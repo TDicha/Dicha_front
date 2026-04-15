@@ -22,6 +22,7 @@ export const useAppStore = create<AppState>((set) => ({
   qrDraft: {
     code: "",
     target: "product-detail",
+    targetId: "ethiopia-yirgacheffe",
   },
   qrResolvedTarget: null,
   setSearchQuery: (searchQuery) => set({ searchQuery }),
@@ -39,11 +40,20 @@ export const useAppStore = create<AppState>((set) => ({
     set((state) => {
       const normalized = state.qrDraft.code.trim().toLowerCase();
       const target = normalized.includes("blend") ? "my-blend" : "product-detail";
+      const targetId =
+        target === "my-blend"
+          ? "blend-signature-balance"
+          : normalized.includes("guatemala")
+            ? "guatemala-antigua"
+            : normalized.includes("kenya")
+              ? "kenya-kiambu-aa"
+              : "ethiopia-yirgacheffe";
 
       return {
         qrDraft: {
           ...state.qrDraft,
           target,
+          targetId,
         },
         qrResolvedTarget: normalized ? target : null,
       };
@@ -53,6 +63,7 @@ export const useAppStore = create<AppState>((set) => ({
       qrDraft: {
         code: "",
         target: "product-detail",
+        targetId: "ethiopia-yirgacheffe",
       },
       qrResolvedTarget: null,
     }),

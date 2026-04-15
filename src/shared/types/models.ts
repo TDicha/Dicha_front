@@ -75,3 +75,14 @@ export interface QrResultDraft {
   target: QrResultTarget;
   targetId?: string;
 }
+
+export interface MyBlendRecipe {
+  id: string;
+  name: string;
+  description: string;
+  roastLevel: string;
+  ratioLabel: string;
+  notes: string[];
+  recommendedFor: string;
+  lastBrewedAt: string;
+}

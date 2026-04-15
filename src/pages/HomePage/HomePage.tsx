@@ -1,13 +1,29 @@
 import { ArrowRight, Camera, Coffee } from "lucide-react";
 import { Link } from "react-router-dom";
 
+import { useAuthStore } from "@/app/store";
 import { AppCard } from "@/components/common/AppCard";
 import { ProductTileCard } from "@/components/common/ProductTileCard";
 import { mockProducts } from "@/mock/products";
 import { ROUTES } from "@/shared/constants/routes";
 
 export function HomePage() {
+  const status = useAuthStore((state) => state.status);
   const bestProducts = mockProducts.slice(0, 3);
+  const quickLinks =
+    status === "authenticated"
+      ? [
+          { label: "주문 조회", description: "최근 주문과 상태 확인", to: ROUTES.orders },
+          { label: "구독 관리", description: "배송 주기와 상품 변경", to: ROUTES.subscription },
+          { label: "QR / O2O", description: "매장 QR 진입과 수동 입력", to: ROUTES.qr },
+          { label: "나의 블렌드", description: "저장한 블렌드 확인", to: ROUTES.myBlend },
+        ]
+      : [
+          { label: "로그인", description: "주문/구독/블렌드 이어보기", to: ROUTES.login },
+          { label: "회원가입", description: "취향 저장과 주문 관리 시작", to: ROUTES.signup },
+          { label: "QR / O2O", description: "매장 코드로 빠르게 연결", to: ROUTES.qr },
+          { label: "픽업 예약", description: "예약 가능한 시간 확인", to: ROUTES.reservation },
+        ];
   const reviews = [
     {
       id: "review-1",
@@ -49,6 +65,29 @@ export function HomePage() {
             <span className="size-1.5 rounded-full bg-white/65" />
             <span className="size-1.5 rounded-full bg-white/35" />
           </div>
+        </div>
+      </section>
+
+      <section>
+        <div className="flex items-end justify-between gap-4">
+          <div>
+            <h3 className="font-heading text-[1.35rem] font-semibold tracking-[-0.03em] text-[var(--color-primary-green)]">
+              빠른 진입
+            </h3>
+            <p className="mt-1 text-sm text-[var(--color-muted)]">
+              구현된 주요 화면으로 바로 이동해 볼 수 있어요.
+            </p>
+          </div>
+        </div>
+        <div className="mt-4 grid grid-cols-2 gap-3">
+          {quickLinks.map((item) => (
+            <Link key={item.to} to={item.to}>
+              <AppCard className="h-full rounded-[1.25rem]">
+                <p className="text-sm font-semibold text-[var(--color-primary-green)]">{item.label}</p>
+                <p className="mt-2 text-xs leading-5 text-[var(--color-muted)]">{item.description}</p>
+              </AppCard>
+            </Link>
+          ))}
         </div>
       </section>
 

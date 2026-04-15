@@ -20,6 +20,7 @@
   --radius: 1.25rem;
   --header-height: 4.5rem;
   --tabbar-height: 5.5rem;
+  --tabbar-dock-offset: 0.85rem;
 
   --background: var(--color-bg-ivory);
   --foreground: var(--color-ink);
