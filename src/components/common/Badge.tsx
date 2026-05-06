@@ -2,9 +2,9 @@ import { cn } from "@/lib/utils";
 import type { ProductBadge } from "@/shared/types/models";
 
 const badgeStyles: Record<ProductBadge, string> = {
-  BEST: "bg-[rgba(148,35,30,0.1)] text-[var(--color-primary-red)]",
-  NEW: "bg-[rgba(42,54,99,0.1)] text-[var(--color-primary-blue)]",
-  PICK: "bg-[rgba(195,159,84,0.18)] text-[color:#7c5a1d]",
+  BEST: "bg-[var(--rgba-148-35-30-01)] text-[var(--color-primary-red)]",
+  NEW: "bg-[var(--rgba-42-54-99-01)] text-[var(--color-primary-blue)]",
+  PICK: "bg-[var(--rgba-195-159-84-018)] text-[color:var(--palette-7c5a1d)]",
 };
 
 export function Badge({ label }: { label: ProductBadge }) {

@@ -6,9 +6,14 @@ export const mockSubscriptions: SubscriptionPlan[] = [
     name: "홈 구독",
     price: 52000,
     beansPerMonth: "에티오피아 예가체프 G1 / 미디엄 로스트 / 200g x 2",
-    perks: ["배송 일정 변경", "상품 / 옵션 변경", "결제 수단 변경", "배송지 변경"],
+    perks: [
+      "배송 일정 변경",
+      "상품 / 옵션 변경",
+      "결제 수단 변경",
+      "배송지 변경",
+    ],
     statusLabel: "ACTIVE",
-    nextDeliveryLabel: "2026.04.12",
+    nextDeliveryLabel: "2026.05.06",
     billingDayLabel: "매월 5일",
   },
   {
@@ -19,7 +24,7 @@ export const mockSubscriptions: SubscriptionPlan[] = [
     perks: ["월 1회 샘플러 포함", "바리스타 큐레이션", "픽업 예약 우선권"],
     highlight: "추천",
     statusLabel: "ACTIVE",
-    nextDeliveryLabel: "2026.04.18",
+    nextDeliveryLabel: "2026.05.13",
     billingDayLabel: "매월 12일",
   },
 ];

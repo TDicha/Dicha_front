@@ -9,7 +9,7 @@ export function AuthField({ label, icon, className, ...props }: AuthFieldProps) 
   return (
     <label className="block space-y-2">
       <span className="text-sm text-[var(--color-muted)]">{label}</span>
-      <div className="flex items-center gap-3 rounded-[1rem] border border-[rgba(17,24,39,0.08)] bg-white px-4 py-3">
+      <div className="flex items-center gap-3 rounded-[1rem] border border-[var(--rgba-17-24-39-008)] bg-white px-4 py-3">
         {icon}
         <input
           className={[

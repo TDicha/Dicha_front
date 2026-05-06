@@ -15,7 +15,7 @@ const plans = [
     description: "1~2인 가정용 / 월 2회 배송",
     price: 52000,
     icon: "🏠",
-    accent: "#d9e6d8",
+    accent: "var(--palette-d9e6d8)",
     featured: true,
   },
   {
@@ -27,7 +27,7 @@ const plans = [
     description: "사무실 · 카페용 / 월 4회 배송",
     price: 200000,
     icon: "🏢",
-    accent: "#f3efe7",
+    accent: "var(--palette-f3efe7)",
     featured: false,
   },
   {
@@ -39,7 +39,7 @@ const plans = [
     description: "언제 어디서나 간편하게",
     price: 38000,
     icon: "🧧",
-    accent: "#f6ebca",
+    accent: "var(--palette-f6ebca)",
     featured: false,
   },
 ] as const;
@@ -48,15 +48,15 @@ export function ReservationPage() {
   const [selectedPlanId, setSelectedPlanId] = useState<(typeof plans)[number]["id"]>("home");
 
   return (
-    <div className="bg-[#f4f2eb] pb-8">
-      <section className="relative overflow-hidden bg-[#1d3e2b] px-5 pb-7 pt-4 text-white">
-        <div className="absolute right-[-2.75rem] top-[3.5rem] size-[15.5rem] rounded-full bg-[rgba(68,108,76,0.28)]" />
-        <div className="absolute right-[1.25rem] top-[6.5rem] size-[10.25rem] rounded-full bg-[rgba(96,128,100,0.22)]" />
-        <div className="absolute bottom-0 left-0 h-8 w-full bg-[rgba(10,20,13,0.24)]" />
+    <div className="bg-[var(--background-color)] pb-8">
+      <section className="relative overflow-hidden bg-[var(--primary-color)] px-5 pb-7 pt-4 text-white">
+        <div className="absolute right-[-2.75rem] top-[3.5rem] size-[15.5rem] rounded-full bg-[var(--rgba-68-108-76-028)]" />
+        <div className="absolute right-[1.25rem] top-[6.5rem] size-[10.25rem] rounded-full bg-[var(--rgba-96-128-100-022)]" />
+        <div className="absolute bottom-0 left-0 h-8 w-full bg-[var(--rgba-10-20-13-024)]" />
 
         <p className="relative text-center text-[1.45rem] font-black tracking-[-0.03em]">커피 구독</p>
 
-        <div className="relative mt-8 inline-flex rounded-full bg-[#c39f54] px-3.5 py-1.5 text-[0.8rem] font-bold text-[#1d3e2b]">
+        <div className="relative mt-8 inline-flex rounded-full bg-[var(--accent-color)] px-3.5 py-1.5 text-[0.8rem] font-bold text-[var(--primary-color)]">
           🎉 첫 구독 20% 할인
         </div>
 
@@ -78,10 +78,10 @@ export function ReservationPage() {
       </section>
 
       <section className="px-4 pb-6 pt-5">
-        <h2 className="text-[1.95rem] font-black tracking-[-0.05em] text-[#121212]">구독 플랜 선택</h2>
-        <p className="mt-1 text-[0.92rem] text-[#666666]">필요에 맞는 플랜을 고르세요</p>
+        <h2 className="text-[1.95rem] font-black tracking-[-0.05em] text-[var(--palette-121212)]">구독 플랜 선택</h2>
+        <p className="mt-1 text-[0.92rem] text-[var(--palette-666666)]">필요에 맞는 플랜을 고르세요</p>
 
-        <div className="mt-2 inline-flex rounded-full bg-[#c39f54] px-3 py-1 text-[0.78rem] font-bold text-[#1d3e2b]">
+        <div className="mt-2 inline-flex rounded-full bg-[var(--accent-color)] px-3 py-1 text-[0.78rem] font-bold text-[var(--primary-color)]">
           ⭐ 가장 인기
         </div>
 
@@ -93,8 +93,8 @@ export function ReservationPage() {
               <article
                 key={plan.id}
                 className={[
-                  "overflow-hidden rounded-[1rem] bg-white shadow-[0_3px_10px_rgba(0,0,0,0.08)]",
-                  isSelected ? "border-2 border-[#c39f54]" : "border border-transparent",
+                  "overflow-hidden rounded-[1rem] bg-white shadow-[0_3px_10px_var(--rgba-0-0-0-008)]",
+                  isSelected ? "border-2 border-[var(--accent-color)]" : "border border-transparent",
                 ].join(" ")}
               >
                 <div className="grid grid-cols-[6.9rem_1fr]">
@@ -111,31 +111,31 @@ export function ReservationPage() {
                         className={[
                           "inline-flex rounded-full px-2.5 py-1 text-[0.68rem] font-bold",
                           plan.badgeTone === "gold"
-                            ? "bg-[#caa24a] text-white"
-                            : "bg-[#4b8e73] text-white",
+                            ? "bg-[var(--palette-caa24a)] text-white"
+                            : "bg-[var(--palette-4b8e73)] text-white",
                         ].join(" ")}
                       >
                         {plan.badge}
                       </span>
                     ) : null}
 
-                    <h3 className="mt-2 text-[1.8rem] font-black tracking-[-0.05em] text-[#121212]">
+                    <h3 className="mt-2 text-[1.8rem] font-black tracking-[-0.05em] text-[var(--palette-121212)]">
                       {plan.title}
                     </h3>
-                    <p className="mt-0.5 text-[1.2rem] font-bold text-[#1d3e2b]">{plan.quantity}</p>
-                    <p className="mt-0.5 text-[0.88rem] text-[#666666]">{plan.description}</p>
+                    <p className="mt-0.5 text-[1.2rem] font-bold text-[var(--primary-color)]">{plan.quantity}</p>
+                    <p className="mt-0.5 text-[0.88rem] text-[var(--palette-666666)]">{plan.description}</p>
 
                     <div className="mt-7 flex items-end justify-between gap-3">
-                      <p className="text-[2rem] font-black tracking-[-0.05em] text-[#94231e]">
+                      <p className="text-[2rem] font-black tracking-[-0.05em] text-[var(--danger-color)]">
                         ₩{formatPrice(plan.price)}
-                        <span className="ml-0.5 text-[0.95rem] font-normal text-[#666666]">/월</span>
+                        <span className="ml-0.5 text-[0.95rem] font-normal text-[var(--palette-666666)]">/월</span>
                       </p>
                       <button
                         className={[
                           "h-8 rounded-[0.65rem] px-4 text-[0.92rem] font-bold",
                           isSelected
-                            ? "bg-[#204a32] text-white"
-                            : "bg-[#e5ede1] text-[#204a32]",
+                            ? "bg-[var(--second-color)] text-white"
+                            : "bg-[var(--palette-e5ede1)] text-[var(--second-color)]",
                         ].join(" ")}
                         onClick={() => setSelectedPlanId(plan.id)}
                         type="button"
@@ -152,7 +152,7 @@ export function ReservationPage() {
       </section>
 
       <section className="px-5 pt-8">
-        <h2 className="text-[1.55rem] font-bold tracking-[-0.04em] text-[#121212]">
+        <h2 className="text-[1.55rem] font-bold tracking-[-0.04em] text-[var(--palette-121212)]">
           직접 커피를 만들어 보는건 어떨까요?
         </h2>
         <PrimaryButton asChild className="mt-6 h-12 w-full rounded-[0.95rem] text-[1rem] shadow-none">

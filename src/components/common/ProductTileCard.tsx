@@ -31,7 +31,7 @@ export function ProductTileCard({
       <AppCard className="overflow-hidden rounded-[1.35rem]" padding="none">
         <div
           className={[
-            "relative flex items-center justify-center bg-[linear-gradient(180deg,#efebe2_0%,#dcd5c9_100%)]",
+            "relative flex items-center justify-center bg-[linear-gradient(180deg,var(--palette-efebe2)_0%,var(--palette-dcd5c9)_100%)]",
             imageHeightClassName,
           ].join(" ")}
         >
@@ -42,7 +42,7 @@ export function ProductTileCard({
           />
           <span className="relative text-4xl">☕</span>
           {product.roastLabel ? (
-            <span className="absolute bottom-3 left-2 rounded-md bg-[rgba(255,255,255,0.82)] px-2 py-1 text-[11px] font-medium text-[var(--color-primary-green)]">
+            <span className="absolute bottom-3 left-2 rounded-md bg-[var(--rgba-255-255-255-082)] px-2 py-1 text-[11px] font-medium text-[var(--color-primary-green)]">
               {product.roastLabel}
             </span>
           ) : null}
@@ -58,7 +58,7 @@ export function ProductTileCard({
 
         <div className={compact ? "px-3 pb-3 pt-2.5" : "px-2.5 pb-2.5 pt-2.5"}>
           {showOrigin && product.originLabel ? (
-            <span className="inline-flex rounded-md bg-[rgba(29,62,43,0.06)] px-2 py-1 text-[11px] font-medium text-[var(--color-primary-green)]">
+            <span className="inline-flex rounded-md bg-[var(--rgba-29-62-43-006)] px-2 py-1 text-[11px] font-medium text-[var(--color-primary-green)]">
               {product.originLabel}
             </span>
           ) : null}

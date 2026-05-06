@@ -8,8 +8,8 @@ import { ROUTES } from "@/shared/constants/routes";
 export function NotFoundPage() {
   return (
     <div className="page-shell items-center justify-center bg-white px-5 py-10 text-center">
-      <AppCard className="w-full rounded-[2rem] px-6 py-10 shadow-[0_20px_36px_rgba(31,37,31,0.08)]" padding="none">
-        <div className="mx-auto flex size-16 items-center justify-center rounded-full bg-[rgba(29,62,43,0.08)]">
+      <AppCard className="w-full rounded-[2rem] px-6 py-10 shadow-[0_20px_36px_var(--rgba-31-37-31-008)]" padding="none">
+        <div className="mx-auto flex size-16 items-center justify-center rounded-full bg-[var(--rgba-29-62-43-008)]">
           <Compass className="size-8 text-[var(--color-primary-green)]" />
         </div>
         <p className="mt-5 text-xs uppercase tracking-[0.32em] text-[var(--color-accent-gold)]">404</p>

@@ -36,7 +36,7 @@ export function AppHeader() {
   }
 
   return (
-    <header className="sticky top-0 z-20 flex h-14 items-center justify-between border-b border-[rgba(17,24,39,0.06)] bg-[rgba(255,255,255,0.94)] px-5 backdrop-blur-md">
+    <header className="sticky top-0 z-20 flex h-14 items-center justify-between border-b border-[var(--rgba-17-24-39-006)] bg-[var(--rgba-255-255-255-094)] px-5 backdrop-blur-md">
       {isHome ? (
         <>
           <div className="font-heading text-[1.7rem] font-semibold tracking-[-0.04em] text-[var(--color-primary-green)]">

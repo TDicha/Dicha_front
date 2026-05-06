@@ -53,7 +53,7 @@ export function AccountSectionPage() {
             <p className="mt-3 text-sm leading-6 text-white/82">{section.description}</p>
           </div>
           <div className="flex size-20 shrink-0 items-center justify-center rounded-full bg-white/12">
-            <Icon className="size-9 text-[#f1d08b]" />
+            <Icon className="size-9 text-[var(--palette-f1d08b)]" />
           </div>
         </div>
       </AppCard>
@@ -81,7 +81,7 @@ export function AccountSectionPage() {
             key={item}
             className={[
               "flex w-full items-center justify-between py-4 text-left text-sm font-medium text-[var(--color-primary-green)]",
-              index < section.items.length - 1 ? "border-b border-[rgba(17,24,39,0.06)]" : "",
+              index < section.items.length - 1 ? "border-b border-[var(--rgba-17-24-39-006)]" : "",
             ].join(" ")}
             type="button"
           >

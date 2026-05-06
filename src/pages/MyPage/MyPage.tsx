@@ -71,7 +71,7 @@ export function MyPage() {
           {sections.map(({ icon: Icon, label }) => (
             <Link
               key={label}
-              className="flex w-full items-center justify-between border-b border-[rgba(17,24,39,0.06)] py-4 text-left last:border-b-0"
+              className="flex w-full items-center justify-between border-b border-[var(--rgba-17-24-39-006)] py-4 text-left last:border-b-0"
               to={accountSectionRoute(
                 label === "결제 수단 관리"
                   ? "payment"
@@ -107,13 +107,13 @@ export function MyPage() {
         </div>
         <div className="mt-4 grid grid-cols-2 gap-3">
           <Link
-            className="rounded-[1rem] border border-[rgba(17,24,39,0.08)] bg-white px-4 py-3 text-center text-sm font-medium text-[var(--color-primary-green)]"
+            className="rounded-[1rem] border border-[var(--rgba-17-24-39-008)] bg-white px-4 py-3 text-center text-sm font-medium text-[var(--color-primary-green)]"
             to={ROUTES.login}
           >
             로그인 보기
           </Link>
           <Link
-            className="rounded-[1rem] border border-[rgba(17,24,39,0.08)] bg-white px-4 py-3 text-center text-sm font-medium text-[var(--color-primary-green)]"
+            className="rounded-[1rem] border border-[var(--rgba-17-24-39-008)] bg-white px-4 py-3 text-center text-sm font-medium text-[var(--color-primary-green)]"
             to={ROUTES.signup}
           >
             회원가입 보기
@@ -137,7 +137,7 @@ export function MyPage() {
             key={label}
             className={[
               "flex w-full items-center justify-between py-4 text-left text-sm font-medium text-[var(--color-primary-green)]",
-              index < 2 ? "border-b border-[rgba(17,24,39,0.06)]" : "",
+              index < 2 ? "border-b border-[var(--rgba-17-24-39-006)]" : "",
             ].join(" ")}
             to={to}
           >

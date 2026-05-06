@@ -21,7 +21,7 @@ export function BottomTabBar() {
 
   return (
     <div className="sticky bottom-0 z-30 px-4 pb-safe pt-[var(--tabbar-dock-offset)] bg-white/60">
-      <nav className="flex h-[var(--tabbar-height)] items-center justify-around rounded-[1.6rem] border border-[rgba(17,24,39,0.08)] bg-[rgba(255,255,255,0.94)] px-2 shadow-[0_16px_40px_rgba(22,28,22,0.14)] backdrop-blur-xl">
+      <nav className="flex h-[var(--tabbar-height)] items-center justify-around rounded-[1.6rem] border border-[var(--rgba-17-24-39-008)] bg-[var(--rgba-255-255-255-094)] px-2 shadow-[0_16px_40px_var(--rgba-22-28-22-014)] backdrop-blur-xl">
         {bottomTabItems.map(({ icon: Icon, label, to }) => (
           <NavLink
             key={to}
@@ -30,7 +30,7 @@ export function BottomTabBar() {
                 "relative flex min-w-[72px] flex-col items-center gap-1 rounded-[1rem] px-3 py-3 text-[11px] font-medium transition",
                 isActive
                   ? "text-[var(--color-primary-green)]"
-                  : "text-[rgba(31,37,31,0.52)]",
+                  : "text-[var(--rgba-31-37-31-052)]",
               ].join(" ")
             }
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}

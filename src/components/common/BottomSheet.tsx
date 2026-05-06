@@ -33,12 +33,12 @@ export function BottomSheet({
       />
       <section
         className={cn(
-          "absolute bottom-0 left-1/2 max-h-[84vh] w-full max-w-md -translate-x-1/2 overflow-y-auto rounded-t-[1.9rem] border border-white/70 bg-[rgba(255,252,247,0.98)] px-5 pb-[calc(1.25rem+env(safe-area-inset-bottom))] pt-3 shadow-[0_-18px_42px_rgba(20,28,21,0.18)] transition-[transform,opacity] duration-300 ease-out",
+          "absolute bottom-0 left-1/2 max-h-[84vh] w-full max-w-md -translate-x-1/2 overflow-y-auto rounded-t-[1.9rem] border border-white/70 bg-[var(--rgba-255-252-247-098)] px-5 pb-[calc(1.25rem+env(safe-area-inset-bottom))] pt-3 shadow-[0_-18px_42px_var(--rgba-20-28-21-018)] transition-[transform,opacity] duration-300 ease-out",
           open ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0",
         )}
       >
-        <div className="mx-auto mb-4 h-1.5 w-12 rounded-full bg-[rgba(29,62,43,0.18)]" />
-        <div className="mb-5 flex items-start justify-between gap-3 border-b border-[rgba(29,62,43,0.08)] pb-4">
+        <div className="mx-auto mb-4 h-1.5 w-12 rounded-full bg-[var(--rgba-29-62-43-018)]" />
+        <div className="mb-5 flex items-start justify-between gap-3 border-b border-[var(--rgba-29-62-43-008)] pb-4">
           <div>
             <p className="text-[11px] font-semibold tracking-[0.16em] text-[var(--color-muted)]">
               CUSTOMIZE ORDER
@@ -48,7 +48,7 @@ export function BottomSheet({
             </h3>
           </div>
           <button
-            className="rounded-full border border-[rgba(29,62,43,0.1)] bg-white px-3 py-1.5 text-sm font-medium text-[var(--color-primary-green)] shadow-[0_6px_16px_rgba(29,62,43,0.06)]"
+            className="rounded-full border border-[var(--rgba-29-62-43-01)] bg-white px-3 py-1.5 text-sm font-medium text-[var(--color-primary-green)] shadow-[0_6px_16px_var(--rgba-29-62-43-006)]"
             onClick={onClose}
             type="button"
           >

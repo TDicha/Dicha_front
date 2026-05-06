@@ -67,7 +67,7 @@ export function SearchPage() {
                 </p>
               </div>
               <div className="flex size-20 items-center justify-center rounded-full bg-white/12">
-                <SearchIcon className="size-9 text-[#f1d08b]" />
+                <SearchIcon className="size-9 text-[var(--palette-f1d08b)]" />
               </div>
             </div>
           </AppCard>
@@ -83,7 +83,7 @@ export function SearchPage() {
               {recommendedKeywords.map((keyword) => (
                 <button
                   key={keyword}
-                  className="rounded-full border border-[rgba(29,62,43,0.08)] bg-white px-3 py-2 text-sm font-medium text-[var(--color-primary-green)]"
+                  className="rounded-full border border-[var(--rgba-29-62-43-008)] bg-white px-3 py-2 text-sm font-medium text-[var(--color-primary-green)]"
                   onClick={() => setQuery(keyword)}
                   type="button"
                 >
@@ -104,7 +104,7 @@ export function SearchPage() {
               {recentKeywords.map((keyword) => (
                 <button
                   key={keyword}
-                  className="flex w-full items-center justify-between rounded-[1rem] bg-[rgba(29,62,43,0.04)] px-4 py-3 text-left text-sm font-medium text-[var(--color-primary-green)]"
+                  className="flex w-full items-center justify-between rounded-[1rem] bg-[var(--rgba-29-62-43-004)] px-4 py-3 text-left text-sm font-medium text-[var(--color-primary-green)]"
                   onClick={() => setQuery(keyword)}
                   type="button"
                 >

@@ -12,8 +12,8 @@ export function OptionRow({ label, description, price, selected = false, onClick
       className={[
         "flex w-full items-start justify-between gap-3 rounded-[1.1rem] border px-4 py-4 text-left transition-all duration-200",
         selected
-          ? "border-[rgba(0,117,74,0.36)] bg-[rgba(0,117,74,0.07)] shadow-[0_10px_18px_rgba(0,117,74,0.08)]"
-          : "border-[rgba(29,62,43,0.09)] bg-white hover:border-[rgba(29,62,43,0.18)]",
+          ? "border-[var(--rgba-0-117-74-036)] bg-[var(--rgba-0-117-74-007)] shadow-[0_10px_18px_var(--rgba-0-117-74-008)]"
+          : "border-[var(--rgba-29-62-43-009)] bg-white hover:border-[var(--rgba-29-62-43-018)]",
       ].join(" ")}
       onClick={onClick}
       type="button"
@@ -32,8 +32,8 @@ export function OptionRow({ label, description, price, selected = false, onClick
           className={[
             "mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full border transition-colors",
             selected
-              ? "border-[rgb(0,117,74)] bg-[rgb(0,117,74)] text-white"
-              : "border-[rgba(17,24,39,0.14)] bg-white text-transparent",
+              ? "border-[var(--rgb-0-117-74)] bg-[var(--rgb-0-117-74)] text-white"
+              : "border-[var(--rgba-17-24-39-014)] bg-white text-transparent",
           ].join(" ")}
         >
           <span className="size-2 rounded-full bg-current" />

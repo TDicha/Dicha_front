@@ -22,20 +22,20 @@ export function ClassReservationPage() {
             </p>
           </div>
           <div className="flex size-20 shrink-0 items-center justify-center rounded-full bg-white/10">
-            <CalendarDays className="size-9 text-[#f1d08b]" />
+            <CalendarDays className="size-9 text-[var(--palette-f1d08b)]" />
           </div>
         </div>
       </AppCard>
 
       <section className="grid grid-cols-2 gap-3 text-sm">
-        <div className="rounded-[1.3rem] border border-[rgba(17,24,39,0.06)] bg-[rgba(29,62,43,0.04)] px-4 py-4">
+        <div className="rounded-[1.3rem] border border-[var(--rgba-17-24-39-006)] bg-[var(--rgba-29-62-43-004)] px-4 py-4">
           <p className="text-[var(--color-muted)]">진행 시간</p>
           <p className="mt-2 flex items-center gap-2 font-medium text-[var(--color-primary-green)]">
             <Clock3 className="size-4" />
             90분 클래스
           </p>
         </div>
-        <div className="rounded-[1.3rem] border border-[rgba(17,24,39,0.06)] bg-[rgba(29,62,43,0.04)] px-4 py-4">
+        <div className="rounded-[1.3rem] border border-[var(--rgba-17-24-39-006)] bg-[var(--rgba-29-62-43-004)] px-4 py-4">
           <p className="text-[var(--color-muted)]">진행 지점</p>
           <p className="mt-2 flex items-center gap-2 font-medium text-[var(--color-primary-green)]">
             <MapPin className="size-4" />
@@ -54,7 +54,7 @@ export function ClassReservationPage() {
               원하는 날짜와 클래스 시간을 선택하세요
             </p>
           </div>
-          <div className="rounded-full bg-[rgba(29,62,43,0.06)] px-3 py-1 text-xs font-semibold text-[var(--color-primary-green)]">
+          <div className="rounded-full bg-[var(--rgba-29-62-43-006)] px-3 py-1 text-xs font-semibold text-[var(--color-primary-green)]">
             4월 18일
           </div>
         </div>
@@ -67,7 +67,7 @@ export function ClassReservationPage() {
                 "rounded-[1rem] border px-3 py-3 text-sm font-medium transition",
                 index === 2
                   ? "border-[var(--color-primary-green)] bg-[var(--color-primary-green)] text-white"
-                  : "border-[rgba(17,24,39,0.08)] bg-white text-[var(--color-primary-green)]",
+                  : "border-[var(--rgba-17-24-39-008)] bg-white text-[var(--color-primary-green)]",
               ].join(" ")}
               type="button"
             >
@@ -103,7 +103,7 @@ export function ClassReservationPage() {
             key={label}
             className={[
               "flex w-full items-center justify-between py-4 text-left",
-              index < 2 ? "border-b border-[rgba(17,24,39,0.06)]" : "",
+              index < 2 ? "border-b border-[var(--rgba-17-24-39-006)]" : "",
             ].join(" ")}
             type="button"
           >

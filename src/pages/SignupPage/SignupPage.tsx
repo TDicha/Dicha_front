@@ -91,7 +91,7 @@ export function SignupPage() {
           <h1 className="font-semibold text-[var(--color-ink)]">회원가입</h1>
           <div className="size-8" />
         </header>
-        <div className="h-1 w-full bg-[#f5f5f5]">
+        <div className="h-1 w-full bg-[var(--palette-f5f5f5)]">
           <div
             className="h-1 bg-[var(--color-primary-green)] transition-all"
             style={{ width: `${(progress / 3) * 100}%` }}
@@ -109,7 +109,7 @@ export function SignupPage() {
           <h2 className="font-heading text-[2rem] font-semibold tracking-[-0.04em] text-[var(--color-ink)]">
             약관 동의
           </h2>
-          <p className="mt-2 text-sm text-[#666]">서비스 이용을 위해 약관에 동의해 주세요</p>
+          <p className="mt-2 text-sm text-[var(--palette-666)]">서비스 이용을 위해 약관에 동의해 주세요</p>
 
           <button
             className="mt-8 flex h-14 w-full items-center rounded-[0.95rem] bg-[var(--color-bg-ivory)] px-4 text-left"
@@ -121,7 +121,7 @@ export function SignupPage() {
                 "mr-3 flex size-5 items-center justify-center rounded-[4px] border text-[11px] font-bold",
                 Object.values(agreements).every(Boolean)
                   ? "border-[var(--color-primary-green)] bg-[var(--color-primary-green)] text-white"
-                  : "border-[#cccccc] bg-white text-transparent",
+                  : "border-[var(--palette-cccccc)] bg-white text-transparent",
               ].join(" ")}
             >
               ✓
@@ -129,7 +129,7 @@ export function SignupPage() {
             <span className="text-sm font-semibold text-[var(--color-ink)]">전체 동의</span>
           </button>
 
-          <div className="mt-3 divide-y divide-[rgba(232,232,232,0.7)]">
+          <div className="mt-3 divide-y divide-[var(--rgba-232-232-232-07)]">
             {agreementRows.map((row) => (
               <button
                 key={row.key}
@@ -143,14 +143,14 @@ export function SignupPage() {
                       "flex size-5 items-center justify-center rounded-[4px] border text-[11px] font-bold",
                       agreements[row.key]
                         ? "border-[var(--color-primary-green)] bg-[var(--color-primary-green)] text-white"
-                        : "border-[#cccccc] bg-white text-transparent",
+                        : "border-[var(--palette-cccccc)] bg-white text-transparent",
                     ].join(" ")}
                   >
                     ✓
                   </span>
-                  <span className="text-sm text-[#333333]">{row.label}</span>
+                  <span className="text-sm text-[var(--palette-333333)]">{row.label}</span>
                 </div>
-                <ChevronRight className="size-4 text-[#cccccc]" />
+                <ChevronRight className="size-4 text-[var(--palette-cccccc)]" />
               </button>
             ))}
           </div>
@@ -171,15 +171,15 @@ export function SignupPage() {
           <h2 className="font-heading text-[2rem] font-semibold tracking-[-0.04em] text-[var(--color-ink)]">
             정보 입력
           </h2>
-          <p className="mt-2 text-sm text-[#666]">회원 정보를 입력해 주세요</p>
+          <p className="mt-2 text-sm text-[var(--palette-666)]">회원 정보를 입력해 주세요</p>
 
           <div className="mt-6 space-y-4">
             <div>
-              <p className="mb-2 text-xs font-medium text-[#666]">이메일 *</p>
+              <p className="mb-2 text-xs font-medium text-[var(--palette-666)]">이메일 *</p>
               <div className="flex gap-2">
-                <div className="flex h-11 flex-1 items-center rounded-[0.85rem] border border-[#e8e8e8] bg-[#f8f8f8] px-4">
+                <div className="flex h-11 flex-1 items-center rounded-[0.85rem] border border-[var(--line-color)] bg-[var(--palette-f8f8f8)] px-4">
                   <input
-                    className="w-full bg-transparent text-sm text-[var(--color-primary-green)] placeholder:text-[#999]"
+                    className="w-full bg-transparent text-sm text-[var(--color-primary-green)] placeholder:text-[var(--palette-999)]"
                     onChange={(event) => {
                       setEmail(event.target.value);
                       setEmailChecked(false);
@@ -202,10 +202,10 @@ export function SignupPage() {
             </div>
 
             <div>
-              <p className="mb-2 text-xs font-medium text-[#666]">비밀번호 *</p>
-              <div className="flex h-11 items-center rounded-[0.85rem] border border-[#e8e8e8] bg-[#f8f8f8] px-4">
+              <p className="mb-2 text-xs font-medium text-[var(--palette-666)]">비밀번호 *</p>
+              <div className="flex h-11 items-center rounded-[0.85rem] border border-[var(--line-color)] bg-[var(--palette-f8f8f8)] px-4">
                 <input
-                  className="w-full bg-transparent text-sm text-[var(--color-primary-green)] placeholder:text-[#999]"
+                  className="w-full bg-transparent text-sm text-[var(--color-primary-green)] placeholder:text-[var(--palette-999)]"
                   onChange={(event) => setPassword(event.target.value)}
                   placeholder="영문, 숫자 포함 8자 이상"
                   type="password"
@@ -220,7 +220,7 @@ export function SignupPage() {
                 ].map((item) => (
                   <span
                     key={item.label}
-                    className={item.passed ? "text-[var(--color-primary-green)]" : "text-[#999]"}
+                    className={item.passed ? "text-[var(--color-primary-green)]" : "text-[var(--palette-999)]"}
                   >
                     ● {item.label}
                   </span>
@@ -229,10 +229,10 @@ export function SignupPage() {
             </div>
 
             <div>
-              <p className="mb-2 text-xs font-medium text-[#666]">비밀번호 확인 *</p>
-              <div className="flex h-11 items-center rounded-[0.85rem] border border-[#e8e8e8] bg-[#f8f8f8] px-4">
+              <p className="mb-2 text-xs font-medium text-[var(--palette-666)]">비밀번호 확인 *</p>
+              <div className="flex h-11 items-center rounded-[0.85rem] border border-[var(--line-color)] bg-[var(--palette-f8f8f8)] px-4">
                 <input
-                  className="w-full bg-transparent text-sm text-[var(--color-primary-green)] placeholder:text-[#999]"
+                  className="w-full bg-transparent text-sm text-[var(--color-primary-green)] placeholder:text-[var(--palette-999)]"
                   onChange={(event) => setPasswordConfirm(event.target.value)}
                   placeholder="비밀번호를 한번 더 입력해주세요"
                   type="password"
@@ -242,10 +242,10 @@ export function SignupPage() {
             </div>
 
             <div>
-              <p className="mb-2 text-xs font-medium text-[#666]">이름 *</p>
-              <div className="flex h-11 items-center rounded-[0.85rem] border border-[#e8e8e8] bg-[#f8f8f8] px-4">
+              <p className="mb-2 text-xs font-medium text-[var(--palette-666)]">이름 *</p>
+              <div className="flex h-11 items-center rounded-[0.85rem] border border-[var(--line-color)] bg-[var(--palette-f8f8f8)] px-4">
                 <input
-                  className="w-full bg-transparent text-sm text-[var(--color-primary-green)] placeholder:text-[#999]"
+                  className="w-full bg-transparent text-sm text-[var(--color-primary-green)] placeholder:text-[var(--palette-999)]"
                   onChange={(event) => setName(event.target.value)}
                   placeholder="홍길동"
                   value={name}
@@ -254,11 +254,11 @@ export function SignupPage() {
             </div>
 
             <div>
-              <p className="mb-2 text-xs font-medium text-[#666]">휴대폰 번호 *</p>
+              <p className="mb-2 text-xs font-medium text-[var(--palette-666)]">휴대폰 번호 *</p>
               <div className="flex gap-2">
-                <div className="flex h-11 flex-1 items-center rounded-[0.85rem] border border-[#e8e8e8] bg-[#f8f8f8] px-4">
+                <div className="flex h-11 flex-1 items-center rounded-[0.85rem] border border-[var(--line-color)] bg-[var(--palette-f8f8f8)] px-4">
                   <input
-                    className="w-full bg-transparent text-sm text-[var(--color-primary-green)] placeholder:text-[#999]"
+                    className="w-full bg-transparent text-sm text-[var(--color-primary-green)] placeholder:text-[var(--palette-999)]"
                     onChange={(event) => {
                       setPhone(event.target.value);
                       setPhoneVerified(false);
@@ -278,11 +278,11 @@ export function SignupPage() {
             </div>
 
             <div>
-              <p className="mb-2 text-xs font-medium text-[#666]">인증번호 *</p>
+              <p className="mb-2 text-xs font-medium text-[var(--palette-666)]">인증번호 *</p>
               <div className="flex gap-2">
                 <div className="flex h-11 flex-1 items-center rounded-[0.85rem] border-[1.5px] border-[var(--color-primary-green)] bg-white px-4">
                   <input
-                    className="w-full bg-transparent text-sm text-[var(--color-primary-green)] placeholder:text-[#999]"
+                    className="w-full bg-transparent text-sm text-[var(--color-primary-green)] placeholder:text-[var(--palette-999)]"
                     onChange={(event) => setVerificationCode(event.target.value)}
                     placeholder="인증번호 입력"
                     value={verificationCode}
@@ -304,7 +304,7 @@ export function SignupPage() {
           </div>
 
           {error ? (
-            <div className="mt-4 rounded-[0.95rem] bg-[rgba(148,35,30,0.05)] px-4 py-3 text-sm text-[var(--color-primary-red)]">
+            <div className="mt-4 rounded-[0.95rem] bg-[var(--rgba-148-35-30-005)] px-4 py-3 text-sm text-[var(--color-primary-red)]">
               {error}
             </div>
           ) : null}
@@ -334,7 +334,7 @@ export function SignupPage() {
       {renderTopBar(3)}
       <main className="flex-1 px-4 pb-10 pt-8">
         <div className="flex flex-col items-center text-center">
-          <div className="flex size-[6.25rem] items-center justify-center rounded-full bg-[#f4ecda]">
+          <div className="flex size-[6.25rem] items-center justify-center rounded-full bg-[var(--palette-f4ecda)]">
             <span className="text-[3.1rem]">🐎</span>
           </div>
           <h2 className="mt-8 font-heading text-[2rem] font-semibold tracking-[-0.04em] text-[var(--color-ink)]">

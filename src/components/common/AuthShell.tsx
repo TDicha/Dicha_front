@@ -22,16 +22,16 @@ export function AuthShell({
 }: AuthShellProps) {
   const headerClassName =
     tone === "red"
-      ? "bg-[linear-gradient(135deg,#8b2b1f_0%,#b24535_100%)]"
-      : "bg-[linear-gradient(135deg,#1f4b37_0%,#143726_100%)]";
+      ? "bg-[linear-gradient(135deg,var(--palette-8b2b1f)_0%,var(--palette-b24535)_100%)]"
+      : "bg-[linear-gradient(135deg,var(--palette-1f4b37)_0%,var(--palette-143726)_100%)]";
 
   const iconClassName =
-    tone === "red" ? "bg-white/12 text-[#ffd8b5]" : "bg-white/10 text-[#f1d08b]";
+    tone === "red" ? "bg-white/12 text-[var(--palette-ffd8b5)]" : "bg-white/10 text-[var(--palette-f1d08b)]";
 
   return (
     <div className="page-shell justify-center bg-white px-5 py-8">
       <AppCard
-        className="overflow-hidden rounded-[2rem] shadow-[0_20px_36px_rgba(31,37,31,0.08)]"
+        className="overflow-hidden rounded-[2rem] shadow-[0_20px_36px_var(--rgba-31-37-31-008)]"
         padding="none"
       >
         <div className={cn("px-6 py-7 text-white", headerClassName)}>

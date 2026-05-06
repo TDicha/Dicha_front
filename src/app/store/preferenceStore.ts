@@ -1,15 +1,14 @@
 import { create } from "zustand";
 
+import {
+  tasteProfiles,
+  tasteQuestions,
+  type TasteTestAnswerKey,
+} from "@/features/taste-test/tasteTestConfig";
 import { mockPreference } from "@/mock/user";
 import type { RoastPreference } from "@/shared/types/models";
 
-type TasteTestAnswerKey = "brew" | "flavor" | "mood";
-
-interface TasteTestAnswers {
-  brew?: string;
-  flavor?: string;
-  mood?: string;
-}
+type TasteTestAnswers = Partial<Record<TasteTestAnswerKey, string>>;
 
 interface PreferenceState {
   preference: RoastPreference;
@@ -23,27 +22,6 @@ interface PreferenceState {
   completeTest: () => void;
   resetTest: () => void;
 }
-
-const tasteProfiles: Record<string, RoastPreference> = {
-  bright: {
-    roastLevel: "Light",
-    acidity: "높음",
-    body: "가볍고 선명함",
-    notes: ["Floral", "Berry", "Citrus"],
-  },
-  balanced: {
-    roastLevel: "Medium",
-    acidity: "중간",
-    body: "부드럽고 균형감 있음",
-    notes: ["Chocolate", "Citrus", "Caramel"],
-  },
-  deep: {
-    roastLevel: "Dark",
-    acidity: "낮음",
-    body: "묵직하고 진함",
-    notes: ["Cacao", "Nutty", "Molasses"],
-  },
-};
 
 export const usePreferenceStore = create<PreferenceState>((set) => ({
   preference: mockPreference,
@@ -64,8 +42,11 @@ export const usePreferenceStore = create<PreferenceState>((set) => ({
         [key]: value,
       };
 
+      const lastQuestionIndex = tasteQuestions.length - 1;
       const nextQuestionIndex =
-        state.currentQuestionIndex < 2 ? state.currentQuestionIndex + 1 : state.currentQuestionIndex;
+        state.currentQuestionIndex < lastQuestionIndex
+          ? state.currentQuestionIndex + 1
+          : state.currentQuestionIndex;
 
       return {
         answers: nextAnswers,
