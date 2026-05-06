@@ -9,6 +9,8 @@ export const productQueryKeys = {
     [...productQueryKeys.all, "list", params ?? {}] as const,
   detail: (productId: string) =>
     [...productQueryKeys.all, "detail", productId] as const,
+  options: (productId: string) =>
+    [...productQueryKeys.all, "options", productId] as const,
 };
 
 export function useProducts(params?: ProductListParams) {
@@ -23,5 +25,16 @@ export function useProduct(productId?: string) {
     enabled: Boolean(productId),
     queryKey: productQueryKeys.detail(productId ?? ""),
     queryFn: () => productRepository.getById(productId ?? ""),
+  });
+}
+
+export function useProductOptions(productId?: string) {
+  return useQuery({
+    enabled: Boolean(productId),
+    queryKey: productQueryKeys.options(productId ?? ""),
+    queryFn: async () => {
+      const product = await productRepository.getById(productId ?? "");
+      return product?.options ?? [];
+    },
   });
 }

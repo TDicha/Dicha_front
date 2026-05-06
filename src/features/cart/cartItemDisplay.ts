@@ -2,17 +2,7 @@ import { getProductDetail } from "@/mock/productDetails";
 import type { Product } from "@/shared/types/models";
 
 interface DisplayCartItem {
-  productName: string;
-}
-
-function getSelectedOptionName(item: DisplayCartItem, product?: Product) {
-  const optionName = item.productName.split("/").at(1)?.trim();
-
-  if (optionName) {
-    return optionName;
-  }
-
-  return product?.options[0]?.name ?? "기본";
+  optionName: string;
 }
 
 export function buildCartItemOptionLabel(
@@ -24,5 +14,5 @@ export function buildCartItemOptionLabel(
   }
 
   const detail = getProductDetail(product);
-  return `${detail.defaultRoastLabel} / ${getSelectedOptionName(item, product)} / ${detail.baseWeightLabel}`;
+  return `${detail.defaultRoastLabel} / ${item.optionName} / ${detail.baseWeightLabel}`;
 }

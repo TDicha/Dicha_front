@@ -1,8 +1,6 @@
 import { create } from "zustand";
 
-import { mockUser } from "@/mock/user";
 import { login, logout, signup } from "@/services/auth/authService";
-import { env } from "@/shared/lib/env";
 import type { UserProfile } from "@/shared/types/models";
 
 type AuthStatus = "authenticated" | "anonymous";
@@ -21,8 +19,8 @@ interface AuthState {
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
-  user: env.enableMock ? mockUser : null,
-  status: env.enableMock ? "authenticated" : "anonymous",
+  user: null,
+  status: "anonymous",
   isPending: false,
   error: null,
   login: (user) => set({ user, status: "authenticated" }),

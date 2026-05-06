@@ -6,6 +6,7 @@ import { HomePage } from "@/pages/HomePage/HomePage";
 import { AccountSectionPage } from "@/pages/AccountSectionPage/AccountSectionPage";
 import { CartPage } from "@/pages/CartPage/CartPage";
 import { ClassReservationPage } from "@/pages/ClassReservationPage/ClassReservationPage";
+import { GuestOrderLookupPage } from "@/pages/GuestOrderLookupPage/GuestOrderLookupPage";
 import { LoginPage } from "@/pages/LoginPage/LoginPage";
 import { MyBlendPage } from "@/pages/MyBlendPage/MyBlendPage";
 import { MyPage } from "@/pages/MyPage/MyPage";
@@ -81,11 +82,6 @@ export const router = createBrowserRouter([
             handle: { title: "주문 조회" },
           },
           {
-            path: "purchase",
-            element: <PurchasePage />,
-            handle: { title: "구매하기" },
-          },
-          {
             path: "my-blend",
             element: <MyBlendPage />,
             handle: { title: "나의 블렌드" },
@@ -96,6 +92,16 @@ export const router = createBrowserRouter([
         path: "cart",
         element: <CartPage />,
         handle: { title: "장바구니" },
+      },
+      {
+        path: "purchase",
+        element: <PurchasePage />,
+        handle: { title: "구매하기" },
+      },
+      {
+        path: "guest-orders",
+        element: <GuestOrderLookupPage />,
+        handle: { title: "비회원 주문 조회" },
       },
       {
         path: "search",

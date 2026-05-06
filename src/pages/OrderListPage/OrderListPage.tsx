@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 
 import { PrimaryButton } from "@/components/common/PrimaryButton";
-import { mockOrders } from "@/mock/orders";
+import { useOrders, type Order } from "@/features/orders";
 import { mockProducts } from "@/mock/products";
 import { ROUTES } from "@/shared/constants/routes";
 import { formatPrice } from "@/shared/utils/format";
@@ -15,23 +15,40 @@ const filterOptions = [
 ] as const;
 
 const orderMeta = {
+  order_created: {
+    badge: "주문접수",
+    badgeClassName: "bg-[var(--palette-f3f2ef)] text-[var(--palette-7c776f)]",
+    reviewEnabled: false,
+  },
+  payment_completed: {
+    badge: "결제완료",
+    badgeClassName: "bg-[var(--palette-eaf6ef)] text-[var(--palette-37795e)]",
+    reviewEnabled: false,
+  },
   shipping: {
     badge: "배송중",
     badgeClassName: "bg-[var(--palette-eaf6ef)] text-[var(--palette-37795e)]",
-    detailLabel: "미디엄·핸드드립·200g",
     reviewEnabled: false,
   },
   preparing: {
     badge: "배송준비",
     badgeClassName: "bg-[var(--palette-f3f2ef)] text-[var(--palette-7c776f)]",
-    detailLabel: "미디엄 200g·월 1회",
     reviewEnabled: false,
   },
-  completed: {
+  delivered: {
     badge: "배송완료",
     badgeClassName: "bg-[var(--palette-eef6ef)] text-[var(--palette-214b33)]",
-    detailLabel: "라이트·핸드드립·200g",
     reviewEnabled: true,
+  },
+  canceled: {
+    badge: "취소",
+    badgeClassName: "bg-[var(--palette-f3f2ef)] text-[var(--palette-7c776f)]",
+    reviewEnabled: false,
+  },
+  refunded: {
+    badge: "환불",
+    badgeClassName: "bg-[var(--palette-f3f2ef)] text-[var(--palette-7c776f)]",
+    reviewEnabled: false,
   },
 } as const;
 
@@ -41,33 +58,33 @@ const recommendedProducts = [
   { productId: "kenya-kiambu-aa", price: 20000 },
 ];
 
-function formatOrderNumber(orderId: string, index: number) {
-  const digits = orderId.replace(/\D/g, "").slice(-8);
-  return `2026${digits}${index + 1}`;
+function formatOrderDate(date: string) {
+  return date.slice(0, 10).replace(/-/g, ".");
 }
 
-function formatOrderDate(date: string) {
-  return date.replace(/-/g, ".");
+function isActiveOrder(order: Order) {
+  return !["delivered", "canceled", "refunded"].includes(order.status);
 }
 
 export function OrderListPage() {
   const [filter, setFilter] = useState<(typeof filterOptions)[number]["key"]>("all");
+  const { data: orders = [], isError, isLoading } = useOrders();
 
   const filteredOrders = useMemo(() => {
     if (filter === "all") {
-      return mockOrders;
+      return orders;
     }
 
     if (filter === "active") {
-      return mockOrders.filter((order) => order.status !== "completed");
+      return orders.filter(isActiveOrder);
     }
 
     if (filter === "done") {
-      return mockOrders.filter((order) => order.status === "completed");
+      return orders.filter((order) => order.status === "delivered");
     }
 
     return [];
-  }, [filter]);
+  }, [filter, orders]);
 
   return (
     <div className="bg-[var(--palette-f7f5f0)] px-4 pb-10 pt-3">
@@ -91,22 +108,35 @@ export function OrderListPage() {
 
       <p className="px-1 pt-2 text-[1rem] text-[var(--palette-7b776f)]">총 {filteredOrders.length}건</p>
 
-      {filteredOrders.length ? (
+      {isLoading ? (
+        <section className="px-1 pt-8 text-center text-sm text-[var(--palette-6d6a64)]">
+          주문 내역을 불러오는 중입니다
+        </section>
+      ) : isError ? (
+        <section className="px-1 pt-8 text-center text-sm text-[var(--color-primary-red)]">
+          주문 내역을 불러오지 못했어요.
+        </section>
+      ) : filteredOrders.length ? (
         <section className="mt-2 space-y-4">
           {filteredOrders.map((order, index) => {
-            const product = mockProducts.find((item) => item.name === order.productName);
+            const firstItem = order.items[0];
+            const productName = firstItem?.productName ?? "DICHA Coffee";
+            const product = mockProducts.find((item) => item.name === productName);
             const meta = orderMeta[order.status];
+            const detailLabel = firstItem
+              ? `${firstItem.optionName} · ${firstItem.quantity}개`
+              : "주문 상품";
 
             return (
               <article
-                key={`${order.id}-${order.productName}-${index}`}
+                key={`${order.id}-${productName}-${index}`}
                 className="overflow-hidden rounded-[1.6rem] bg-white shadow-[0_8px_24px_var(--rgba-34-34-34-006)]"
               >
                 <div className="flex items-start justify-between gap-4 px-4 pb-3 pt-4">
                   <div>
                     <p className="text-[1rem] text-[var(--palette-8b867d)]">{formatOrderDate(order.orderedAt)}</p>
                     <p className="mt-1 text-[0.92rem] text-[var(--palette-c5c0b6)]">
-                      주문번호 {formatOrderNumber(order.id, index)}
+                      주문번호 {order.orderNo}
                     </p>
                   </div>
                   <button className="pt-0.5 text-[1rem] text-[var(--palette-1e3f2d)]" type="button">
@@ -119,7 +149,7 @@ export function OrderListPage() {
                     <div className="flex size-20 shrink-0 items-center justify-center rounded-[0.8rem] bg-[var(--palette-dfe8d8)]">
                       {product ? (
                         <img
-                          alt={order.productName}
+                          alt={productName}
                           className="h-12 w-12 rounded-full object-cover"
                           src={product.image}
                         />
@@ -129,11 +159,11 @@ export function OrderListPage() {
                     </div>
                     <div className="min-w-0 flex-1">
                       <h2 className="text-[1.18rem] font-bold leading-7 tracking-[-0.03em] text-[var(--palette-171717)]">
-                        {order.productName}
+                        {productName}
                       </h2>
-                      <p className="mt-1 text-[0.98rem] text-[var(--palette-88837a)]">{meta.detailLabel}</p>
+                      <p className="mt-1 text-[0.98rem] text-[var(--palette-88837a)]">{detailLabel}</p>
                       <p className="mt-2 text-[1.05rem] font-bold text-[var(--palette-171717)]">
-                        ₩{formatPrice(order.amount)}
+                        ₩{formatPrice(order.totalAmount)}
                       </p>
                     </div>
                   </div>
@@ -152,7 +182,7 @@ export function OrderListPage() {
                     <div className="text-right">
                       <p className="text-[0.95rem] text-[var(--palette-9a958c)]">결제금액</p>
                       <p className="mt-0.5 text-[1rem] font-bold text-[var(--palette-171717)]">
-                        ₩{formatPrice(order.amount)}
+                        ₩{formatPrice(order.totalAmount)}
                       </p>
                     </div>
                   </div>

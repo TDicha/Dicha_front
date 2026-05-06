@@ -2,13 +2,16 @@ import { CheckCircle2, ChevronRight, CreditCard, MapPin } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-import { useCartStore } from "@/app/store";
+import { useAuthStore, useCartStore, useCheckoutStore } from "@/app/store";
 import { PrimaryButton } from "@/components/common/PrimaryButton";
 import { buildCartItemOptionLabel } from "@/features/cart/cartItemDisplay";
 import {
   calculateCartPricing,
   type CartPricingSummary,
 } from "@/features/cart/cartPricing";
+import type { PaymentMethod } from "@/features/checkout";
+import { useCreateOrder } from "@/features/orders";
+import type { Order } from "@/features/orders";
 import { mockProducts } from "@/mock/products";
 import { ROUTES } from "@/shared/constants/routes";
 import { formatPrice } from "@/shared/utils/format";
@@ -25,13 +28,19 @@ const paymentOptions = [
 
 export function PurchasePage() {
   const navigate = useNavigate();
-  const items = useCartStore((state) => state.items);
-  const clearCart = useCartStore((state) => state.clearCart);
+  const draft = useCheckoutStore((state) => state.draft);
+  const clearDraft = useCheckoutStore((state) => state.clearDraft);
+  const clearPurchasedItems = useCartStore((state) => state.clearPurchasedItems);
+  const authStatus = useAuthStore((state) => state.status);
+  const user = useAuthStore((state) => state.user);
+  const createOrderMutation = useCreateOrder();
   const [step, setStep] = useState<"checkout" | "complete">("checkout");
   const [completedPricing, setCompletedPricing] =
     useState<CartPricingSummary | null>(null);
+  const [completedOrder, setCompletedOrder] = useState<Order | null>(null);
   const [selectedPaymentId, setSelectedPaymentId] =
     useState<(typeof paymentOptions)[number]["id"]>("dicha-card");
+  const items = useMemo(() => draft?.items ?? [], [draft]);
 
   const { subtotal, couponDiscount, shippingFee, total } = useMemo(
     () => calculateCartPricing(items),
@@ -41,9 +50,50 @@ export function PurchasePage() {
     (option) => option.id === selectedPaymentId,
   );
 
-  function handlePlaceOrder() {
+  async function handlePlaceOrder() {
+    if (!draft) {
+      return;
+    }
+
+    const addressSnapshot = {
+      recipientName: user?.name ?? "비회원 고객",
+      phone: "010-0000-0000",
+      address: "서울 성동구 연무장길 00",
+      detailAddress: "DICHA Studio 302호",
+      postalCode: "04782",
+    };
+    const paymentMethod = selectedPaymentId as PaymentMethod;
+    const payload =
+      authStatus === "authenticated" && user
+        ? {
+            ordererType: "member" as const,
+            userId: user.id,
+            items: draft.items,
+            addressSnapshot,
+            paymentMethod,
+            pricing: draft.pricing,
+          }
+        : {
+            ordererType: "guest" as const,
+            guestOrderer: {
+              name: "비회원 고객",
+              phone: "010-0000-0000",
+              orderPassword: "0000",
+            },
+            items: draft.items,
+            addressSnapshot,
+            paymentMethod,
+            pricing: draft.pricing,
+          };
+
+    const order = await createOrderMutation.mutateAsync(payload);
+
     setCompletedPricing({ subtotal, couponDiscount, shippingFee, total });
-    clearCart();
+    setCompletedOrder(order);
+    if (draft?.mode === "cart") {
+      clearPurchasedItems(draft.items.map((item) => item.cartItemId));
+    }
+    clearDraft();
     setStep("complete");
   }
 
@@ -87,6 +137,14 @@ export function PurchasePage() {
 
         <section className="mt-5 rounded-[1.6rem] bg-white px-5 py-6">
           <div className="flex items-center justify-between border-b border-[var(--palette-ebe6dd)] pb-4">
+            <span className="text-[1rem] text-[var(--palette-6d6a64)]">
+              주문번호
+            </span>
+            <span className="text-[1rem] font-bold text-[var(--palette-171717)]">
+              {completedOrder?.orderNo ?? "-"}
+            </span>
+          </div>
+          <div className="flex items-center justify-between border-b border-[var(--palette-ebe6dd)] py-4">
             <span className="text-[1rem] text-[var(--palette-6d6a64)]">
               총 결제 금액
             </span>
@@ -220,7 +278,7 @@ export function PurchasePage() {
 
             return (
               <div
-                key={item.productId}
+                key={item.cartItemId}
                 className={
                   index < items.length - 1
                     ? "border-b border-[var(--palette-ebe6dd)] pb-4"
@@ -240,7 +298,7 @@ export function PurchasePage() {
                     </p>
                   </div>
                   <span className="text-[1rem] font-semibold text-[var(--palette-171717)]">
-                    ₩{formatPrice(item.price * item.quantity)}
+                    ₩{formatPrice(item.unitPrice * item.quantity)}
                   </span>
                 </div>
               </div>
@@ -295,9 +353,10 @@ export function PurchasePage() {
         </div>
         <PrimaryButton
           className="h-16 min-w-[18rem] rounded-[1.35rem] px-6 text-[1.05rem] shadow-none"
+          disabled={createOrderMutation.isPending}
           onClick={handlePlaceOrder}
         >
-          결제하기
+          {createOrderMutation.isPending ? "주문 생성 중..." : "결제하기"}
         </PrimaryButton>
       </div>
     </div>

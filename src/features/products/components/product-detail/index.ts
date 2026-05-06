@@ -1,0 +1,11 @@
+export { ProductBottomActionBar } from "@/features/products/components/product-detail/ProductBottomActionBar";
+export { ProductBrewingGuideSection } from "@/features/products/components/product-detail/ProductBrewingGuideSection";
+export { ProductDetailActionRow } from "@/features/products/components/product-detail/ProductDetailActionRow";
+export { ProductDetailHeader } from "@/features/products/components/product-detail/ProductDetailHeader";
+export { ProductFlavorNotesSection } from "@/features/products/components/product-detail/ProductFlavorNotesSection";
+export { ProductHeroSection } from "@/features/products/components/product-detail/ProductHeroSection";
+export { ProductOptionBottomSheet } from "@/features/products/components/product-detail/ProductOptionBottomSheet";
+export { ProductOptionSection } from "@/features/products/components/product-detail/ProductOptionSection";
+export { ProductReviewSection } from "@/features/products/components/product-detail/ProductReviewSection";
+export { ProductStorySection } from "@/features/products/components/product-detail/ProductStorySection";
+export { ProductSummarySection } from "@/features/products/components/product-detail/ProductSummarySection";

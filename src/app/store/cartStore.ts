@@ -1,17 +1,25 @@
 import { create } from "zustand";
 
-interface CartItem {
+export interface CartItem {
+  cartItemId: string;
   productId: string;
+  optionId: string;
   productName: string;
+  optionName: string;
+  unitPrice: number;
   quantity: number;
-  price: number;
+  selected: boolean;
 }
 
 interface CartState {
   items: CartItem[];
   addItem: (item: CartItem) => void;
-  updateQuantity: (productId: string, quantity: number) => void;
-  removeItem: (productId: string) => void;
+  updateQuantity: (cartItemId: string, quantity: number) => void;
+  removeItem: (cartItemId: string) => void;
+  toggleSelected: (cartItemId: string) => void;
+  selectAll: () => void;
+  unselectAll: () => void;
+  clearPurchasedItems: (cartItemIds: string[]) => void;
   clearCart: () => void;
 }
 
@@ -20,14 +28,18 @@ export const useCartStore = create<CartState>((set) => ({
   addItem: (item) =>
     set((state) => {
       const existingItem = state.items.find(
-        (cartItem) => cartItem.productId === item.productId,
+        (cartItem) => cartItem.optionId === item.optionId,
       );
 
       if (existingItem) {
         return {
           items: state.items.map((cartItem) =>
-            cartItem.productId === item.productId
-              ? { ...cartItem, quantity: cartItem.quantity + item.quantity }
+            cartItem.cartItemId === existingItem.cartItemId
+              ? {
+                  ...cartItem,
+                  quantity: cartItem.quantity + item.quantity,
+                  selected: true,
+                }
               : cartItem,
           ),
         };
@@ -35,17 +47,39 @@ export const useCartStore = create<CartState>((set) => ({
 
       return { items: [...state.items, item] };
     }),
-  updateQuantity: (productId, quantity) =>
+  updateQuantity: (cartItemId, quantity) =>
     set((state) => ({
       items: state.items
         .map((item) =>
-          item.productId === productId ? { ...item, quantity: Math.max(1, quantity) } : item,
+          item.cartItemId === cartItemId
+            ? { ...item, quantity: Math.max(1, quantity) }
+            : item,
         )
         .filter((item) => item.quantity > 0),
     })),
-  removeItem: (productId) =>
+  removeItem: (cartItemId) =>
     set((state) => ({
-      items: state.items.filter((item) => item.productId !== productId),
+      items: state.items.filter((item) => item.cartItemId !== cartItemId),
+    })),
+  toggleSelected: (cartItemId) =>
+    set((state) => ({
+      items: state.items.map((item) =>
+        item.cartItemId === cartItemId
+          ? { ...item, selected: !item.selected }
+          : item,
+      ),
+    })),
+  selectAll: () =>
+    set((state) => ({
+      items: state.items.map((item) => ({ ...item, selected: true })),
+    })),
+  unselectAll: () =>
+    set((state) => ({
+      items: state.items.map((item) => ({ ...item, selected: false })),
+    })),
+  clearPurchasedItems: (cartItemIds) =>
+    set((state) => ({
+      items: state.items.filter((item) => !cartItemIds.includes(item.cartItemId)),
     })),
   clearCart: () => set({ items: [] }),
 }));

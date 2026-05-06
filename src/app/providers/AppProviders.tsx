@@ -1,32 +1,15 @@
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { RouterProvider } from "react-router-dom";
-import { useState } from "react";
 
+import { PwaProvider } from "@/app/providers/PwaProvider";
+import { QueryProvider } from "@/app/providers/QueryProvider";
 import { router } from "@/app/router/router";
-import { useInstallPrompt } from "@/services/hooks/useInstallPrompt";
-
-function InstallPromptBootstrap() {
-  useInstallPrompt();
-  return null;
-}
 
 export function AppProviders() {
-  const [queryClient] = useState(
-    () =>
-      new QueryClient({
-        defaultOptions: {
-          queries: {
-            staleTime: 1000 * 30,
-            retry: 1,
-          },
-        },
-      }),
-  );
-
   return (
-    <QueryClientProvider client={queryClient}>
-      <InstallPromptBootstrap />
-      <RouterProvider router={router} />
-    </QueryClientProvider>
+    <QueryProvider>
+      <PwaProvider>
+        <RouterProvider router={router} />
+      </PwaProvider>
+    </QueryProvider>
   );
 }

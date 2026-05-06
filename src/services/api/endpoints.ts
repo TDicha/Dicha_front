@@ -5,6 +5,7 @@ export const endpoints = {
     signup: "/api/auth/signup",
     logout: "/api/auth/logout",
     refresh: "/api/auth/refresh",
+    csrf: "/api/auth/csrf",
   },
   products: {
     list: "/api/products",
@@ -12,6 +13,16 @@ export const endpoints = {
   },
   orders: {
     list: "/api/orders",
+    create: "/api/orders",
+    detail: (orderId: string) => `/api/orders/${orderId}`,
+    guestLookup: "/api/guest-orders/lookup",
+  },
+  addresses: {
+    list: "/api/addresses",
+  },
+  payments: {
+    create: "/api/payments",
+    confirm: "/api/payments/confirm",
   },
   subscriptions: {
     list: "/api/subscriptions",

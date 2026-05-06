@@ -1,9 +1,17 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
 import { useAppStore } from "@/app/store";
-import { ProductTileCard } from "@/components/common/ProductTileCard";
-import { SearchInput } from "@/components/common/SearchInput";
-import { mockProducts } from "@/mock/products";
+import { EmptyState } from "@/components/common/EmptyState";
+import {
+  ProductCategoryFilter,
+  ProductGrid,
+  ProductListSearchBar,
+  ProductLoadMoreButton,
+  ProductSortTabs,
+  type ProductCategoryKey,
+  type ProductSortKey,
+} from "@/features/products";
+import { useProducts } from "@/features/products";
 import type { Product, ProductBadge } from "@/shared/types/models";
 
 const productPageSize = 4;
@@ -13,9 +21,6 @@ const sortOptions = [
   { key: "popular", label: "인기순" },
   { key: "price", label: "가격순" },
 ] as const;
-
-type SortKey = (typeof sortOptions)[number]["key"];
-type CategoryKey = Product["category"] | "all";
 
 const badgePriority: Record<ProductBadge, number> = {
   BEST: 3,
@@ -41,14 +46,20 @@ function getCategoryLabel(product: Product) {
 export function ProductListPage() {
   const query = useAppStore((state) => state.searchQuery);
   const setQuery = useAppStore((state) => state.setSearchQuery);
-  const [selectedCategory, setSelectedCategory] = useState<CategoryKey>("all");
-  const [selectedSort, setSelectedSort] = useState<SortKey>("recommended");
+  const [selectedCategory, setSelectedCategory] = useState<ProductCategoryKey>("all");
+  const [selectedSort, setSelectedSort] = useState<ProductSortKey>("recommended");
   const [visibleCount, setVisibleCount] = useState(productPageSize);
+  const productParams = {
+    ...(selectedCategory === "all" ? {} : { category: selectedCategory }),
+    ...(query.trim() ? { query: query.trim() } : {}),
+  };
+  const { data: products = [], isError, isLoading } = useProducts(productParams);
+  const { data: allProducts = [] } = useProducts();
 
   const categories = useMemo(() => {
     const productCategories = new Map<Product["category"], string>();
 
-    mockProducts.forEach((product) => {
+    allProducts.forEach((product) => {
       productCategories.set(product.category, getCategoryLabel(product));
     });
 
@@ -56,26 +67,10 @@ export function ProductListPage() {
       { key: "all" as const, label: "전체" },
       ...Array.from(productCategories, ([key, label]) => ({ key, label })),
     ];
-  }, []);
+  }, [allProducts]);
 
   const filteredProducts = useMemo(() => {
-    const normalizedQuery = query.trim().toLowerCase();
-    const categoryFilteredProducts =
-      selectedCategory === "all"
-        ? mockProducts
-        : mockProducts.filter(
-            (product) => product.category === selectedCategory,
-          );
-
-    const searchFilteredProducts = normalizedQuery
-      ? categoryFilteredProducts.filter((product) =>
-          `${product.name} ${product.subtitle} ${product.originLabel ?? ""} ${product.notes.join(" ")}`
-            .toLowerCase()
-            .includes(normalizedQuery),
-        )
-      : categoryFilteredProducts;
-
-    return [...searchFilteredProducts].sort((first, second) => {
+    return [...products].sort((first, second) => {
       if (selectedSort === "popular") {
         return (
           (second.reviewCount ?? 0) - (first.reviewCount ?? 0) ||
@@ -89,7 +84,7 @@ export function ProductListPage() {
 
       return getRecommendationScore(second) - getRecommendationScore(first);
     });
-  }, [query, selectedCategory, selectedSort]);
+  }, [products, selectedSort]);
 
   const visibleProducts = filteredProducts.slice(0, visibleCount);
   const remainingProductCount = Math.max(
@@ -97,84 +92,59 @@ export function ProductListPage() {
     0,
   );
 
-  useEffect(() => {
-    setVisibleCount(productPageSize);
-  }, [query, selectedCategory, selectedSort]);
-
   return (
     <div className="page-content space-y-0 bg-white px-0 pt-0">
-      <div className="px-4 py-3">
-        <SearchInput
-          onChange={setQuery}
-          placeholder="원두, 드립백, 구독 상품 검색"
-          value={query}
+      <ProductListSearchBar
+        onChange={(nextQuery) => {
+          setQuery(nextQuery);
+          setVisibleCount(productPageSize);
+        }}
+        query={query}
+      />
+      <ProductCategoryFilter
+        categories={categories}
+        onSelectCategory={(category) => {
+          setSelectedCategory(category);
+          setVisibleCount(productPageSize);
+        }}
+        selectedCategory={selectedCategory}
+      />
+      <ProductSortTabs
+        onSelectSort={(sort) => {
+          setSelectedSort(sort);
+          setVisibleCount(productPageSize);
+        }}
+        options={sortOptions}
+        selectedSort={selectedSort}
+      />
+
+      {isLoading ? (
+        <div className="px-4 py-8 text-center text-sm text-[var(--color-muted)]">
+          상품을 불러오는 중입니다
+        </div>
+      ) : isError ? (
+        <div className="px-4 py-4">
+          <EmptyState
+            description="잠시 후 다시 시도해 주세요."
+            title="상품을 불러오지 못했어요"
+          />
+        </div>
+      ) : visibleProducts.length ? (
+        <ProductGrid products={visibleProducts} />
+      ) : (
+        <div className="px-4 py-4">
+          <EmptyState
+            description="검색어나 카테고리를 바꿔 다시 찾아보세요."
+            title="조건에 맞는 상품이 없어요"
+          />
+        </div>
+      )}
+
+      {!isLoading && !isError && remainingProductCount > 0 ? (
+        <ProductLoadMoreButton
+          onLoadMore={() => setVisibleCount((current) => current + productPageSize)}
+          remainingProductCount={remainingProductCount}
         />
-      </div>
-
-      <section className="overflow-x-auto border-b border-[var(--rgba-17-24-39-006)] px-4 py-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-        <div className="flex min-w-max gap-2">
-          {categories.map((category) => {
-            const isSelected = category.key === selectedCategory;
-
-            return (
-              <button
-                key={category.key}
-                className={[
-                  "rounded-full border px-3 py-2 text-sm font-medium transition",
-                  isSelected
-                    ? "border-[var(--color-primary-green)] bg-[var(--color-primary-green)] text-white"
-                    : "border-[var(--rgba-17-24-39-008)] bg-white text-[var(--color-primary-green)]",
-                ].join(" ")}
-                onClick={() => setSelectedCategory(category.key)}
-                type="button"
-              >
-                {category.label}
-              </button>
-            );
-          })}
-        </div>
-      </section>
-
-      <section className="flex items-center gap-3 border-b border-[var(--rgba-17-24-39-006)] px-4 py-3 text-sm text-[var(--color-muted)]">
-        {sortOptions.map((sort, index) => (
-          <div key={sort.key} className="flex items-center gap-3">
-            <button
-              className={
-                selectedSort === sort.key
-                  ? "font-semibold text-[var(--color-primary-green)]"
-                  : ""
-              }
-              onClick={() => setSelectedSort(sort.key)}
-              type="button"
-            >
-              {sort.label}
-              {selectedSort === sort.key ? " ✓" : ""}
-            </button>
-            {index < sortOptions.length - 1 ? (
-              <span className="text-[var(--rgba-17-24-39-018)]">|</span>
-            ) : null}
-          </div>
-        ))}
-      </section>
-
-      <div className="grid grid-cols-2 gap-x-3 gap-y-4 px-4 py-4">
-        {visibleProducts.map((product) => (
-          <ProductTileCard key={product.id} product={product} />
-        ))}
-      </div>
-
-      {remainingProductCount > 0 ? (
-        <div className="px-4 pb-6 pt-1">
-          <button
-            className="flex h-11 w-full items-center justify-center rounded-[1rem] border border-[var(--rgba-17-24-39-008)] bg-white text-sm font-medium text-[var(--color-primary-green)]"
-            onClick={() =>
-              setVisibleCount((current) => current + productPageSize)
-            }
-            type="button"
-          >
-            더 보기 ({remainingProductCount}개)
-          </button>
-        </div>
       ) : null}
     </div>
   );

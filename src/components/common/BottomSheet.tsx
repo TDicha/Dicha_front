@@ -19,7 +19,7 @@ export function BottomSheet({
     <div
       aria-hidden={!open}
       className={cn(
-        "fixed inset-0 z-40 transition-[background-color,backdrop-filter] duration-300",
+        "sticky inset-0 z-40 transition-[background-color,backdrop-filter] duration-300",
         open
           ? "pointer-events-auto bg-black/28 backdrop-blur-[2px]"
           : "pointer-events-none bg-black/0 backdrop-blur-none",

@@ -1,8 +1,7 @@
 import { Minus, Plus, ShoppingCart, X } from "lucide-react";
-import { useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
-import { useCartStore } from "@/app/store";
+import { useCartStore, useCheckoutStore } from "@/app/store";
 import { PrimaryButton } from "@/components/common/PrimaryButton";
 import { buildCartItemOptionLabel } from "@/features/cart/cartItemDisplay";
 import { calculateCartPricing } from "@/features/cart/cartPricing";
@@ -11,49 +10,42 @@ import { ROUTES } from "@/shared/constants/routes";
 import { formatPrice } from "@/shared/utils/format";
 
 export function CartPage() {
+  const navigate = useNavigate();
   const items = useCartStore((state) => state.items);
   const updateQuantity = useCartStore((state) => state.updateQuantity);
   const removeItem = useCartStore((state) => state.removeItem);
-  const [selectedIdState, setSelectedIdState] = useState<string[] | null>(null);
+  const toggleSelected = useCartStore((state) => state.toggleSelected);
+  const selectAll = useCartStore((state) => state.selectAll);
+  const unselectAll = useCartStore((state) => state.unselectAll);
+  const clearPurchasedItems = useCartStore((state) => state.clearPurchasedItems);
+  const createCheckoutFromCart = useCheckoutStore((state) => state.createFromCart);
+  const selectedItems = items.filter((item) => item.selected);
 
   const recommendedProducts = mockProducts.slice(0, 2);
-  const availableIds = useMemo(
-    () => items.map((item) => item.productId),
-    [items],
-  );
-  const selectedIds = useMemo(() => {
-    if (selectedIdState === null) {
-      return availableIds;
-    }
-
-    return selectedIdState.filter((id) => availableIds.includes(id));
-  }, [availableIds, selectedIdState]);
-  const selectedItems = items.filter((item) =>
-    selectedIds.includes(item.productId),
-  );
   const { subtotal, couponDiscount, shippingFee, total } =
     calculateCartPricing(selectedItems);
-  const isAllSelected = items.length > 0 && selectedIds.length === items.length;
+  const isAllSelected = items.length > 0 && selectedItems.length === items.length;
 
   function handleToggleAll() {
     if (isAllSelected) {
-      setSelectedIdState([]);
+      unselectAll();
       return;
     }
 
-    setSelectedIdState(availableIds);
+    selectAll();
   }
 
-  function handleToggleItem(productId: string) {
-    setSelectedIdState((current) => {
-      const base =
-        current === null
-          ? availableIds
-          : current.filter((id) => availableIds.includes(id));
-      return base.includes(productId)
-        ? base.filter((id) => id !== productId)
-        : [...base, productId];
-    });
+  function handleRemoveSelected() {
+    clearPurchasedItems(selectedItems.map((item) => item.cartItemId));
+  }
+
+  function handleCheckout() {
+    if (!selectedItems.length) {
+      return;
+    }
+
+    createCheckoutFromCart(selectedItems);
+    navigate(ROUTES.purchase);
   }
 
   if (!items.length) {
@@ -133,8 +125,19 @@ export function CartPage() {
               전체선택
             </span>
           </span>
-          <span className="text-[1.05rem] text-[var(--palette-6f6b63)]">
-            {selectedIds.length}개 선택됨
+          <span className="flex items-center gap-3">
+            <span className="text-[1.05rem] text-[var(--palette-6f6b63)]">
+              {selectedItems.length}개 선택됨
+            </span>
+            <span
+              className="rounded-full bg-[var(--palette-f2efea)] px-3 py-1 text-[0.85rem] font-semibold text-[var(--palette-6f6b63)]"
+              onClick={(event) => {
+                event.stopPropagation();
+                handleRemoveSelected();
+              }}
+            >
+              선택삭제
+            </span>
           </span>
         </button>
       </section>
@@ -144,12 +147,11 @@ export function CartPage() {
           const product = mockProducts.find(
             (candidate) => candidate.id === item.productId,
           );
-          const isSelected = selectedIds.includes(item.productId);
-          const lineTotal = item.price * item.quantity;
+          const lineTotal = item.unitPrice * item.quantity;
 
           return (
             <article
-              key={item.productId}
+              key={item.cartItemId}
               className={[
                 "flex gap-4 px-6 py-8",
                 index < items.length - 1
@@ -160,13 +162,13 @@ export function CartPage() {
               <button
                 aria-label={`${item.productName} 선택`}
                 className="mt-16"
-                onClick={() => handleToggleItem(item.productId)}
+                onClick={() => toggleSelected(item.cartItemId)}
                 type="button"
               >
                 <span
                   className={[
                     "flex size-9 items-center justify-center rounded-[0.8rem] border",
-                    isSelected
+                    item.selected
                       ? "border-[var(--second-color)] bg-[var(--second-color)]"
                       : "border-[var(--palette-d7d0c5)] bg-white",
                   ].join(" ")}
@@ -198,7 +200,7 @@ export function CartPage() {
                   <button
                     aria-label={`${item.productName} 삭제`}
                     className="text-[var(--palette-7a746d)]"
-                    onClick={() => removeItem(item.productId)}
+                    onClick={() => removeItem(item.cartItemId)}
                     type="button"
                   >
                     <X className="size-7 stroke-[1.5]" />
@@ -208,7 +210,7 @@ export function CartPage() {
                 <div className="mt-5 flex items-end justify-between gap-3">
                   <div>
                     <p className="text-[1.15rem] font-bold text-[var(--palette-992b22)]">
-                      ₩{formatPrice(item.price)}
+                      ₩{formatPrice(item.unitPrice)}
                     </p>
                     {item.quantity > 1 ? (
                       <p className="mt-1 text-[0.95rem] text-[var(--palette-76706a)]">
@@ -221,7 +223,7 @@ export function CartPage() {
                     <button
                       className="flex size-10 items-center justify-center text-[var(--palette-55514a)]"
                       onClick={() =>
-                        updateQuantity(item.productId, item.quantity - 1)
+                        updateQuantity(item.cartItemId, item.quantity - 1)
                       }
                       type="button"
                     >
@@ -233,7 +235,7 @@ export function CartPage() {
                     <button
                       className="flex size-10 items-center justify-center text-[var(--second-color)]"
                       onClick={() =>
-                        updateQuantity(item.productId, item.quantity + 1)
+                        updateQuantity(item.cartItemId, item.quantity + 1)
                       }
                       type="button"
                     >
@@ -291,12 +293,21 @@ export function CartPage() {
             ₩{formatPrice(total)}
           </p>
         </div>
-        <PrimaryButton
-          asChild
-          className="h-16 min-w-[18rem] rounded-[1.35rem] px-6 text-[1.05rem] shadow-none"
-        >
-          <Link to={ROUTES.purchase}>₩{formatPrice(total)} 결제하기</Link>
-        </PrimaryButton>
+        {selectedItems.length ? (
+          <PrimaryButton
+            className="h-16 min-w-[18rem] rounded-[1.35rem] px-6 text-[1.05rem] shadow-none"
+            onClick={handleCheckout}
+          >
+            ₩{formatPrice(total)} 결제하기
+          </PrimaryButton>
+        ) : (
+          <PrimaryButton
+            className="h-16 min-w-[18rem] rounded-[1.35rem] px-6 text-[1.05rem] shadow-none"
+            disabled
+          >
+            상품 선택 필요
+          </PrimaryButton>
+        )}
       </div>
     </div>
   );

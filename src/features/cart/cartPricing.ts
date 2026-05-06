@@ -1,5 +1,5 @@
 interface PriceableCartItem {
-  price: number;
+  unitPrice: number;
   quantity: number;
 }
 
@@ -20,7 +20,7 @@ export function calculateCartPricing(
   items: PriceableCartItem[],
 ): CartPricingSummary {
   const subtotal = items.reduce(
-    (sum, item) => sum + item.price * item.quantity,
+    (sum, item) => sum + item.unitPrice * item.quantity,
     0,
   );
   const couponDiscount = items.length

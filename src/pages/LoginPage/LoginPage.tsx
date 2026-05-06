@@ -1,6 +1,6 @@
 import { ArrowLeft, Mail, Search, ShieldCheck } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import { useAuthStore } from "@/app/store";
 import { PrimaryButton } from "@/components/common/PrimaryButton";
@@ -8,6 +8,7 @@ import { ROUTES } from "@/shared/constants/routes";
 
 export function LoginPage() {
   const navigate = useNavigate();
+  const location = useLocation();
   const signIn = useAuthStore((state) => state.signIn);
   const isPending = useAuthStore((state) => state.isPending);
   const error = useAuthStore((state) => state.error);
@@ -22,7 +23,8 @@ export function LoginPage() {
     const isSuccess = await signIn({ email, password });
 
     if (isSuccess) {
-      navigate(ROUTES.home);
+      const from = typeof location.state?.from === "string" ? location.state.from : ROUTES.home;
+      navigate(from, { replace: true });
     }
   }
 

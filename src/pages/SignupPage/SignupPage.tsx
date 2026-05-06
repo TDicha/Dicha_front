@@ -23,8 +23,8 @@ export function SignupPage() {
     marketing: false,
   });
   const [email, setEmail] = useState("wooseok@dicha.coffee");
-  const [password, setPassword] = useState("password123");
-  const [passwordConfirm, setPasswordConfirm] = useState("password123");
+  const [password, setPassword] = useState("Password123!");
+  const [passwordConfirm, setPasswordConfirm] = useState("Password123!");
   const [name, setName] = useState("우석");
   const [phone, setPhone] = useState("010-0000-0000");
   const [verificationCode, setVerificationCode] = useState("");
@@ -42,11 +42,23 @@ export function SignupPage() {
   ] as const;
 
   const passwordChecks = useMemo(
-    () => ({
-      hasLetter: /[A-Za-z]/.test(password),
-      hasNumber: /\d/.test(password),
-      hasLength: password.length >= 8,
-    }),
+    () => {
+      const typeCount = [
+        /[A-Z]/.test(password),
+        /[a-z]/.test(password),
+        /\d/.test(password),
+        /[^A-Za-z0-9]/.test(password),
+      ].filter(Boolean).length;
+
+      return {
+        hasUppercase: /[A-Z]/.test(password),
+        hasLowercase: /[a-z]/.test(password),
+        hasNumber: /\d/.test(password),
+        hasSpecial: /[^A-Za-z0-9]/.test(password),
+        hasLength: password.length >= 8,
+        hasEnoughTypes: typeCount >= 3,
+      };
+    },
     [password],
   );
 
@@ -207,16 +219,19 @@ export function SignupPage() {
                 <input
                   className="w-full bg-transparent text-sm text-[var(--color-primary-green)] placeholder:text-[var(--palette-999)]"
                   onChange={(event) => setPassword(event.target.value)}
-                  placeholder="영문, 숫자 포함 8자 이상"
+                  placeholder="8자 이상, 3종 이상 조합"
                   type="password"
                   value={password}
                 />
               </div>
               <div className="mt-2 flex flex-wrap gap-4 text-[11px]">
-                {[
-                  { label: "영문 포함", passed: passwordChecks.hasLetter },
+                  {[
+                  { label: "대문자", passed: passwordChecks.hasUppercase },
+                  { label: "소문자", passed: passwordChecks.hasLowercase },
                   { label: "숫자 포함", passed: passwordChecks.hasNumber },
+                  { label: "특수문자", passed: passwordChecks.hasSpecial },
                   { label: "8자 이상", passed: passwordChecks.hasLength },
+                  { label: "3종 이상", passed: passwordChecks.hasEnoughTypes },
                 ].map((item) => (
                   <span
                     key={item.label}
@@ -315,9 +330,8 @@ export function SignupPage() {
               isPending ||
               !emailChecked ||
               !phoneVerified ||
-              !passwordChecks.hasLetter ||
-              !passwordChecks.hasNumber ||
               !passwordChecks.hasLength ||
+              !passwordChecks.hasEnoughTypes ||
               password !== passwordConfirm
             }
             onClick={handleSubmitDetails}
