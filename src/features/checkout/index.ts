@@ -1,2 +1,10 @@
 export * from "@/features/checkout/checkoutDraft";
+export { PurchaseBottomActionBar } from "@/features/checkout/components/PurchaseBottomActionBar";
+export { PurchaseCompleteView } from "@/features/checkout/components/PurchaseCompleteView";
+export { PurchaseEmptyState } from "@/features/checkout/components/PurchaseEmptyState";
+export { PurchaseHeaderSection } from "@/features/checkout/components/PurchaseHeaderSection";
+export { PurchaseItemsSection } from "@/features/checkout/components/PurchaseItemsSection";
+export { PurchasePaymentMethodSection } from "@/features/checkout/components/PurchasePaymentMethodSection";
+export { PurchasePricingSection } from "@/features/checkout/components/PurchasePricingSection";
+export { PurchaseShippingAddressSection } from "@/features/checkout/components/PurchaseShippingAddressSection";
 export * from "@/features/checkout/types";
