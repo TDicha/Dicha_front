@@ -7,6 +7,10 @@ export function RouteGuard() {
   const location = useLocation();
   const status = useAuthStore((state) => state.status);
 
+  if (status === "checking") {
+    return null;
+  }
+
   if (status !== "authenticated") {
     return <Navigate replace state={{ from: location.pathname }} to={ROUTES.login} />;
   }

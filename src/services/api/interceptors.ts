@@ -1,9 +1,13 @@
 import type { AxiosError, AxiosInstance } from "axios";
 
-const unsafeMethods = new Set(["post", "put", "patch", "delete"]);
+import { clearAccessToken, getAccessToken } from "@/services/auth/tokenStorage";
 
 function sanitizeError(error: AxiosError) {
   const status = error.response?.status;
+
+  if (status === 401) {
+    clearAccessToken();
+  }
 
   return Promise.reject({
     status,
@@ -18,11 +22,10 @@ function sanitizeError(error: AxiosError) {
 
 export function applyInterceptors(client: AxiosInstance) {
   client.interceptors.request.use((config) => {
-    const method = config.method?.toLowerCase();
+    const accessToken = getAccessToken();
 
-    if (method && unsafeMethods.has(method)) {
-      // TODO: Spring Security CSRF policy 확정 후 endpoints.auth.csrf에서 받은 토큰을
-      // X-CSRF-TOKEN 같은 짧은 수명 헤더로 붙인다. 장기 localStorage 저장은 피한다.
+    if (accessToken) {
+      config.headers.Authorization = `Bearer ${accessToken}`;
     }
 
     return config;

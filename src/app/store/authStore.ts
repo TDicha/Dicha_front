@@ -1,9 +1,10 @@
 import { create } from "zustand";
 
-import { login, logout, signup } from "@/services/auth/authService";
+import { fetchSession, login, logout, signup } from "@/services/auth/authService";
+import { hasAccessToken } from "@/services/auth/tokenStorage";
 import type { UserProfile } from "@/shared/types/models";
 
-type AuthStatus = "authenticated" | "anonymous";
+type AuthStatus = "checking" | "authenticated" | "anonymous";
 
 interface AuthState {
   user: UserProfile | null;
@@ -15,12 +16,13 @@ interface AuthState {
   signIn: (payload: { email: string; password: string }) => Promise<boolean>;
   signUp: (payload: { name: string; email: string; password: string }) => Promise<boolean>;
   signOut: () => Promise<void>;
+  hydrateSession: () => Promise<void>;
   clearError: () => void;
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
   user: null,
-  status: "anonymous",
+  status: hasAccessToken() ? "checking" : "anonymous",
   isPending: false,
   error: null,
   login: (user) => set({ user, status: "authenticated" }),
@@ -75,6 +77,27 @@ export const useAuthStore = create<AuthState>((set) => ({
         status: "anonymous",
         isPending: false,
       });
+    }
+  },
+  hydrateSession: async () => {
+    if (!hasAccessToken()) {
+      set({ user: null, status: "anonymous" });
+      return;
+    }
+
+    set({ status: "checking", error: null });
+
+    try {
+      const user = await fetchSession();
+
+      if (!user) {
+        set({ user: null, status: "anonymous" });
+        return;
+      }
+
+      set({ user, status: "authenticated" });
+    } catch {
+      set({ user: null, status: "anonymous" });
     }
   },
 }));

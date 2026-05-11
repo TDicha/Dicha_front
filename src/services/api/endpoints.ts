@@ -1,11 +1,8 @@
 export const endpoints = {
   auth: {
-    session: "/api/auth/session",
-    login: "/api/auth/login",
-    signup: "/api/auth/signup",
-    logout: "/api/auth/logout",
-    refresh: "/api/auth/refresh",
-    csrf: "/api/auth/csrf",
+    session: "/api/members/me",
+    login: "/api/members/login",
+    signup: "/api/members/signup",
   },
   products: {
     list: "/api/products",
