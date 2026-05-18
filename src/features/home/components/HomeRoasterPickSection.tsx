@@ -21,21 +21,18 @@ export function HomeRoasterPickSection({
 
   return (
     <AppCard className="relative overflow-hidden rounded-[1.6rem]" variant="warm">
-      <span className="absolute right-4 top-4 flex size-[5.25rem] items-center justify-center rounded-full bg-[var(--rgba-193-162-97-024)]">
-        <Coffee className="size-9 text-[var(--color-primary-green)]" />
+      <span className="absolute right-4 top-4 flex size-[clamp(4.25rem,20vw,5.25rem)] items-center justify-center rounded-full bg-[var(--surface-accent-orb)]">
+        <Coffee className="size-[clamp(1.85rem,9vw,2.25rem)] text-[var(--brand-primary)]" />
       </span>
-      <span className="inline-flex rounded-full bg-white/70 px-3 py-1 text-[10px] font-semibold tracking-[0.1em] text-[var(--color-primary-green)]">
-        {roasterPickMeta.label}
-      </span>
-      <p className="mt-3 text-xs font-semibold text-[var(--color-muted)]">{roasterPickMeta.title}</p>
-      <h3 className="mt-1 font-heading text-[1.4rem] font-semibold tracking-[-0.04em] text-[var(--color-primary-green)]">
+      <p className="mt-3 text-xs font-semibold text-[var(--text-muted)]">{roasterPickMeta.title}</p>
+      <h3 className="mt-1 max-w-[calc(100%_-_5rem)] break-keep font-heading text-[clamp(1.25rem,5.5vw,1.4rem)] font-semibold tracking-[-0.04em] text-[var(--brand-primary)]">
         {product.name}
       </h3>
-      <p className="mt-1 max-w-[12rem] text-xs leading-5 text-[var(--color-muted)]">
+      <p className="mt-1 max-w-[12rem] break-keep text-xs leading-5 text-[var(--text-muted)] max-[360px]:max-w-[10.5rem]">
         {product.notes.join(" · ")}
       </p>
       <Link
-        className="mt-3 inline-flex items-center rounded-full bg-[var(--color-primary-green)] px-3 py-1.5 text-xs font-semibold text-white"
+        className="mt-3 inline-flex items-center rounded-full bg-[var(--brand-primary)] px-3 py-1.5 text-xs font-semibold text-[var(--text-inverse)]"
         to={`${ROUTES.products}/${product.id}`}
       >
         자세히 보기

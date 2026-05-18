@@ -16,16 +16,16 @@ export function MyBlendCardList({ blendCards }: MyBlendCardListProps) {
       {blendCards.map((blend) => (
         <article
           key={blend.id}
-          className="overflow-hidden rounded-[1.75rem] border-2 border-[var(--second-color)] bg-white shadow-[0_8px_20px_var(--rgba-32-74-50-005)]"
+          className="overflow-hidden rounded-[1.75rem] border-2 border-[var(--brand-secondary)] bg-[var(--surface-base)] shadow-[var(--shadow-card-muted)]"
         >
-          <div className="flex items-start justify-between gap-3 bg-[var(--palette-dfe8d6)] px-5 py-4">
+          <div className="flex items-start justify-between gap-3 bg-[var(--surface-green-card)] px-5 py-4">
             <div>
-              <h2 className="text-[1.75rem] font-bold tracking-[-0.04em] text-[var(--second-color)]">
+              <h2 className="text-[1.75rem] font-bold tracking-[-0.04em] text-[var(--brand-secondary)]">
                 {blend.title}
               </h2>
-              <div className="mt-3 flex items-center gap-2 text-[0.95rem] text-[var(--palette-6f6a61)]">
+              <div className="mt-3 flex items-center gap-2 text-[0.95rem] text-[var(--text-chip-muted)]">
                 {blend.isQr ? (
-                  <span className="inline-flex items-center gap-1 rounded-full bg-[var(--palette-cfa54f)] px-3 py-1 text-[var(--palette-173726)]">
+                  <span className="inline-flex items-center gap-1 rounded-full bg-[var(--brand-accent-strong)] px-3 py-1 text-[var(--text-brand-deep)]">
                     <QrCode className="size-3.5" />
                     {blend.source}
                   </span>
@@ -37,31 +37,31 @@ export function MyBlendCardList({ blendCards }: MyBlendCardListProps) {
                 )}
               </div>
             </div>
-            <span className="pt-1 text-[1rem] text-[var(--palette-6f6a61)]">
+            <span className="pt-1 text-[1rem] text-[var(--text-chip-muted)]">
               {blend.savedAt}
             </span>
           </div>
 
           <div className="px-5 py-4">
-            <p className="text-[1.55rem] font-bold tracking-[-0.04em] text-[var(--palette-173726)]">
+            <p className="text-[1.55rem] font-bold tracking-[-0.04em] text-[var(--text-brand-deep)]">
               {blend.beanName}
             </p>
 
             <div className="mt-4 flex flex-wrap items-center gap-2">
               {blend.recipe?.notes[0] ? (
-                <span className="min-w-[5.5rem] rounded-full bg-[var(--second-color)] px-5 py-2 text-center text-[1rem] font-semibold text-white">
+                <span className="min-w-[5.5rem] rounded-full bg-[var(--brand-secondary)] px-5 py-2 text-center text-[1rem] font-semibold text-[var(--text-inverse)]">
                   {blend.recipe.notes[0]}
                 </span>
               ) : null}
-              <span className="rounded-full bg-[var(--palette-f3f2ef)] px-4 py-2 text-[1rem] text-[var(--palette-6f6a61)]">
+              <span className="rounded-full bg-[var(--surface-chip)] px-4 py-2 text-[1rem] text-[var(--text-chip-muted)]">
                 {blend.method}
               </span>
-              <span className="rounded-full bg-[var(--palette-f3f2ef)] px-4 py-2 text-[1rem] text-[var(--palette-6f6a61)]">
+              <span className="rounded-full bg-[var(--surface-chip)] px-4 py-2 text-[1rem] text-[var(--text-chip-muted)]">
                 {blend.amount}
               </span>
             </div>
 
-            <div className="mt-4 border-t border-[var(--palette-ebe6dd)] pt-4">
+            <div className="mt-4 border-t border-[var(--border-list)] pt-4">
               <div className="grid grid-cols-[1.65fr_1fr] gap-3">
                 <PrimaryButton
                   asChild
@@ -72,7 +72,7 @@ export function MyBlendCardList({ blendCards }: MyBlendCardListProps) {
                   </Link>
                 </PrimaryButton>
                 <button
-                  className="h-[3.25rem] rounded-[1rem] border border-[var(--palette-d9d3c8)] bg-white text-[1.1rem] font-medium text-[var(--palette-c1bdb5)]"
+                  className="h-[3.25rem] rounded-[1rem] border border-[var(--border-input-muted)] bg-[var(--surface-base)] text-[1.1rem] font-medium text-[var(--text-control-disabled)]"
                   type="button"
                 >
                   삭제

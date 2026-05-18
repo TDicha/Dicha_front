@@ -40,17 +40,17 @@ export function OrderListPage() {
   }, [filter, orders]);
 
   return (
-    <div className="bg-[var(--palette-f7f5f0)] px-4 pb-10 pt-3">
+    <div className="bg-[var(--surface-page)] px-4 pb-10 pt-3">
       <OrderFilterTabs filter={filter} onChange={setFilter} options={filterOptions} />
 
-      <p className="px-1 pt-2 text-[1rem] text-[var(--palette-7b776f)]">총 {filteredOrders.length}건</p>
+      <p className="px-1 pt-2 text-[1rem] text-[var(--text-list-count)]">총 {filteredOrders.length}건</p>
 
       {isLoading ? (
-        <section className="px-1 pt-8 text-center text-sm text-[var(--palette-6d6a64)]">
+        <section className="px-1 pt-8 text-center text-sm text-[var(--text-muted-warm)]">
           주문 내역을 불러오는 중입니다
         </section>
       ) : isError ? (
-        <section className="px-1 pt-8 text-center text-sm text-[var(--color-primary-red)]">
+        <section className="px-1 pt-8 text-center text-sm text-[var(--state-danger)]">
           주문 내역을 불러오지 못했어요.
         </section>
       ) : filteredOrders.length ? (

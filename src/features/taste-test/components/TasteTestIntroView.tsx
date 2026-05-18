@@ -19,7 +19,7 @@ export function TasteTestIntroView({
   onStart,
 }: TasteTestIntroViewProps) {
   return (
-    <div className="page-content space-y-5 bg-white pt-4">
+    <div className="page-content space-y-5 bg-[var(--surface-base)] pt-4">
       <AppCard
         className="rounded-[1.8rem] px-5 py-6"
         padding="none"
@@ -27,7 +27,7 @@ export function TasteTestIntroView({
       >
         <div className="flex items-start justify-between gap-4">
           <div>
-            <p className="text-xs font-semibold tracking-[0.18em] text-white/70">
+            <p className="text-xs font-semibold tracking-[0.18em] text-[var(--overlay-white-70)]">
               TASTE TEST
             </p>
             <h1 className="mt-2 font-heading text-[1.9rem] font-semibold tracking-[-0.04em]">
@@ -35,28 +35,28 @@ export function TasteTestIntroView({
               <br />
               오늘의 원두 찾기
             </h1>
-            <p className="mt-3 max-w-[14rem] text-sm leading-6 text-white/82">
+            <p className="mt-3 max-w-[14rem] text-sm leading-6 text-[var(--overlay-white-82)]">
               총 {questionCount}가지 질문에 답하면 취향에 맞는 로스팅과 추천
               원두를 바로 보여드려요.
             </p>
           </div>
-          <div className="flex size-20 shrink-0 items-center justify-center rounded-full bg-white/12">
-            <Sparkles className="size-9 text-[var(--palette-f1d08b)]" />
+          <div className="flex size-20 shrink-0 items-center justify-center rounded-full bg-[var(--overlay-white-12)]">
+            <Sparkles className="size-9 text-[var(--icon-accent)]" />
           </div>
         </div>
       </AppCard>
 
       <AppCard>
-        <h2 className="font-heading text-lg font-semibold text-[var(--color-primary-green)]">
+        <h2 className="font-heading text-lg font-semibold text-[var(--brand-primary)]">
           이런 분께 추천해요
         </h2>
         <div className="mt-4 space-y-3">
           {recommendationTargets.map((item) => (
             <div
               key={item}
-              className="flex items-center gap-3 rounded-[1rem] bg-[var(--rgba-29-62-43-004)] px-4 py-3 text-sm text-[var(--color-primary-green)]"
+              className="flex items-center gap-3 rounded-[1rem] bg-[var(--surface-brand-tint-4)] px-4 py-3 text-sm text-[var(--brand-primary)]"
             >
-              <CheckCircle2 className="size-4 text-[var(--color-primary-green)]" />
+              <CheckCircle2 className="size-4 text-[var(--brand-primary)]" />
               <span>{item}</span>
             </div>
           ))}
@@ -65,14 +65,14 @@ export function TasteTestIntroView({
 
       <AppCard variant="warm">
         <div className="flex items-start gap-3">
-          <div className="flex size-10 items-center justify-center rounded-full bg-white/75">
-            <Coffee className="size-5 text-[var(--color-primary-green)]" />
+          <div className="flex size-10 items-center justify-center rounded-full bg-[var(--overlay-white-75)]">
+            <Coffee className="size-5 text-[var(--brand-primary)]" />
           </div>
           <div>
-            <h2 className="font-heading text-lg font-semibold text-[var(--color-primary-green)]">
+            <h2 className="font-heading text-lg font-semibold text-[var(--brand-primary)]">
               테스트는 약 30초 걸려요
             </h2>
-            <p className="mt-1 text-sm leading-6 text-[var(--color-muted)]">
+            <p className="mt-1 text-sm leading-6 text-[var(--text-muted)]">
               결과를 보면 바로 추천 원두를 확인하고 상품 리스트로 이어서 볼 수
               있어요.
             </p>

@@ -22,16 +22,16 @@ export function ProductCard({ product }: { product: Product }) {
           ))}
         </div>
         <div>
-          <h3 className="font-heading text-lg font-semibold text-[var(--color-primary-green)]">
+          <h3 className="font-heading text-lg font-semibold text-[var(--brand-primary)]">
             {product.name}
           </h3>
-          <p className="mt-1 text-sm text-[var(--color-muted)]">{product.subtitle}</p>
+          <p className="mt-1 text-sm text-[var(--text-muted)]">{product.subtitle}</p>
         </div>
         <div className="flex items-center justify-between">
-          <p className="text-xs uppercase tracking-[0.24em] text-[var(--color-accent-gold)]">
+          <p className="text-xs uppercase tracking-[0.24em] text-[var(--brand-accent)]">
             {product.roastLevel} Roast
           </p>
-          <p className="font-heading text-lg font-semibold text-[var(--color-primary-green)]">
+          <p className="font-heading text-lg font-semibold text-[var(--brand-primary)]">
             {formatPrice(product.price)}원
           </p>
         </div>

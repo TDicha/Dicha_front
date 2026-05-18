@@ -12,7 +12,7 @@ export function ReservationPage() {
     useState<ReservationPlanId>("home");
 
   return (
-    <div className="bg-[var(--background-color)] pb-8">
+    <div className="bg-[var(--surface-app)] pb-8">
       <ReservationHeroSection />
       <ReservationPlanSelectionSection
         onSelectPlan={setSelectedPlanId}

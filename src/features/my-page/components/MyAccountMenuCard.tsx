@@ -22,21 +22,21 @@ const accountMenuItems = [
 export function MyAccountMenuCard() {
   return (
     <AppCard className="py-2">
-      <h2 className="py-3 font-heading text-lg font-semibold text-[var(--color-primary-green)]">
+      <h2 className="py-3 font-heading text-lg font-semibold text-[var(--brand-primary)]">
         계정 관리
       </h2>
       <div className="space-y-0">
         {accountMenuItems.map(({ icon: Icon, label, sectionId }) => (
           <Link
             key={label}
-            className="flex w-full items-center justify-between border-b border-[var(--rgba-17-24-39-006)] py-4 text-left last:border-b-0"
+            className="flex w-full items-center justify-between border-b border-[var(--border-ink-6)] py-4 text-left last:border-b-0"
             to={accountSectionRoute(sectionId)}
           >
-            <span className="flex items-center gap-3 text-sm font-medium text-[var(--color-primary-green)]">
+            <span className="flex items-center gap-3 text-sm font-medium text-[var(--brand-primary)]">
               <Icon className="size-4" />
               {label}
             </span>
-            <ChevronRight className="size-4 text-[var(--color-muted)]" />
+            <ChevronRight className="size-4 text-[var(--text-muted)]" />
           </Link>
         ))}
       </div>

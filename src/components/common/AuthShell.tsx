@@ -22,29 +22,29 @@ export function AuthShell({
 }: AuthShellProps) {
   const headerClassName =
     tone === "red"
-      ? "bg-[linear-gradient(135deg,var(--palette-8b2b1f)_0%,var(--palette-b24535)_100%)]"
-      : "bg-[linear-gradient(135deg,var(--palette-1f4b37)_0%,var(--palette-143726)_100%)]";
+      ? "bg-[linear-gradient(135deg,var(--gradient-card-red-start)_0%,var(--gradient-card-red-end)_100%)]"
+      : "bg-[linear-gradient(135deg,var(--gradient-card-green-start)_0%,var(--gradient-card-green-end)_100%)]";
 
   const iconClassName =
-    tone === "red" ? "bg-white/12 text-[var(--palette-ffd8b5)]" : "bg-white/10 text-[var(--palette-f1d08b)]";
+    tone === "red" ? "bg-[var(--overlay-white-12)] text-[var(--text-warm-inverse)]" : "bg-[var(--overlay-white-10)] text-[var(--icon-accent)]";
 
   return (
-    <div className="page-shell justify-center bg-white px-5 py-8">
+    <div className="page-shell justify-center bg-[var(--surface-base)] px-[var(--page-x)] py-8">
       <AppCard
-        className="overflow-hidden rounded-[2rem] shadow-[0_20px_36px_var(--rgba-31-37-31-008)]"
+        className="overflow-hidden rounded-[2rem] shadow-[0_20px_36px_var(--shadow-ink-alpha-8)]"
         padding="none"
       >
-        <div className={cn("px-6 py-7 text-white", headerClassName)}>
+        <div className={cn("px-[var(--page-x)] py-7 text-[var(--text-inverse)]", headerClassName)}>
           <div className={cn("flex size-12 items-center justify-center rounded-full", iconClassName)}>
             {icon}
           </div>
-          <p className="mt-4 text-xs font-semibold tracking-[0.24em] text-white/72">{badge}</p>
+          <p className="mt-4 text-xs font-semibold tracking-[0.24em] text-[var(--overlay-white-72)]">{badge}</p>
           <h1 className="mt-2 font-heading text-[2rem] font-semibold tracking-[-0.04em]">
             {title}
           </h1>
-          <p className="mt-3 text-sm leading-6 text-white/82">{description}</p>
+          <p className="mt-3 text-sm leading-6 text-[var(--overlay-white-82)]">{description}</p>
         </div>
-        <div className="space-y-4 px-6 py-6">{children}</div>
+        <div className="space-y-4 px-[var(--page-x)] py-6">{children}</div>
       </AppCard>
     </div>
   );

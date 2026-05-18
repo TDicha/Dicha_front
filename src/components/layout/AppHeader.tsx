@@ -36,13 +36,13 @@ export function AppHeader() {
   }
 
   return (
-    <header className="sticky top-0 z-20 flex h-14 items-center justify-between border-b border-[var(--rgba-17-24-39-006)] bg-[var(--rgba-255-255-255-094)] px-5 backdrop-blur-md">
+    <header className="sticky top-0 z-20 flex h-14 items-center justify-between border-b border-[var(--border-ink-6)] bg-[var(--surface-card-glass-strong)] px-[var(--page-x)] backdrop-blur-md">
       {isHome ? (
         <>
-          <div className="font-heading text-[1.7rem] font-semibold tracking-[-0.04em] text-[var(--color-primary-green)]">
+          <div className="font-heading text-[1.7rem] font-semibold tracking-[-0.04em] text-[var(--brand-primary)]">
             DICHA
           </div>
-          <div className="flex items-center gap-3 text-[var(--color-primary-green)]">
+          <div className="flex items-center gap-3 text-[var(--brand-primary)]">
             {shouldShowSearch ? (
               <Link
                 aria-label="검색으로 이동"
@@ -58,7 +58,7 @@ export function AppHeader() {
               to={ROUTES.cart}
             >
               <ShoppingCart className="size-4.5" />
-              <span className="absolute -right-1 -top-1 flex size-4 items-center justify-center rounded-full bg-[var(--color-accent-gold)] text-[9px] font-semibold text-white">
+              <span className="absolute -right-1 -top-1 flex size-4 items-center justify-center rounded-full bg-[var(--brand-accent)] text-[9px] font-semibold text-[var(--text-inverse)]">
                 {itemCount}
               </span>
             </Link>
@@ -68,16 +68,16 @@ export function AppHeader() {
         <>
           <button
             aria-label="뒤로가기"
-            className="relative z-10 flex size-8 items-center justify-center rounded-full text-[var(--color-primary-green)]"
+            className="relative z-10 flex size-8 items-center justify-center rounded-full text-[var(--brand-primary)]"
             onClick={handleBack}
             type="button"
           >
             <ChevronLeft className="size-5" />
           </button>
-          <h1 className="pointer-events-none absolute left-1/2 -translate-x-1/2 font-heading text-base font-semibold text-[var(--color-primary-green)]">
+          <h1 className="pointer-events-none absolute left-1/2 max-w-[60%] -translate-x-1/2 truncate text-center font-heading text-base font-semibold text-[var(--brand-primary)]">
             {handle?.title ?? "DICHA"}
           </h1>
-          <div className="relative z-10 flex items-center gap-3 text-[var(--color-primary-green)]">
+          <div className="relative z-10 flex items-center gap-3 text-[var(--brand-primary)]">
             {shouldShowSearch ? (
               <Link
                 aria-label="검색으로 이동"
@@ -93,7 +93,7 @@ export function AppHeader() {
               to={ROUTES.cart}
             >
               <ShoppingCart className="size-4.5" />
-              <span className="absolute -right-1 -top-1 flex size-4 items-center justify-center rounded-full bg-[var(--color-accent-gold)] text-[9px] font-semibold text-white">
+              <span className="absolute -right-1 -top-1 flex size-4 items-center justify-center rounded-full bg-[var(--brand-accent)] text-[9px] font-semibold text-[var(--text-inverse)]">
                 {itemCount}
               </span>
             </Link>

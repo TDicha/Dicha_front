@@ -109,7 +109,7 @@ export function ProductDetailPage() {
 
   if (isProductLoading) {
     return (
-      <div className="min-h-screen bg-white px-6 py-12 text-center text-sm text-[var(--color-muted)]">
+      <div className="min-h-[100dvh] bg-[var(--surface-base)] px-[var(--page-x)] py-12 text-center text-sm text-[var(--text-muted)]">
         상품 정보를 불러오는 중입니다
       </div>
     );
@@ -117,7 +117,7 @@ export function ProductDetailPage() {
 
   if (isProductError || !product || !detail) {
     return (
-      <div className="min-h-screen bg-white px-5 py-10">
+      <div className="min-h-[100dvh] bg-[var(--surface-base)] px-[var(--page-x)] py-10">
         <EmptyState
           action={
             <PrimaryButton asChild className="h-12 rounded-[0.95rem] shadow-none">
@@ -132,7 +132,7 @@ export function ProductDetailPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[var(--background-color)] pb-32">
+    <div className="min-h-[100dvh] bg-[var(--surface-app)] pb-[var(--product-action-page-padding)]">
       <ProductDetailHeader itemCount={itemCount} onBack={() => navigate(-1)} />
       <ProductHeroSection productName={product.name} />
       <ProductSummarySection

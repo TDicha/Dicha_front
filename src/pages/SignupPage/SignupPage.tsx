@@ -97,7 +97,7 @@ export function SignupPage() {
 
   if (step === "terms") {
     return (
-      <div className="page-shell bg-white">
+      <div className="page-shell bg-[var(--surface-base)]">
         <SignupTopBar onBack={handleBack} progress={1} />
         <SignupTermsStep
           agreementRows={agreementRows}
@@ -113,7 +113,7 @@ export function SignupPage() {
 
   if (step === "details") {
     return (
-      <div className="page-shell bg-white">
+      <div className="page-shell bg-[var(--surface-base)]">
         <SignupTopBar onBack={handleBack} progress={2} />
         <SignupDetailsStep
           email={email}
@@ -149,7 +149,7 @@ export function SignupPage() {
   }
 
   return (
-    <div className="page-shell bg-white">
+    <div className="page-shell bg-[var(--surface-base)]">
       <SignupTopBar onBack={handleBack} progress={3} />
       <SignupCompleteStep />
     </div>

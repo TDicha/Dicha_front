@@ -10,23 +10,25 @@ interface HomeHeroSectionProps {
 
 export function HomeHeroSection({ heroSlide, heroSlides }: HomeHeroSectionProps) {
   return (
-    <section className="relative overflow-hidden rounded-b-[2rem] rounded-t-none bg-[linear-gradient(180deg,var(--palette-214d38)_0%,var(--palette-143826)_100%)] px-5 pb-5 pt-6 text-white">
-      <div className="absolute right-2 top-5 size-40 rounded-full bg-[radial-gradient(circle_at_35%_35%,var(--rgba-239-208-119-095),var(--rgba-239-208-119-015)_58%,transparent_70%)] opacity-90" />
-      <div className="absolute right-8 top-12 size-24 rounded-full border border-white/20 bg-white/10" />
+    <section className="relative overflow-hidden rounded-b-[2rem] rounded-t-none bg-[linear-gradient(180deg,var(--gradient-home-hero-start)_0%,var(--gradient-home-hero-end)_100%)] px-[var(--page-x)] pb-5 pt-6 text-[var(--text-inverse)]">
+      <div className="absolute right-2 top-5 size-[clamp(7.5rem,36vw,10rem)] rounded-full bg-[radial-gradient(circle_at_35%_35%,var(--surface-accent-glow),var(--surface-accent-glow-soft)_58%,transparent_70%)] opacity-90" />
+      <div className="absolute right-8 top-12 size-[clamp(4.5rem,24vw,6rem)] rounded-full border border-[var(--overlay-white-20)] bg-[var(--overlay-white-10)]" />
       <div className="relative">
-        <span className="inline-flex rounded-full bg-[var(--rgba-247-244-232-018)] px-3 py-1 text-[10px] font-semibold tracking-[0.18em] text-[var(--palette-f6edcf)]">
+        <span className="inline-flex rounded-full bg-[var(--surface-hero-chip)] px-3 py-1 text-[10px] font-semibold tracking-[0.18em] text-[var(--text-hero-eyebrow)]">
           {heroSlide.eyebrow}
         </span>
-        <h2 className="mt-3 max-w-[13rem] font-heading text-[1.9rem] font-semibold leading-[1.2] tracking-[-0.04em]">
+        <h2 className="mt-3 max-w-[clamp(12rem,62vw,13.5rem)] font-heading text-[clamp(1.65rem,7vw,1.9rem)] font-semibold leading-[1.2] tracking-[-0.04em]">
           {heroSlide.title.map((line) => (
             <span key={line} className="block">
               {line}
             </span>
           ))}
         </h2>
-        <p className="mt-10 text-xs font-medium tracking-[0.04em] text-white/74">{heroSlide.description}</p>
+        <p className="mt-[clamp(1.75rem,9vw,2.5rem)] max-w-[clamp(12rem,70vw,16rem)] text-xs font-medium tracking-[0.04em] text-[var(--overlay-white-74)]">
+          {heroSlide.description}
+        </p>
         <Link
-          className="mt-3 inline-flex h-9 items-center rounded-full bg-white px-4 text-sm font-semibold text-[var(--color-primary-green)]"
+          className="mt-3 inline-flex h-9 items-center rounded-full bg-[var(--surface-base)] px-4 text-sm font-semibold text-[var(--brand-primary)]"
           to={heroSlide.ctaTo}
         >
           {heroSlide.ctaLabel}
@@ -36,7 +38,7 @@ export function HomeHeroSection({ heroSlide, heroSlides }: HomeHeroSectionProps)
           {heroSlides.map((slide) => (
             <span
               key={slide.id}
-              className={["size-1.5 rounded-full", slide.id === heroSlide.id ? "bg-white/65" : "bg-white/35"].join(" ")}
+              className={["size-1.5 rounded-full", slide.id === heroSlide.id ? "bg-[var(--overlay-white-65)]" : "bg-[var(--overlay-white-35)]"].join(" ")}
             />
           ))}
         </div>

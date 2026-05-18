@@ -6,7 +6,7 @@ import { ROUTES } from "@/shared/constants/routes";
 export function ReservationClassCtaSection() {
   return (
     <section className="px-5 pt-8">
-      <h2 className="text-[1.55rem] font-bold tracking-[-0.04em] text-[var(--palette-121212)]">
+      <h2 className="text-[1.55rem] font-bold tracking-[-0.04em] text-[var(--text-title)]">
         직접 커피를 만들어 보는건 어떨까요?
       </h2>
       <PrimaryButton

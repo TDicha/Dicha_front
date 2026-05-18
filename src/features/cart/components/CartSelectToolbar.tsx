@@ -12,25 +12,25 @@ export function CartSelectToolbar({
   onToggleAll,
 }: CartSelectToolbarProps) {
   return (
-    <section className="border-b border-[var(--palette-e8e3da)] bg-white px-6 py-5">
-      <button className="flex w-full items-center justify-between" onClick={onToggleAll} type="button">
-        <span className="flex items-center gap-4">
+    <section className="border-b border-[var(--border-section-strong)] bg-[var(--surface-base)] px-[var(--page-x)] py-5">
+      <button className="flex w-full items-center justify-between gap-3" onClick={onToggleAll} type="button">
+        <span className="flex min-w-0 items-center gap-3">
           <span
             className={[
               "flex size-9 items-center justify-center rounded-[0.8rem] border",
               isAllSelected
-                ? "border-[var(--second-color)] bg-[var(--second-color)]"
-                : "border-[var(--palette-d7d0c5)] bg-white",
+                ? "border-[var(--brand-secondary)] bg-[var(--brand-secondary)]"
+                : "border-[var(--border-warm)] bg-[var(--surface-base)]",
             ].join(" ")}
           />
-          <span className="text-[1.15rem] font-semibold tracking-[-0.03em] text-[var(--palette-171717)]">
+          <span className="text-[1.15rem] font-semibold tracking-[-0.03em] text-[var(--text-heading)]">
             전체선택
           </span>
         </span>
-        <span className="flex items-center gap-3">
-          <span className="text-[1.05rem] text-[var(--palette-6f6b63)]">{selectedCount}개 선택됨</span>
+        <span className="flex shrink-0 items-center gap-2">
+          <span className="text-[1rem] text-[var(--text-action-subtle)] max-[360px]:hidden">{selectedCount}개 선택됨</span>
           <span
-            className="rounded-full bg-[var(--palette-f2efea)] px-3 py-1 text-[0.85rem] font-semibold text-[var(--palette-6f6b63)]"
+            className="rounded-full bg-[var(--surface-control-muted)] px-3 py-1 text-[0.85rem] font-semibold text-[var(--text-action-subtle)]"
             onClick={(event) => {
               event.stopPropagation();
               onRemoveSelected();

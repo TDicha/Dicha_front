@@ -23,35 +23,35 @@ export function PurchaseCompleteView({
   onGoOrders,
 }: PurchaseCompleteViewProps) {
   return (
-    <div className="bg-[var(--palette-f7f5f1)] px-6 pb-10 pt-8">
-      <section className="rounded-[1.9rem] bg-white px-6 py-10 text-center">
-        <div className="mx-auto flex size-24 items-center justify-center rounded-full bg-[var(--palette-edf3ec)]">
-          <CheckCircle2 className="size-12 text-[var(--second-color)]" />
+    <div className="bg-[var(--surface-page-alt)] px-[var(--page-x)] pb-10 pt-8">
+      <section className="rounded-[1.9rem] bg-[var(--surface-base)] px-[var(--page-x)] py-10 text-center">
+        <div className="mx-auto flex size-24 items-center justify-center rounded-full bg-[var(--surface-icon-green)]">
+          <CheckCircle2 className="size-12 text-[var(--brand-secondary)]" />
         </div>
-        <h1 className="mt-7 text-[2rem] font-bold tracking-[-0.04em] text-[var(--palette-171717)]">
+        <h1 className="mt-7 break-keep text-[clamp(1.65rem,7vw,2rem)] font-bold tracking-[-0.04em] text-[var(--text-heading)]">
           결제가 완료되었어요
         </h1>
-        <p className="mt-3 text-[1.05rem] leading-7 text-[var(--palette-666666)]">
+        <p className="mt-3 text-[1.05rem] leading-7 text-[var(--text-muted-subtle)]">
           주문이 정상적으로 접수되었습니다.
           <br />
           주문 조회에서 준비 상태를 바로 확인할 수 있어요.
         </p>
       </section>
 
-      <section className="mt-5 rounded-[1.6rem] bg-white px-5 py-6">
-        <div className="flex items-center justify-between border-b border-[var(--palette-ebe6dd)] pb-4">
-          <span className="text-[1rem] text-[var(--palette-6d6a64)]">주문번호</span>
-          <span className="text-[1rem] font-bold text-[var(--palette-171717)]">
+      <section className="mt-5 rounded-[1.6rem] bg-[var(--surface-base)] px-[var(--page-x)] py-6">
+        <div className="flex items-center justify-between gap-3 border-b border-[var(--border-list)] pb-4">
+          <span className="text-[1rem] text-[var(--text-muted-warm)]">주문번호</span>
+          <span className="min-w-0 truncate text-[1rem] font-bold text-[var(--text-heading)]">
             {completedOrder?.orderNo ?? "-"}
           </span>
         </div>
-        <div className="flex items-center justify-between border-b border-[var(--palette-ebe6dd)] py-4">
-          <span className="text-[1rem] text-[var(--palette-6d6a64)]">총 결제 금액</span>
-          <span className="text-[1.55rem] font-bold text-[var(--palette-992b22)]">
+        <div className="flex items-center justify-between gap-3 border-b border-[var(--border-list)] py-4">
+          <span className="text-[1rem] text-[var(--text-muted-warm)]">총 결제 금액</span>
+          <span className="shrink-0 text-[clamp(1.35rem,5.8vw,1.55rem)] font-bold text-[var(--text-price-danger)]">
             ₩{formatPrice(completedPricing?.total ?? fallbackTotal)}
           </span>
         </div>
-        <div className="pt-4 text-[1rem] text-[var(--palette-555555)]">
+        <div className="pt-4 text-[1rem] text-[var(--text-neutral-700)]">
           <p>결제 수단: {paymentLabel}</p>
           <p className="mt-2">배송지: 서울 성동구 연무장길 00, DICHA Studio 302호</p>
         </div>
@@ -60,7 +60,7 @@ export function PurchaseCompleteView({
       <div className="mt-6 grid grid-cols-2 gap-3">
         <PrimaryButton
           asChild
-          className="h-14 rounded-[1.15rem] bg-white text-[var(--second-color)] shadow-none"
+          className="h-14 rounded-[1.15rem] bg-[var(--surface-base)] text-[var(--brand-secondary)] shadow-none"
           variant="outline"
         >
           <Link to={ROUTES.home}>홈으로</Link>

@@ -37,18 +37,18 @@ export function AccountSectionHeroCard({
     >
       <div className="flex items-start justify-between gap-4">
         <div>
-          <p className="text-xs font-semibold tracking-[0.18em] text-white/70">
+          <p className="text-xs font-semibold tracking-[0.18em] text-[var(--overlay-white-70)]">
             ACCOUNT
           </p>
-          <h1 className="mt-2 font-heading text-[1.8rem] font-semibold tracking-[-0.04em] text-white">
+          <h1 className="mt-2 font-heading text-[1.8rem] font-semibold tracking-[-0.04em] text-[var(--text-inverse)]">
             {section.title}
           </h1>
-          <p className="mt-3 text-sm leading-6 text-white/82">
+          <p className="mt-3 text-sm leading-6 text-[var(--overlay-white-82)]">
             {section.description}
           </p>
         </div>
-        <div className="flex size-20 shrink-0 items-center justify-center rounded-full bg-white/12">
-          <Icon className="size-9 text-[var(--palette-f1d08b)]" />
+        <div className="flex size-20 shrink-0 items-center justify-center rounded-full bg-[var(--overlay-white-12)]">
+          <Icon className="size-9 text-[var(--icon-accent)]" />
         </div>
       </div>
     </AppCard>

@@ -34,21 +34,21 @@ export function LoginPage() {
   }
 
   return (
-    <div className="page-shell bg-white">
-      <header className="flex h-[3.25rem] items-center justify-between px-5">
+    <div className="page-shell bg-[var(--surface-base)]">
+      <header className="flex h-[3.25rem] items-center justify-between px-[var(--page-x)]">
         <button
           aria-label="뒤로가기"
-          className="flex size-8 items-center justify-center rounded-full text-[var(--color-ink)]"
+          className="flex size-8 items-center justify-center rounded-full text-[var(--text-ink)]"
           onClick={() => navigate(-1)}
           type="button"
         >
           <ArrowLeft className="size-5" />
         </button>
-        <h1 className="font-semibold text-[var(--color-ink)]">로그인</h1>
+        <h1 className="font-semibold text-[var(--text-ink)]">로그인</h1>
         <div className="size-8" />
       </header>
 
-      <main className="flex-1 px-5 pb-10 pt-8">
+      <main className="flex-1 px-[var(--page-x)] pb-10 pt-8">
         <div className="mx-auto max-w-[22rem]">
           <LoginBrandHeader />
           <LoginSocialButtons />

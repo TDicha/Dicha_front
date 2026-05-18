@@ -17,16 +17,16 @@ export function ClassActionListCard() {
           className={[
             "flex w-full items-center justify-between py-4 text-left",
             index < classActions.length - 1
-              ? "border-b border-[var(--rgba-17-24-39-006)]"
+              ? "border-b border-[var(--border-ink-6)]"
               : "",
           ].join(" ")}
           type="button"
         >
-          <span className="flex items-center gap-3 text-sm font-medium text-[var(--color-primary-green)]">
+          <span className="flex items-center gap-3 text-sm font-medium text-[var(--brand-primary)]">
             <Icon className="size-4" />
             {label}
           </span>
-          <ChevronRight className="size-4 text-[var(--color-muted)]" />
+          <ChevronRight className="size-4 text-[var(--text-muted)]" />
         </button>
       ))}
     </AppCard>

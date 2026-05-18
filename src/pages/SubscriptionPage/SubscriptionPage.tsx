@@ -28,7 +28,7 @@ export function SubscriptionPage() {
   }
 
   return (
-    <div className="bg-[var(--palette-f7f5f0)] pb-10">
+    <div className="bg-[var(--surface-page)] pb-10">
       <SubscriptionSummaryCard
         activePlan={activePlan}
         deliveryDayLabel={getDeliveryDayLabel(activePlan.nextDeliveryLabel)}

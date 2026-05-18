@@ -24,10 +24,15 @@ export function CartItemCard({
   const lineTotal = item.unitPrice * item.quantity;
 
   return (
-    <article className={["flex gap-4 px-6 py-8", !isLast ? "border-b border-[var(--palette-ebe6dd)]" : ""].join(" ")}>
+    <article
+      className={[
+        "flex gap-3 px-[var(--page-x)] py-8 min-[380px]:gap-4",
+        !isLast ? "border-b border-[var(--border-list)]" : "",
+      ].join(" ")}
+    >
       <button
         aria-label={`${item.productName} 선택`}
-        className="mt-16"
+        className="mt-14 shrink-0"
         onClick={() => onToggleSelected(item.cartItemId)}
         type="button"
       >
@@ -35,15 +40,19 @@ export function CartItemCard({
           className={[
             "flex size-9 items-center justify-center rounded-[0.8rem] border",
             item.selected
-              ? "border-[var(--second-color)] bg-[var(--second-color)]"
-              : "border-[var(--palette-d7d0c5)] bg-white",
+              ? "border-[var(--brand-secondary)] bg-[var(--brand-secondary)]"
+              : "border-[var(--border-warm)] bg-[var(--surface-base)]",
           ].join(" ")}
         />
       </button>
 
-      <div className="flex h-[8.5rem] w-[8.5rem] shrink-0 items-center justify-center rounded-[1.5rem] bg-[var(--palette-dde6d4)]">
+      <div className="flex size-[clamp(6.4rem,31vw,8.5rem)] shrink-0 items-center justify-center rounded-[1.5rem] bg-[var(--surface-cart-image)]">
         {product ? (
-          <img alt={item.productName} className="h-24 w-24 rounded-full object-cover" src={product.image} />
+          <img
+            alt={item.productName}
+            className="size-[clamp(4.75rem,22vw,6rem)] rounded-full object-cover"
+            src={product.image}
+          />
         ) : (
           <div className="text-4xl">☕</div>
         )}
@@ -51,17 +60,17 @@ export function CartItemCard({
 
       <div className="min-w-0 flex-1">
         <div className="flex items-start justify-between gap-3">
-          <div>
-            <h2 className="text-[1.2rem] font-bold leading-8 tracking-[-0.03em] text-[var(--palette-141414)]">
+          <div className="min-w-0">
+            <h2 className="break-keep text-[clamp(1.05rem,4.8vw,1.2rem)] font-bold leading-7 tracking-[-0.03em] text-[var(--text-rich)]">
               {item.productName}
             </h2>
-            <p className="mt-1 text-[1rem] text-[var(--palette-6c6c6c)]">
+            <p className="mt-1 break-keep text-[0.95rem] leading-6 text-[var(--text-product-muted)]">
               {buildCartItemOptionLabel(item, product)}
             </p>
           </div>
           <button
             aria-label={`${item.productName} 삭제`}
-            className="text-[var(--palette-7a746d)]"
+            className="text-[var(--icon-muted)]"
             onClick={() => onRemove(item.cartItemId)}
             type="button"
           >
@@ -69,31 +78,31 @@ export function CartItemCard({
           </button>
         </div>
 
-        <div className="mt-5 flex items-end justify-between gap-3">
-          <div>
-            <p className="text-[1.15rem] font-bold text-[var(--palette-992b22)]">
+        <div className="mt-5 flex flex-wrap items-end justify-between gap-3">
+          <div className="min-w-0">
+            <p className="text-[1.15rem] font-bold text-[var(--text-price-danger)]">
               ₩{formatPrice(item.unitPrice)}
             </p>
             {item.quantity > 1 ? (
-              <p className="mt-1 text-[0.95rem] text-[var(--palette-76706a)]">
+              <p className="mt-1 text-[0.95rem] text-[var(--text-meta-warm)]">
                 (x{item.quantity}) 합계 ₩{formatPrice(lineTotal)}
               </p>
             ) : null}
           </div>
 
-          <div className="flex items-center rounded-full bg-[var(--palette-f2efea)] px-2 py-1">
+          <div className="flex shrink-0 items-center rounded-full bg-[var(--surface-control-muted)] px-1.5 py-1">
             <button
-              className="flex size-10 items-center justify-center text-[var(--palette-55514a)]"
+              className="flex size-10 items-center justify-center text-[var(--text-control)]"
               onClick={() => onUpdateQuantity(item.cartItemId, item.quantity - 1)}
               type="button"
             >
               <Minus className="size-5" />
             </button>
-            <span className="min-w-10 text-center text-[1.1rem] font-semibold text-[var(--palette-151515)]">
+            <span className="min-w-10 text-center text-[1.1rem] font-semibold text-[var(--text-deep)]">
               {item.quantity}
             </span>
             <button
-              className="flex size-10 items-center justify-center text-[var(--second-color)]"
+              className="flex size-10 items-center justify-center text-[var(--brand-secondary)]"
               onClick={() => onUpdateQuantity(item.cartItemId, item.quantity + 1)}
               type="button"
             >

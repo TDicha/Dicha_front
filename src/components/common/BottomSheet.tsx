@@ -21,8 +21,8 @@ export function BottomSheet({
       className={cn(
         "sticky inset-0 z-40 transition-[background-color,backdrop-filter] duration-300",
         open
-          ? "pointer-events-auto bg-black/28 backdrop-blur-[2px]"
-          : "pointer-events-none bg-black/0 backdrop-blur-none",
+          ? "pointer-events-auto bg-[var(--overlay-black-28)] backdrop-blur-[2px]"
+          : "pointer-events-none bg-[var(--overlay-black-0)] backdrop-blur-none",
       )}
     >
       <button
@@ -33,22 +33,22 @@ export function BottomSheet({
       />
       <section
         className={cn(
-          "absolute bottom-0 left-1/2 max-h-[84vh] w-full max-w-md -translate-x-1/2 overflow-y-auto rounded-t-[1.9rem] border border-white/70 bg-[var(--rgba-255-252-247-098)] px-5 pb-[calc(1.25rem+env(safe-area-inset-bottom))] pt-3 shadow-[0_-18px_42px_var(--rgba-20-28-21-018)] transition-[transform,opacity] duration-300 ease-out",
+          "absolute bottom-0 left-1/2 max-h-[84vh] w-full max-w-[var(--app-max-width)] -translate-x-1/2 overflow-y-auto rounded-t-[1.9rem] border border-[var(--border-overlay-70)] bg-[var(--surface-card-panel)] px-[var(--page-x)] pb-[calc(env(safe-area-inset-bottom)+1.25rem)] pt-3 shadow-[var(--shadow-bottom-sheet)] transition-[transform,opacity] duration-300 ease-out",
           open ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0",
         )}
       >
-        <div className="mx-auto mb-4 h-1.5 w-12 rounded-full bg-[var(--rgba-29-62-43-018)]" />
-        <div className="mb-5 flex items-start justify-between gap-3 border-b border-[var(--rgba-29-62-43-008)] pb-4">
+        <div className="mx-auto mb-4 h-1.5 w-12 rounded-full bg-[var(--surface-brand-tint-18)]" />
+        <div className="mb-5 flex items-start justify-between gap-3 border-b border-[var(--surface-brand-tint-8)] pb-4">
           <div>
-            <p className="text-[11px] font-semibold tracking-[0.16em] text-[var(--color-muted)]">
+            <p className="text-[11px] font-semibold tracking-[0.16em] text-[var(--text-muted)]">
               CUSTOMIZE ORDER
             </p>
-            <h3 className="mt-1 font-heading text-[1.1rem] font-semibold text-[var(--color-primary-green)]">
+            <h3 className="mt-1 font-heading text-[1.1rem] font-semibold text-[var(--brand-primary)]">
               {title}
             </h3>
           </div>
           <button
-            className="rounded-full border border-[var(--rgba-29-62-43-01)] bg-white px-3 py-1.5 text-sm font-medium text-[var(--color-primary-green)] shadow-[0_6px_16px_var(--rgba-29-62-43-006)]"
+            className="rounded-full border border-[var(--surface-brand-tint-10)] bg-[var(--surface-base)] px-3 py-1.5 text-sm font-medium text-[var(--brand-primary)] shadow-[0_6px_16px_var(--surface-brand-tint-6)]"
             onClick={onClose}
             type="button"
           >

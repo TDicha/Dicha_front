@@ -24,7 +24,7 @@ export function AccountSectionPage() {
   }
 
   return (
-    <div className="page-content space-y-5 bg-white pt-4">
+    <div className="page-content space-y-5 bg-[var(--surface-base)] pt-4">
       <AccountSectionHeroCard section={section} />
       <AccountSectionStatusCard statusLabel={section.statusLabel} />
       <AccountSectionItemsCard items={section.items} />

@@ -15,7 +15,7 @@ export function CartItemList({
   onUpdateQuantity,
 }: CartItemListProps) {
   return (
-    <section className="bg-white">
+    <section className="bg-[var(--surface-base)]">
       {items.map((item, index) => (
         <CartItemCard
           key={item.cartItemId}

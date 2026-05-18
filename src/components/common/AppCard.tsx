@@ -13,16 +13,16 @@ type AppCardVariant =
 
 const cardVariants: Record<AppCardVariant, string> = {
   default:
-    "border border-[var(--rgba-17-24-39-006)] bg-white shadow-[0_12px_24px_var(--rgba-31-37-31-005)]",
-  muted: "bg-[var(--rgba-29-62-43-004)]",
-  warm: "bg-[linear-gradient(135deg,var(--palette-f8f2e4)_0%,var(--palette-ece1c9)_100%)]",
-  danger: "border border-[var(--rgba-148-35-30-008)] bg-[var(--rgba-148-35-30-003)]",
+    "border border-[var(--border-ink-6)] bg-[var(--surface-base)] shadow-[0_12px_24px_var(--shadow-ink-alpha-5)]",
+  muted: "bg-[var(--surface-brand-tint-4)]",
+  warm: "bg-[linear-gradient(135deg,var(--surface-warm-card-start)_0%,var(--surface-warm-card-end)_100%)]",
+  danger: "border border-[var(--border-danger)] bg-[var(--surface-danger-tint)]",
   "hero-green":
-    "overflow-hidden bg-[linear-gradient(140deg,var(--palette-1f4b37)_0%,var(--palette-143726)_100%)] text-white shadow-[0_20px_36px_var(--rgba-20-55-38-018)]",
+    "overflow-hidden bg-[linear-gradient(140deg,var(--gradient-card-green-start)_0%,var(--gradient-card-green-end)_100%)] text-[var(--text-inverse)] shadow-[var(--shadow-green-card)]",
   "hero-blue":
-    "overflow-hidden bg-[linear-gradient(135deg,var(--palette-24406d)_0%,var(--palette-52699a)_100%)] text-white shadow-[0_18px_34px_var(--rgba-42-54-99-018)]",
+    "overflow-hidden bg-[linear-gradient(135deg,var(--gradient-card-blue-start)_0%,var(--gradient-card-blue-end)_100%)] text-[var(--text-inverse)] shadow-[0_18px_34px_var(--shadow-blue-alpha-18)]",
   "hero-red":
-    "overflow-hidden bg-[linear-gradient(135deg,var(--palette-8b2b1f)_0%,var(--palette-b24535)_100%)] text-white shadow-[0_20px_36px_var(--rgba-148-35-30-016)]",
+    "overflow-hidden bg-[linear-gradient(135deg,var(--gradient-card-red-start)_0%,var(--gradient-card-red-end)_100%)] text-[var(--text-inverse)] shadow-[var(--shadow-red-card)]",
 };
 
 export interface AppCardProps extends ComponentPropsWithoutRef<"section"> {

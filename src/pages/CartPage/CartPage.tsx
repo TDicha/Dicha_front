@@ -53,7 +53,7 @@ export function CartPage() {
   }
 
   return (
-    <div className="bg-[var(--palette-f7f5f1)] pb-44">
+    <div className="bg-[var(--surface-page-alt)] pb-[var(--fixed-action-page-padding)]">
       <CartSelectToolbar
         isAllSelected={isAllSelected}
         onRemoveSelected={handleRemoveSelected}

@@ -12,10 +12,10 @@ export function SearchInput({
   placeholder = "원두, 드립백, 구독 상품 검색",
 }: SearchInputProps) {
   return (
-    <label className="flex items-center gap-3 rounded-[1rem] border border-[var(--rgba-17-24-39-008)] bg-white px-4 py-3 shadow-[0_8px_18px_var(--rgba-31-37-31-005)]">
-      <Search className="size-4 text-[var(--color-muted)]" />
+    <label className="flex items-center gap-3 rounded-[1rem] border border-[var(--border-ink-8)] bg-[var(--surface-base)] px-4 py-3 shadow-[0_8px_18px_var(--shadow-ink-alpha-5)]">
+      <Search className="size-4 text-[var(--text-muted)]" />
       <input
-        className="w-full bg-transparent text-sm text-[var(--color-primary-green)] placeholder:text-[var(--color-muted)]"
+        className="w-full bg-transparent text-sm text-[var(--brand-primary)] placeholder:text-[var(--text-muted)]"
         onChange={(event) => onChange(event.target.value)}
         placeholder={placeholder}
         value={value}

@@ -12,15 +12,15 @@ export function ReservationPlanSelectionSection({
   onSelectPlan,
 }: ReservationPlanSelectionSectionProps) {
   return (
-    <section className="px-4 pb-6 pt-5">
-      <h2 className="text-[1.95rem] font-black tracking-[-0.05em] text-[var(--palette-121212)]">
+    <section className="px-[var(--page-x)] pb-6 pt-5">
+      <h2 className="break-keep text-[clamp(1.65rem,7vw,1.95rem)] font-black tracking-[-0.05em] text-[var(--text-title)]">
         구독 플랜 선택
       </h2>
-      <p className="mt-1 text-[0.92rem] text-[var(--palette-666666)]">
+      <p className="mt-1 text-[0.92rem] text-[var(--text-muted-subtle)]">
         필요에 맞는 플랜을 고르세요
       </p>
 
-      <div className="mt-2 inline-flex rounded-full bg-[var(--accent-color)] px-3 py-1 text-[0.78rem] font-bold text-[var(--primary-color)]">
+      <div className="mt-2 inline-flex rounded-full bg-[var(--brand-accent)] px-3 py-1 text-[0.78rem] font-bold text-[var(--brand-primary)]">
         ⭐ 가장 인기
       </div>
 
@@ -32,57 +32,57 @@ export function ReservationPlanSelectionSection({
             <article
               key={plan.id}
               className={[
-                "overflow-hidden rounded-[1rem] bg-white shadow-[0_3px_10px_var(--rgba-0-0-0-008)]",
+                "overflow-hidden rounded-[1rem] bg-[var(--surface-base)] shadow-[0_3px_10px_var(--overlay-black-8)]",
                 isSelected
-                  ? "border-2 border-[var(--accent-color)]"
+                  ? "border-2 border-[var(--brand-accent)]"
                   : "border border-transparent",
               ].join(" ")}
             >
-              <div className="grid grid-cols-[6.9rem_1fr]">
+              <div className="grid grid-cols-[clamp(5.25rem,27vw,6.9rem)_minmax(0,1fr)]">
                 <div
-                  className="flex min-h-[9.5rem] items-center justify-center"
+                  className="flex min-h-[clamp(8rem,34vw,9.5rem)] items-center justify-center"
                   style={{ backgroundColor: plan.accent }}
                 >
-                  <div className="text-[3.25rem]">{plan.icon}</div>
+                  <div className="text-[clamp(2.6rem,13vw,3.25rem)]">{plan.icon}</div>
                 </div>
 
-                <div className="px-4 py-4">
+                <div className="min-w-0 px-3 py-4 min-[380px]:px-4">
                   {plan.badge ? (
                     <span
                       className={[
                         "inline-flex rounded-full px-2.5 py-1 text-[0.68rem] font-bold",
                         plan.badgeTone === "gold"
-                          ? "bg-[var(--palette-caa24a)] text-white"
-                          : "bg-[var(--palette-4b8e73)] text-white",
+                          ? "bg-[var(--state-accent)] text-[var(--text-inverse)]"
+                          : "bg-[var(--surface-success)] text-[var(--text-inverse)]",
                       ].join(" ")}
                     >
                       {plan.badge}
                     </span>
                   ) : null}
 
-                  <h3 className="mt-2 text-[1.8rem] font-black tracking-[-0.05em] text-[var(--palette-121212)]">
+                  <h3 className="mt-2 break-keep text-[clamp(1.35rem,6vw,1.8rem)] font-black tracking-[-0.05em] text-[var(--text-title)]">
                     {plan.title}
                   </h3>
-                  <p className="mt-0.5 text-[1.2rem] font-bold text-[var(--primary-color)]">
+                  <p className="mt-0.5 break-keep text-[clamp(1rem,4.8vw,1.2rem)] font-bold text-[var(--brand-primary)]">
                     {plan.quantity}
                   </p>
-                  <p className="mt-0.5 text-[0.88rem] text-[var(--palette-666666)]">
+                  <p className="mt-0.5 text-[0.88rem] text-[var(--text-muted-subtle)]">
                     {plan.description}
                   </p>
 
-                  <div className="mt-7 flex items-end justify-between gap-3">
-                    <p className="text-[2rem] font-black tracking-[-0.05em] text-[var(--danger-color)]">
+                  <div className="mt-5 flex flex-wrap items-end justify-between gap-2 min-[380px]:mt-7 min-[380px]:gap-3">
+                    <p className="text-[clamp(1.45rem,7vw,2rem)] font-black tracking-[-0.05em] text-[var(--state-danger)]">
                       ₩{formatPrice(plan.price)}
-                      <span className="ml-0.5 text-[0.95rem] font-normal text-[var(--palette-666666)]">
+                      <span className="ml-0.5 text-[0.95rem] font-normal text-[var(--text-muted-subtle)]">
                         /월
                       </span>
                     </p>
                     <button
                       className={[
-                        "h-8 rounded-[0.65rem] px-4 text-[0.92rem] font-bold",
+                        "h-8 shrink-0 rounded-[0.65rem] px-3 text-[0.88rem] font-bold min-[380px]:px-4 min-[380px]:text-[0.92rem]",
                         isSelected
-                          ? "bg-[var(--second-color)] text-white"
-                          : "bg-[var(--palette-e5ede1)] text-[var(--second-color)]",
+                          ? "bg-[var(--brand-secondary)] text-[var(--text-inverse)]"
+                          : "bg-[var(--surface-green-pale)] text-[var(--brand-secondary)]",
                       ].join(" ")}
                       onClick={() => onSelectPlan(plan.id)}
                       type="button"

@@ -26,8 +26,8 @@ export function GuestOrderLookupPage() {
   const order = lookupGuestOrder.data;
 
   return (
-    <div className="bg-[var(--palette-f7f5f0)] px-5 pb-10 pt-8">
-      <section className="rounded-[1.5rem] bg-white px-5 py-7 shadow-[0_8px_24px_var(--rgba-34-34-34-006)]">
+    <div className="bg-[var(--surface-page)] px-5 pb-10 pt-8">
+      <section className="rounded-[1.5rem] bg-[var(--surface-base)] px-5 py-7 shadow-[0_8px_24px_var(--shadow-neutral-alpha-6)]">
         <GuestOrderLookupForm
           canLookup={canLookup}
           isPending={lookupGuestOrder.isPending}
@@ -43,7 +43,7 @@ export function GuestOrderLookupPage() {
       </section>
 
       <Link
-        className="mt-6 flex h-12 items-center justify-center rounded-[0.95rem] bg-white text-sm font-semibold text-[var(--second-color)]"
+        className="mt-6 flex h-12 items-center justify-center rounded-[0.95rem] bg-[var(--surface-base)] text-sm font-semibold text-[var(--brand-secondary)]"
         to={ROUTES.products}
       >
         쇼핑 계속하기

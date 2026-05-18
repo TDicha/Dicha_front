@@ -8,14 +8,14 @@ interface SearchResultSummaryProps {
 
 export function SearchResultSummary({ query, resultCount, onReset }: SearchResultSummaryProps) {
   return (
-    <AppCard className="text-sm text-[var(--color-muted)]" variant="muted">
+    <AppCard className="text-sm text-[var(--text-muted)]" variant="muted">
       <div className="flex items-center justify-between gap-3">
         <span>
-          <strong className="font-semibold text-[var(--color-primary-green)]">&quot;{query}&quot;</strong>
+          <strong className="font-semibold text-[var(--brand-primary)]">&quot;{query}&quot;</strong>
           에 대한 검색 결과 {resultCount}개
         </span>
         <button
-          className="shrink-0 font-medium text-[var(--color-primary-green)]"
+          className="shrink-0 font-medium text-[var(--brand-primary)]"
           onClick={onReset}
           type="button"
         >

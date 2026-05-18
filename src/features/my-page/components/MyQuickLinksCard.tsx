@@ -13,22 +13,22 @@ const quickLinks = [
 export function MyQuickLinksCard() {
   return (
     <AppCard className="py-2">
-      <h2 className="py-3 font-heading text-lg font-semibold text-[var(--color-primary-green)]">
+      <h2 className="py-3 font-heading text-lg font-semibold text-[var(--brand-primary)]">
         활동 바로가기
       </h2>
       {quickLinks.map(({ label, to }, index) => (
         <Link
           key={label}
           className={[
-            "flex w-full items-center justify-between py-4 text-left text-sm font-medium text-[var(--color-primary-green)]",
+            "flex w-full items-center justify-between py-4 text-left text-sm font-medium text-[var(--brand-primary)]",
             index < quickLinks.length - 1
-              ? "border-b border-[var(--rgba-17-24-39-006)]"
+              ? "border-b border-[var(--border-ink-6)]"
               : "",
           ].join(" ")}
           to={to}
         >
           <span>{label}</span>
-          <ChevronRight className="size-4 text-[var(--color-muted)]" />
+          <ChevronRight className="size-4 text-[var(--text-muted)]" />
         </Link>
       ))}
     </AppCard>

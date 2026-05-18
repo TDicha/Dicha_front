@@ -2,21 +2,21 @@ import { ChevronRight, MapPin } from "lucide-react";
 
 export function PurchaseShippingAddressSection() {
   return (
-    <section className="mt-4 bg-white px-6 py-6">
+    <section className="mt-4 bg-[var(--surface-base)] px-[var(--page-x)] py-6">
       <div className="flex items-start justify-between gap-4">
-        <div className="flex items-start gap-3">
-          <div className="mt-1 flex size-10 items-center justify-center rounded-full bg-[var(--palette-edf3ec)]">
-            <MapPin className="size-5 text-[var(--second-color)]" />
+        <div className="flex min-w-0 items-start gap-3">
+          <div className="mt-1 flex size-10 shrink-0 items-center justify-center rounded-full bg-[var(--surface-icon-green)]">
+            <MapPin className="size-5 text-[var(--brand-secondary)]" />
           </div>
-          <div>
-            <h2 className="text-[1.2rem] font-bold text-[var(--palette-171717)]">배송지</h2>
-            <p className="mt-2 text-[1rem] font-medium text-[var(--palette-171717)]">우석 / 010-0000-0000</p>
-            <p className="mt-1 text-[0.98rem] leading-7 text-[var(--palette-666666)]">
+          <div className="min-w-0">
+            <h2 className="text-[1.2rem] font-bold text-[var(--text-heading)]">배송지</h2>
+            <p className="mt-2 text-[1rem] font-medium text-[var(--text-heading)]">우석 / 010-0000-0000</p>
+            <p className="mt-1 text-[0.98rem] leading-7 text-[var(--text-muted-subtle)]">
               서울 성동구 연무장길 00, DICHA Studio 302호
             </p>
           </div>
         </div>
-        <button className="text-[var(--palette-6f6b63)]" type="button">
+        <button className="text-[var(--text-action-subtle)]" type="button">
           <ChevronRight className="size-5" />
         </button>
       </div>

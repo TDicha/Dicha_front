@@ -25,14 +25,14 @@ export function SignupTermsStep({
   onToggleAllAgreement,
 }: SignupTermsStepProps) {
   return (
-    <main className="flex-1 px-5 pb-10 pt-4">
-      <h2 className="font-heading text-[2rem] font-semibold tracking-[-0.04em] text-[var(--color-ink)]">
+    <main className="flex-1 px-[var(--page-x)] pb-10 pt-4">
+      <h2 className="font-heading text-[2rem] font-semibold tracking-[-0.04em] text-[var(--text-ink)]">
         약관 동의
       </h2>
-      <p className="mt-2 text-sm text-[var(--palette-666)]">서비스 이용을 위해 약관에 동의해 주세요</p>
+      <p className="mt-2 text-sm text-[var(--text-muted-compact)]">서비스 이용을 위해 약관에 동의해 주세요</p>
 
       <button
-        className="mt-8 flex h-14 w-full items-center rounded-[0.95rem] bg-[var(--color-bg-ivory)] px-4 text-left"
+        className="mt-8 flex h-14 w-full items-center rounded-[0.95rem] bg-[var(--surface-app)] px-4 text-left"
         onClick={onToggleAllAgreement}
         type="button"
       >
@@ -40,16 +40,16 @@ export function SignupTermsStep({
           className={[
             "mr-3 flex size-5 items-center justify-center rounded-[4px] border text-[11px] font-bold",
             Object.values(agreements).every(Boolean)
-              ? "border-[var(--color-primary-green)] bg-[var(--color-primary-green)] text-white"
-              : "border-[var(--palette-cccccc)] bg-white text-transparent",
+              ? "border-[var(--brand-primary)] bg-[var(--brand-primary)] text-[var(--text-inverse)]"
+              : "border-[var(--border-neutral)] bg-[var(--surface-base)] text-[var(--text-transparent)]",
           ].join(" ")}
         >
           ✓
         </span>
-        <span className="text-sm font-semibold text-[var(--color-ink)]">전체 동의</span>
+        <span className="text-sm font-semibold text-[var(--text-ink)]">전체 동의</span>
       </button>
 
-      <div className="mt-3 divide-y divide-[var(--rgba-232-232-232-07)]">
+      <div className="mt-3 divide-y divide-[var(--surface-border-muted)]">
         {agreementRows.map((row) => (
           <button
             key={row.key}
@@ -62,15 +62,15 @@ export function SignupTermsStep({
                 className={[
                   "flex size-5 items-center justify-center rounded-[4px] border text-[11px] font-bold",
                   agreements[row.key]
-                    ? "border-[var(--color-primary-green)] bg-[var(--color-primary-green)] text-white"
-                    : "border-[var(--palette-cccccc)] bg-white text-transparent",
+                    ? "border-[var(--brand-primary)] bg-[var(--brand-primary)] text-[var(--text-inverse)]"
+                    : "border-[var(--border-neutral)] bg-[var(--surface-base)] text-[var(--text-transparent)]",
                 ].join(" ")}
               >
                 ✓
               </span>
-              <span className="text-sm text-[var(--palette-333333)]">{row.label}</span>
+              <span className="text-sm text-[var(--text-neutral-800)]">{row.label}</span>
             </div>
-            <ChevronRight className="size-4 text-[var(--palette-cccccc)]" />
+            <ChevronRight className="size-4 text-[var(--border-neutral)]" />
           </button>
         ))}
       </div>

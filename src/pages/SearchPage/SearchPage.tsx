@@ -25,7 +25,7 @@ export function SearchPage() {
   } = useProducts(isSearching ? { query: query.trim() } : undefined);
 
   return (
-    <div className="page-content space-y-5 bg-white pt-4">
+    <div className="page-content space-y-5 bg-[var(--surface-base)] pt-4">
       <SearchHeader
         isSearching={isSearching}
         onChangeQuery={setQuery}
@@ -41,7 +41,7 @@ export function SearchPage() {
           <RecentKeywordSection keywords={recentKeywords} onSelectKeyword={setQuery} />
         </>
       ) : isLoading ? (
-        <AppCard className="text-center text-sm text-[var(--color-muted)]">
+        <AppCard className="text-center text-sm text-[var(--text-muted)]">
           검색 결과를 불러오는 중입니다
         </AppCard>
       ) : isError ? (

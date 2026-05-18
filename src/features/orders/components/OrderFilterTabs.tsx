@@ -21,7 +21,7 @@ export function OrderFilterTabs<TKey extends string>({
           key={option.key}
           className={[
             "rounded-full px-4 py-2 text-sm font-medium transition",
-            filter === option.key ? "bg-[var(--second-color)] text-white" : "bg-white text-[var(--second-color)]",
+            filter === option.key ? "bg-[var(--brand-secondary)] text-[var(--text-inverse)]" : "bg-[var(--surface-base)] text-[var(--brand-secondary)]",
           ].join(" ")}
           onClick={() => onChange(option.key)}
           type="button"

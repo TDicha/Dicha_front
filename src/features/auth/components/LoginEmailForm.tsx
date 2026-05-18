@@ -28,18 +28,18 @@ export function LoginEmailForm({
   return (
     <>
       <div className="mt-6 flex items-center gap-3">
-        <div className="h-px flex-1 bg-[var(--line-color)]" />
-        <span className="text-[0.82rem] text-[var(--palette-a0a0a0)]">또는</span>
-        <div className="h-px flex-1 bg-[var(--line-color)]" />
+        <div className="h-px flex-1 bg-[var(--border-muted)]" />
+        <span className="text-[0.82rem] text-[var(--text-placeholder)]">또는</span>
+        <div className="h-px flex-1 bg-[var(--border-muted)]" />
       </div>
 
       <div className="mt-6 space-y-3">
         <label className="block">
           <span className="sr-only">이메일 주소</span>
-          <div className="flex h-12 items-center rounded-[0.85rem] border border-[var(--line-color)] bg-white px-4">
-            <Mail className="mr-3 size-4 text-[var(--palette-b0b0b0)]" />
+          <div className="flex h-12 items-center rounded-[0.85rem] border border-[var(--border-muted)] bg-[var(--surface-base)] px-4">
+            <Mail className="mr-3 size-4 text-[var(--border-disabled)]" />
             <input
-              className="w-full bg-transparent text-sm text-[var(--color-primary-green)] placeholder:text-[var(--palette-a0a0a0)]"
+              className="w-full bg-transparent text-sm text-[var(--brand-primary)] placeholder:text-[var(--text-placeholder)]"
               onChange={(event) => onChangeEmail(event.target.value)}
               placeholder="이메일 주소 입력"
               value={email}
@@ -49,10 +49,10 @@ export function LoginEmailForm({
 
         <label className="block">
           <span className="sr-only">비밀번호</span>
-          <div className="flex h-12 items-center rounded-[0.85rem] border border-[var(--line-color)] bg-white px-4">
-            <ShieldCheck className="mr-3 size-4 text-[var(--palette-b0b0b0)]" />
+          <div className="flex h-12 items-center rounded-[0.85rem] border border-[var(--border-muted)] bg-[var(--surface-base)] px-4">
+            <ShieldCheck className="mr-3 size-4 text-[var(--border-disabled)]" />
             <input
-              className="w-full bg-transparent text-sm text-[var(--color-primary-green)] placeholder:text-[var(--palette-a0a0a0)]"
+              className="w-full bg-transparent text-sm text-[var(--brand-primary)] placeholder:text-[var(--text-placeholder)]"
               onChange={(event) => onChangePassword(event.target.value)}
               placeholder="비밀번호 입력"
               type="password"
@@ -62,10 +62,10 @@ export function LoginEmailForm({
         </label>
       </div>
 
-      <label className="mt-4 flex items-center gap-2 text-[0.82rem] text-[var(--palette-666)]">
+      <label className="mt-4 flex items-center gap-2 text-[0.82rem] text-[var(--text-muted-compact)]">
         <input
           checked={rememberId}
-          className="size-4 rounded-[4px] border border-[var(--palette-d1d1d1)]"
+          className="size-4 rounded-[4px] border border-[var(--border-neutral-muted)]"
           onChange={onToggleRememberId}
           type="checkbox"
         />
@@ -73,7 +73,7 @@ export function LoginEmailForm({
       </label>
 
       {error ? (
-        <div className="mt-4 rounded-[0.95rem] bg-[var(--rgba-148-35-30-005)] px-4 py-3 text-sm text-[var(--color-primary-red)]">
+        <div className="mt-4 rounded-[0.95rem] bg-[var(--surface-danger-soft)] px-4 py-3 text-sm text-[var(--state-danger)]">
           {error}
         </div>
       ) : null}

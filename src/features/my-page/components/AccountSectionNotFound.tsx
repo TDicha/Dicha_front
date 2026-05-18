@@ -6,7 +6,7 @@ import { ROUTES } from "@/shared/constants/routes";
 
 export function AccountSectionNotFound() {
   return (
-    <div className="page-content space-y-5 bg-white pt-4">
+    <div className="page-content space-y-5 bg-[var(--surface-base)] pt-4">
       <EmptyState
         action={
           <PrimaryButton asChild className="w-full">

@@ -9,14 +9,14 @@ export function ClassScheduleCard({ slots }: ClassScheduleCardProps) {
     <AppCard>
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="font-heading text-lg font-semibold text-[var(--color-primary-green)]">
+          <h2 className="font-heading text-lg font-semibold text-[var(--brand-primary)]">
             예약 일정
           </h2>
-          <p className="mt-1 text-sm text-[var(--color-muted)]">
+          <p className="mt-1 text-sm text-[var(--text-muted)]">
             원하는 날짜와 클래스 시간을 선택하세요
           </p>
         </div>
-        <div className="rounded-full bg-[var(--rgba-29-62-43-006)] px-3 py-1 text-xs font-semibold text-[var(--color-primary-green)]">
+        <div className="rounded-full bg-[var(--surface-brand-tint-6)] px-3 py-1 text-xs font-semibold text-[var(--brand-primary)]">
           4월 18일
         </div>
       </div>
@@ -28,8 +28,8 @@ export function ClassScheduleCard({ slots }: ClassScheduleCardProps) {
             className={[
               "rounded-[1rem] border px-3 py-3 text-sm font-medium transition",
               index === 2
-                ? "border-[var(--color-primary-green)] bg-[var(--color-primary-green)] text-white"
-                : "border-[var(--rgba-17-24-39-008)] bg-white text-[var(--color-primary-green)]",
+                ? "border-[var(--brand-primary)] bg-[var(--brand-primary)] text-[var(--text-inverse)]"
+                : "border-[var(--border-ink-8)] bg-[var(--surface-base)] text-[var(--brand-primary)]",
             ].join(" ")}
             type="button"
           >

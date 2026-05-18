@@ -93,7 +93,7 @@ export function ProductListPage() {
   );
 
   return (
-    <div className="page-content space-y-0 bg-white px-0 pt-0">
+    <div className="page-content space-y-0 bg-[var(--surface-base)] px-0 pt-0">
       <ProductListSearchBar
         onChange={(nextQuery) => {
           setQuery(nextQuery);
@@ -119,7 +119,7 @@ export function ProductListPage() {
       />
 
       {isLoading ? (
-        <div className="px-4 py-8 text-center text-sm text-[var(--color-muted)]">
+        <div className="px-4 py-8 text-center text-sm text-[var(--text-muted)]">
           상품을 불러오는 중입니다
         </div>
       ) : isError ? (

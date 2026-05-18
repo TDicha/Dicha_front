@@ -24,25 +24,25 @@ const qrUseCases = [
 export function QrUseCaseSection() {
   return (
     <section className="px-4 pt-4">
-      <div className="rounded-[1.55rem] bg-white px-4 py-5 shadow-[0_10px_26px_var(--rgba-34-34-34-006)]">
-        <h2 className="text-[1.35rem] font-black tracking-[-0.04em] text-[var(--palette-121212)]">
+      <div className="rounded-[1.55rem] bg-[var(--surface-base)] px-4 py-5 shadow-[0_10px_26px_var(--shadow-neutral-alpha-6)]">
+        <h2 className="text-[1.35rem] font-black tracking-[-0.04em] text-[var(--text-title)]">
           언제 QR을 쓰면 좋을까요?
         </h2>
         <div className="mt-4 space-y-3">
           {qrUseCases.map(({ icon: Icon, title, description }) => (
             <article
               key={title}
-              className="rounded-[1.2rem] border border-[var(--palette-ece6dc)] bg-[var(--palette-fcfbf8)] px-4 py-4"
+              className="rounded-[1.2rem] border border-[var(--surface-warm-muted)] bg-[var(--surface-offwhite)] px-4 py-4"
             >
               <div className="flex items-start gap-3">
-                <div className="flex size-10 items-center justify-center rounded-full bg-[var(--palette-edf3ec)]">
-                  <Icon className="size-4.5 text-[var(--primary-color)]" />
+                <div className="flex size-10 items-center justify-center rounded-full bg-[var(--surface-icon-green)]">
+                  <Icon className="size-4.5 text-[var(--brand-primary)]" />
                 </div>
                 <div>
-                  <h3 className="text-[1.05rem] font-bold text-[var(--palette-121212)]">
+                  <h3 className="text-[1.05rem] font-bold text-[var(--text-title)]">
                     {title}
                   </h3>
-                  <p className="mt-1 text-[0.92rem] leading-6 text-[var(--palette-666666)]">
+                  <p className="mt-1 text-[0.92rem] leading-6 text-[var(--text-muted-subtle)]">
                     {description}
                   </p>
                 </div>

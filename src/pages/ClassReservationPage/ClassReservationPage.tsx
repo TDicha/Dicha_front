@@ -11,7 +11,7 @@ const slots = ["10:00", "11:30", "13:00", "14:30", "16:00", "18:30"];
 
 export function ClassReservationPage() {
   return (
-    <div className="page-content space-y-5 bg-white pt-4">
+    <div className="page-content space-y-5 bg-[var(--surface-base)] pt-4">
       <ClassReservationHeroSection />
       <ClassReservationInfoGrid />
       <ClassScheduleCard slots={slots} />

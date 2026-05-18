@@ -8,7 +8,7 @@ export const reservationPlans = [
     description: "1~2인 가정용 / 월 2회 배송",
     price: 52000,
     icon: "🏠",
-    accent: "var(--palette-d9e6d8)",
+    accent: "var(--surface-success-soft)",
   },
   {
     id: "office",
@@ -19,7 +19,7 @@ export const reservationPlans = [
     description: "사무실 · 카페용 / 월 4회 배송",
     price: 200000,
     icon: "🏢",
-    accent: "var(--palette-f3efe7)",
+    accent: "var(--surface-modal-soft)",
   },
   {
     id: "simple",
@@ -30,7 +30,7 @@ export const reservationPlans = [
     description: "언제 어디서나 간편하게",
     price: 38000,
     icon: "🧧",
-    accent: "var(--palette-f6ebca)",
+    accent: "var(--surface-accent-pale)",
   },
 ] as const;
 

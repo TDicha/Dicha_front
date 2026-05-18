@@ -119,7 +119,7 @@ export function PurchasePage() {
   }
 
   return (
-    <div className="bg-[var(--palette-f7f5f1)] pb-40">
+    <div className="bg-[var(--surface-page-alt)] pb-[var(--fixed-action-page-padding)]">
       <PurchaseHeaderSection />
       <PurchaseShippingAddressSection />
       <PurchasePaymentMethodSection

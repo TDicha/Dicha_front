@@ -11,13 +11,13 @@ interface EmptyStateProps {
 export function EmptyState({ title, description, action }: EmptyStateProps) {
   return (
     <AppCard className="py-7 text-center" padding="lg">
-      <p className="text-xs uppercase tracking-[0.28em] text-[var(--color-accent-gold)]">
+      <p className="text-xs uppercase tracking-[0.28em] text-[var(--brand-accent)]">
         Empty
       </p>
-      <h3 className="mt-2 font-heading text-lg font-semibold text-[var(--color-primary-green)]">
+      <h3 className="mt-2 font-heading text-lg font-semibold text-[var(--brand-primary)]">
         {title}
       </h3>
-      <p className="mt-2 text-sm leading-6 text-[var(--color-muted)]">{description}</p>
+      <p className="mt-2 text-sm leading-6 text-[var(--text-muted)]">{description}</p>
       {action ? <div className="mt-5">{action}</div> : null}
     </AppCard>
   );

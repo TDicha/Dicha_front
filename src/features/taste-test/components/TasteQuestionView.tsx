@@ -29,24 +29,24 @@ export function TasteQuestionView({
   onSelect,
 }: TasteQuestionViewProps) {
   return (
-    <div className="page-content space-y-5 bg-white pt-4">
+    <div className="page-content space-y-5 bg-[var(--surface-base)] pt-4">
       <AppCard
         className="rounded-[1.8rem] px-5 py-6"
         padding="none"
         variant="hero-blue"
       >
-        <p className="text-xs font-semibold tracking-[0.18em] text-white/70">
+        <p className="text-xs font-semibold tracking-[0.18em] text-[var(--overlay-white-70)]">
           QUESTION {currentQuestionIndex + 1} / {questionCount}
         </p>
         <h1 className="mt-2 font-heading text-[1.8rem] font-semibold tracking-[-0.04em]">
           {currentQuestion.title}
         </h1>
-        <p className="mt-3 text-sm leading-6 text-white/82">
+        <p className="mt-3 text-sm leading-6 text-[var(--overlay-white-82)]">
           {currentQuestion.description}
         </p>
-        <div className="mt-5 h-2 rounded-full bg-white/15">
+        <div className="mt-5 h-2 rounded-full bg-[var(--overlay-white-15)]">
           <div
-            className="h-2 rounded-full bg-[var(--palette-f1d08b)] transition-all"
+            className="h-2 rounded-full bg-[var(--icon-accent)] transition-all"
             style={{
               width: `${((currentQuestionIndex + 1) / questionCount) * 100}%`,
             }}
@@ -61,22 +61,22 @@ export function TasteQuestionView({
             className={[
               "w-full rounded-[1.25rem] border px-4 py-4 text-left transition",
               selectedValue === option.value
-                ? "border-[var(--color-primary-green)] bg-[var(--rgba-29-62-43-006)]"
-                : "border-[var(--rgba-17-24-39-008)] bg-white",
+                ? "border-[var(--brand-primary)] bg-[var(--surface-brand-tint-6)]"
+                : "border-[var(--border-ink-8)] bg-[var(--surface-base)]",
             ].join(" ")}
             onClick={() => onSelect(option.value)}
             type="button"
           >
             <div className="flex items-center justify-between gap-3">
               <div>
-                <p className="text-base font-semibold text-[var(--color-primary-green)]">
+                <p className="text-base font-semibold text-[var(--brand-primary)]">
                   {option.label}
                 </p>
-                <p className="mt-1 text-sm text-[var(--color-muted)]">
+                <p className="mt-1 text-sm text-[var(--text-muted)]">
                   {option.description}
                 </p>
               </div>
-              <ArrowRight className="size-4 text-[var(--color-muted)]" />
+              <ArrowRight className="size-4 text-[var(--text-muted)]" />
             </div>
           </button>
         ))}
@@ -84,7 +84,7 @@ export function TasteQuestionView({
 
       <div className="flex gap-3">
         <PrimaryButton
-          className="flex-1 bg-white text-[var(--color-primary-green)]"
+          className="flex-1 bg-[var(--surface-base)] text-[var(--brand-primary)]"
           onClick={onBack}
           variant="outline"
         >

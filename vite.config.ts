@@ -5,6 +5,9 @@ import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "vite";
 import { VitePWA } from "vite-plugin-pwa";
 
+const PWA_THEME_COLOR = "#1D3E2B";
+const PWA_BACKGROUND_COLOR = "#F4F2EB";
+
 export default defineConfig({
   plugins: [
     react(),
@@ -16,8 +19,8 @@ export default defineConfig({
         name: "Dicha Coffee",
         short_name: "Dicha",
         description: "모바일 퍼스트 PWA 커스텀 로스팅 커피 플랫폼",
-        theme_color: "#1D3E2B",
-        background_color: "#F4F2EB",
+        theme_color: PWA_THEME_COLOR,
+        background_color: PWA_BACKGROUND_COLOR,
         display: "standalone",
         start_url: "/",
         icons: [

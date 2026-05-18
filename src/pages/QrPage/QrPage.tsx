@@ -36,7 +36,7 @@ export function QrPage() {
   }
 
   return (
-    <div className="bg-[var(--background-color)] pb-8">
+    <div className="bg-[var(--surface-app)] pb-8">
       <QrHeroSection />
       <QrScannerPanel />
       <QrUseCaseSection />

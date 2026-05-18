@@ -13,7 +13,7 @@ export function MyBlendPage() {
   }
 
   return (
-    <div className="bg-[var(--palette-f8f6f1)] px-5 pb-8 pt-4">
+    <div className="bg-[var(--surface-blend-page)] px-5 pb-8 pt-4">
       <MyBlendHeader blendCount={blendCards.length} />
       <MyBlendCardList blendCards={blendCards} />
     </div>
