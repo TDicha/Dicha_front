@@ -25,7 +25,7 @@ export function BottomTabBar() {
         {bottomTabItems.map(({ icon: Icon, label, to }) => (
           <NavLink
             key={to}
-            className={({ isActive }) =>
+            className={({ isActive }: { isActive: boolean }) =>
               [
                 "relative flex min-w-0 flex-1 flex-col items-center gap-1 rounded-[1rem] px-2 py-3 text-[11px] font-medium transition max-[360px]:px-1 max-[360px]:text-[10px]",
                 isActive
@@ -36,7 +36,7 @@ export function BottomTabBar() {
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
             to={to}
           >
-            {({ isActive }) => (
+            {({ isActive }: { isActive: boolean }) => (
               <>
                 <span
                   className={[

@@ -1,17 +1,24 @@
-<<<<<<< HEAD
-# Dicha_front
-# React + TypeScript + Vite
-=======
-# Dicha Coffee
->>>>>>> 96881b7 (Initial commit from local)
+# Dicha Coffee Workspace
 
-모바일 퍼스트 PWA 기반의 O2O 커스텀 로스팅 커피 플랫폼 프론트엔드 초기 베이스입니다. `CODEX.md` 기준으로 확장 가능한 서비스형 구조, 인증 보안 원칙, 공통 UI 스켈레톤을 먼저 구성했습니다.
+모바일 퍼스트 PWA 기반의 O2O 커스텀 로스팅 커피 플랫폼 프론트엔드 워크스페이스입니다. 현재는 고객용 앱을 `apps/client`로 이동했고, 이후 관리자 앱을 `apps/admin`에 추가할 수 있도록 모노레포 뼈대를 준비했습니다.
+
+## Structure
+
+```txt
+apps/
+  client/       # 기존 Dicha 고객용 PWA 앱
+  admin/        # Dicha 관리자 콘솔 앱
+packages/
+  types/        # client/admin 공통 타입 자리
+  ui/           # client/admin 공통 UI 컴포넌트 자리
+  utils/        # client/admin 공통 유틸 자리
+```
 
 ## Stack
 
 - Vite
 - React + TypeScript
-- pnpm
+- pnpm workspace
 - Tailwind CSS v4
 - shadcn/ui
 - Zustand
@@ -23,14 +30,21 @@
 ## Scripts
 
 ```bash
-pnpm dev
-pnpm build
-pnpm lint
+pnpm dev:client
+pnpm dev:admin
+pnpm build:client
+pnpm build:admin
+pnpm lint:client
+pnpm lint:admin
+pnpm preview:client
+pnpm preview:admin
 ```
+
+루트의 `pnpm build`와 `pnpm lint`는 현재 client/admin 앱을 함께 검증합니다.
 
 ## Environment
 
-`.env` 예시:
+고객용 앱 환경 변수는 `apps/client` 기준으로 둡니다.
 
 ```bash
 VITE_API_BASE_URL=http://localhost:8080
@@ -58,6 +72,8 @@ VITE_ENABLE_MOCK=true
 
 ## TODO
 
+- `apps/admin` 관리자 목업 CRUD 화면 구현
+- `packages/types`, `packages/ui`, `packages/utils`에 실제 공유 코드 이동
 - Figma MCP 가능 시 모바일 프레임 구조 기준으로 spacing, typography, component token 정밀화
 - Spring Boot 실 API 연결과 react-query query key 전략 확정
 - QR 스캔 실구현과 카메라 권한 플로우 연결
