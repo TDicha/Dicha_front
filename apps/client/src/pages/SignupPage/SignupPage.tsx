@@ -31,10 +31,6 @@ export function SignupPage() {
   const [password, setPassword] = useState("Password123!");
   const [passwordConfirm, setPasswordConfirm] = useState("Password123!");
   const [name, setName] = useState("우석");
-  const [phone, setPhone] = useState("010-0000-0000");
-  const [verificationCode, setVerificationCode] = useState("");
-  const [emailChecked, setEmailChecked] = useState(true);
-  const [phoneVerified, setPhoneVerified] = useState(true);
 
   useEffect(() => clearError, [clearError]);
 
@@ -117,32 +113,17 @@ export function SignupPage() {
         <SignupTopBar onBack={handleBack} progress={2} />
         <SignupDetailsStep
           email={email}
-          emailChecked={emailChecked}
           error={error}
           isPending={isPending}
           name={name}
-          onChangeEmail={(value) => {
-            setEmail(value);
-            setEmailChecked(false);
-          }}
+          onChangeEmail={setEmail}
           onChangeName={setName}
           onChangePassword={setPassword}
           onChangePasswordConfirm={setPasswordConfirm}
-          onChangePhone={(value) => {
-            setPhone(value);
-            setPhoneVerified(false);
-          }}
-          onChangeVerificationCode={setVerificationCode}
-          onCheckEmail={() => setEmailChecked(true)}
-          onRequestPhoneVerification={() => setPhoneVerified(false)}
           onSubmit={handleSubmitDetails}
-          onVerifyPhone={() => setPhoneVerified(true)}
           password={password}
           passwordChecks={passwordChecks}
           passwordConfirm={passwordConfirm}
-          phone={phone}
-          phoneVerified={phoneVerified}
-          verificationCode={verificationCode}
         />
       </div>
     );

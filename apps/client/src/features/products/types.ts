@@ -1,11 +1,12 @@
-import type { Product } from "@/shared/types/models";
+import type { Product, ProductCategory } from "@/shared/types/models";
 
 export interface ProductListParams {
-  category?: Product["category"];
   query?: string;
+  categoryId?: string;
 }
 
 export interface ProductRepository {
+  listCategories: () => Promise<ProductCategory[]>;
   list: (params?: ProductListParams) => Promise<Product[]>;
   getById: (productId: string) => Promise<Product | null>;
 }

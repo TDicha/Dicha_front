@@ -7,3 +7,4 @@ export { CartRecommendedProducts } from "@/features/cart/components/CartRecommen
 export { CartSelectToolbar } from "@/features/cart/components/CartSelectToolbar";
 export * from "@/features/cart/cartItemDisplay";
 export * from "@/features/cart/cartPricing";
+export * from "@/features/cart/hooks/useCartItems";

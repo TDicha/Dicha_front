@@ -1,6 +1,7 @@
 export {
   productQueryKeys,
   useProduct,
+  useProductCategories,
   useProducts,
 } from "./hooks/useProducts";
 export * from "./components/product-detail";

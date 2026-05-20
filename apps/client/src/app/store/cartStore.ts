@@ -6,6 +6,7 @@ export interface CartItem {
   optionId: string;
   productName: string;
   optionName: string;
+  productImage?: string;
   unitPrice: number;
   quantity: number;
   selected: boolean;
@@ -13,6 +14,7 @@ export interface CartItem {
 
 interface CartState {
   items: CartItem[];
+  setItems: (items: CartItem[]) => void;
   addItem: (item: CartItem) => void;
   updateQuantity: (cartItemId: string, quantity: number) => void;
   removeItem: (cartItemId: string) => void;
@@ -25,6 +27,7 @@ interface CartState {
 
 export const useCartStore = create<CartState>((set) => ({
   items: [],
+  setItems: (items) => set({ items }),
   addItem: (item) =>
     set((state) => {
       const existingItem = state.items.find(

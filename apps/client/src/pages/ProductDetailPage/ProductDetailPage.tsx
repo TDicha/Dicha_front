@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
-import { useAppStore, useCartStore, useCheckoutStore } from "@/app/store";
+import { useAppStore, useAuthStore, useCartStore, useCheckoutStore } from "@/app/store";
 import { EmptyState } from "@/components/common/EmptyState";
 import { PrimaryButton } from "@/components/common/PrimaryButton";
 import {
@@ -16,9 +16,11 @@ import {
   ProductStorySection,
   ProductSummarySection,
 } from "@/features/products";
+import { useAddCartItem } from "@/features/cart";
 import { useProduct, useProductOptions } from "@/features/products/hooks/useProducts";
 import { getProductDetail } from "@/mock/productDetails";
 import { ROUTES } from "@/shared/constants/routes";
+import { env } from "@/shared/lib/env";
 import { formatPrice } from "@/shared/utils/format";
 
 export function ProductDetailPage() {
@@ -27,7 +29,9 @@ export function ProductDetailPage() {
   const { isBottomSheetOpen, openBottomSheet, closeBottomSheet } =
     useAppStore();
   const addItem = useCartStore((state) => state.addItem);
+  const authStatus = useAuthStore((state) => state.status);
   const createDirectCheckout = useCheckoutStore((state) => state.createDirect);
+  const addCartItemMutation = useAddCartItem();
   const itemCount = useCartStore((state) =>
     state.items.reduce((count, item) => count + item.quantity, 0),
   );
@@ -52,6 +56,7 @@ export function ProductDetailPage() {
     detail && selectedOption
       ? `${detail.defaultRoastLabel} · ${selectedOption.name} · ${detail.baseWeightLabel}`
       : (detail?.defaultRoastLabel ?? "옵션을 선택해주세요");
+  const shouldUseCartApi = authStatus === "authenticated" && !env.enableMock;
 
   function ensureOptionSelected() {
     if (selectedOption) {
@@ -77,10 +82,20 @@ export function ProductDetailPage() {
       optionId: selectedOption.id,
       productName: product.name,
       optionName: selectedOption.name,
+      productImage: product.image,
       unitPrice,
       quantity,
       selected: true,
     });
+
+    if (shouldUseCartApi) {
+      addCartItemMutation.mutate({
+        productId: product.id,
+        productOptionId: selectedOption.id,
+        quantity,
+      });
+    }
+
     closeBottomSheet();
   }
 
@@ -99,6 +114,7 @@ export function ProductDetailPage() {
       optionId: selectedOption.id,
       productName: product.name,
       optionName: selectedOption.name,
+      productImage: product.image,
       unitPrice,
       quantity,
       selected: true,

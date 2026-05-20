@@ -1,22 +1,157 @@
 import { apiClient } from "@/services/api/client";
 import { endpoints } from "@/services/api/endpoints";
-import type { Product } from "@/shared/types/models";
+import type { Product, ProductBadge, ProductCategory, ProductOption } from "@/shared/types/models";
 
 import type { ProductListParams, ProductRepository } from "../types";
 
+interface ApiCategory {
+  id?: number | string;
+  name?: string;
+  slug?: string;
+  displayOrder?: number;
+}
+
+interface ApiProductOption {
+  id?: number | string;
+  name?: string;
+  optionName?: string;
+  description?: string;
+  extraPrice?: number;
+}
+
+export interface ApiProduct {
+  id?: number | string;
+  name?: string;
+  subtitle?: string;
+  description?: string;
+  price?: number;
+  image?: string;
+  imageUrl?: string;
+  thumbnailUrl?: string;
+  badges?: string[];
+  badgeList?: string[];
+  category?: ApiCategory | string;
+  categoryId?: number | string;
+  categoryName?: string;
+  categorySlug?: string;
+  originLabel?: string;
+  roastLabel?: string;
+  roastLevel?: string;
+  rating?: number;
+  reviewCount?: number;
+  notes?: string[];
+  flavorNotes?: string[];
+  options?: ApiProductOption[];
+}
+
+const fallbackProductImage =
+  "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=900&q=80";
+
+function normalizeRoastLevel(roastLevel?: string): Product["roastLevel"] {
+  const normalized = roastLevel?.toUpperCase();
+
+  if (normalized === "LIGHT") return "Light";
+  if (normalized === "DARK") return "Dark";
+
+  return "Medium";
+}
+
+function normalizeBadges(badges?: string[]): ProductBadge[] {
+  return (badges ?? []).flatMap((badge) => {
+    const normalized = badge.toUpperCase();
+
+    if (normalized === "BEST" || normalized === "NEW" || normalized === "PICK") {
+      return [normalized];
+    }
+
+    return [];
+  });
+}
+
+function getCategoryValue(product: ApiProduct) {
+  if (typeof product.category === "string") {
+    return {
+      id: product.categoryId ?? product.category,
+      label: product.categoryName ?? product.category,
+      slug: product.categorySlug ?? product.category,
+    };
+  }
+
+  const category = product.category;
+
+  return {
+    id: product.categoryId ?? category?.id ?? product.categorySlug ?? "uncategorized",
+    label: product.categoryName ?? category?.name ?? "카테고리",
+    slug: product.categorySlug ?? category?.slug ?? String(product.categoryId ?? category?.id ?? "uncategorized"),
+  };
+}
+
+function toProductOption(option: ApiProductOption): ProductOption {
+  return {
+    id: String(option.id ?? option.name ?? option.optionName ?? "default"),
+    name: option.name ?? option.optionName ?? "기본 옵션",
+    description: option.description,
+    extraPrice: option.extraPrice ?? 0,
+  };
+}
+
+export function toProduct(product: ApiProduct): Product {
+  const category = getCategoryValue(product);
+  const notes = product.notes ?? product.flavorNotes ?? [];
+  const description = product.description ?? "";
+
+  return {
+    id: String(product.id ?? ""),
+    name: product.name ?? "상품명 없음",
+    subtitle: product.subtitle ?? description,
+    description,
+    price: product.price ?? 0,
+    image: product.imageUrl ?? product.thumbnailUrl ?? product.image ?? fallbackProductImage,
+    badges: normalizeBadges(product.badges ?? product.badgeList),
+    category: String(category.id),
+    categoryLabel: category.label,
+    originLabel: product.originLabel,
+    roastLabel: product.roastLabel,
+    roastLevel: normalizeRoastLevel(product.roastLevel),
+    rating: product.rating,
+    reviewCount: product.reviewCount,
+    notes,
+    options: (product.options ?? []).map(toProductOption),
+  };
+}
+
+function toProductCategory(category: ApiCategory): ProductCategory {
+  const id = String(category.id ?? category.slug ?? category.name ?? "");
+
+  return {
+    id,
+    name: category.name ?? category.slug ?? "카테고리",
+    slug: category.slug ?? id,
+    displayOrder: category.displayOrder ?? 0,
+  };
+}
+
 export const apiProductAdapter: ProductRepository = {
+  async listCategories() {
+    const { data } = await apiClient.get<ApiCategory[]>(endpoints.categories.list);
+
+    return data.map(toProductCategory);
+  },
   async list(params?: ProductListParams) {
-    const { data } = await apiClient.get<Product[]>(endpoints.products.list, {
-      params,
+    const { data } = await apiClient.get<ApiProduct[]>(endpoints.products.list, {
+      params: {
+        categoryId: params?.categoryId,
+        keyword: params?.query,
+      },
     });
 
-    return data;
+    return data.map(toProduct);
   },
   async getById(productId: string) {
-    const { data } = await apiClient.get<Product>(
+    const { data } = await apiClient.get<ApiProduct>(
       endpoints.products.detail(productId),
     );
 
-    return data;
+    return toProduct(data);
   },
 };

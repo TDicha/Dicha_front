@@ -3,55 +3,40 @@ import type { PasswordChecks } from "@/features/auth/components/types";
 
 interface SignupDetailsStepProps {
   email: string;
-  emailChecked: boolean;
   error: string | null;
   isPending: boolean;
   name: string;
   password: string;
   passwordChecks: PasswordChecks;
   passwordConfirm: string;
-  phone: string;
-  phoneVerified: boolean;
-  verificationCode: string;
   onChangeEmail: (value: string) => void;
   onChangeName: (value: string) => void;
   onChangePassword: (value: string) => void;
   onChangePasswordConfirm: (value: string) => void;
-  onChangePhone: (value: string) => void;
-  onChangeVerificationCode: (value: string) => void;
-  onCheckEmail: () => void;
-  onRequestPhoneVerification: () => void;
   onSubmit: () => void;
-  onVerifyPhone: () => void;
 }
 
 export function SignupDetailsStep({
   email,
-  emailChecked,
   error,
   isPending,
   name,
   password,
   passwordChecks,
   passwordConfirm,
-  phone,
-  phoneVerified,
-  verificationCode,
   onChangeEmail,
   onChangeName,
   onChangePassword,
   onChangePasswordConfirm,
-  onChangePhone,
-  onChangeVerificationCode,
-  onCheckEmail,
-  onRequestPhoneVerification,
   onSubmit,
-  onVerifyPhone,
 }: SignupDetailsStepProps) {
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const isEmailValid = emailPattern.test(email.trim());
+  const isNameValid = name.trim().length > 0;
   const canSubmit =
     !isPending &&
-    emailChecked &&
-    phoneVerified &&
+    isEmailValid &&
+    isNameValid &&
     passwordChecks.hasLength &&
     passwordChecks.hasEnoughTypes &&
     password === passwordConfirm;
@@ -66,33 +51,29 @@ export function SignupDetailsStep({
       <div className="mt-6 space-y-4">
         <div>
           <p className="mb-2 text-xs font-medium text-[var(--text-muted-compact)]">이메일 *</p>
-          <div className="flex gap-2">
-            <div className="flex h-11 flex-1 items-center rounded-[0.85rem] border border-[var(--border-muted)] bg-[var(--surface-input)] px-4">
-              <input
-                className="w-full bg-transparent text-sm text-[var(--brand-primary)] placeholder:text-[var(--text-muted-light)]"
-                onChange={(event) => onChangeEmail(event.target.value)}
-                placeholder="example@email.com"
-                value={email}
-              />
-            </div>
-            <button
-              className="h-11 rounded-[0.85rem] bg-[var(--brand-primary)] px-4 text-xs font-semibold text-[var(--text-inverse)]"
-              onClick={onCheckEmail}
-              type="button"
-            >
-              중복확인
-            </button>
+          <div className="flex h-11 items-center rounded-[0.85rem] border border-[var(--border-muted)] bg-[var(--surface-input)] px-4">
+            <input
+              autoComplete="email"
+              className="w-full bg-transparent text-sm text-[var(--brand-primary)] placeholder:text-[var(--text-muted-light)]"
+              onChange={(event) => onChangeEmail(event.target.value)}
+              placeholder="example@email.com"
+              type="email"
+              value={email}
+            />
           </div>
-          {emailChecked ? <p className="mt-2 text-xs text-[var(--brand-primary)]">사용 가능한 이메일입니다</p> : null}
+          {email && !isEmailValid ? (
+            <p className="mt-2 text-xs text-[var(--state-danger)]">이메일 형식을 확인해 주세요</p>
+          ) : null}
         </div>
 
         <div>
           <p className="mb-2 text-xs font-medium text-[var(--text-muted-compact)]">비밀번호 *</p>
           <div className="flex h-11 items-center rounded-[0.85rem] border border-[var(--border-muted)] bg-[var(--surface-input)] px-4">
             <input
+              autoComplete="new-password"
               className="w-full bg-transparent text-sm text-[var(--brand-primary)] placeholder:text-[var(--text-muted-light)]"
               onChange={(event) => onChangePassword(event.target.value)}
-              placeholder="8자 이상, 3종 이상 조합"
+              placeholder="8자 이상, 4종 이상 조합"
               type="password"
               value={password}
             />
@@ -104,7 +85,7 @@ export function SignupDetailsStep({
               { label: "숫자 포함", passed: passwordChecks.hasNumber },
               { label: "특수문자", passed: passwordChecks.hasSpecial },
               { label: "8자 이상", passed: passwordChecks.hasLength },
-              { label: "3종 이상", passed: passwordChecks.hasEnoughTypes },
+              { label: "4종 이상", passed: passwordChecks.hasEnoughTypes },
             ].map((item) => (
               <span key={item.label} className={item.passed ? "text-[var(--brand-primary)]" : "text-[var(--text-muted-light)]"}>
                 ● {item.label}
@@ -117,6 +98,7 @@ export function SignupDetailsStep({
           <p className="mb-2 text-xs font-medium text-[var(--text-muted-compact)]">비밀번호 확인 *</p>
           <div className="flex h-11 items-center rounded-[0.85rem] border border-[var(--border-muted)] bg-[var(--surface-input)] px-4">
             <input
+              autoComplete="new-password"
               className="w-full bg-transparent text-sm text-[var(--brand-primary)] placeholder:text-[var(--text-muted-light)]"
               onChange={(event) => onChangePasswordConfirm(event.target.value)}
               placeholder="비밀번호를 한번 더 입력해주세요"
@@ -130,56 +112,16 @@ export function SignupDetailsStep({
           <p className="mb-2 text-xs font-medium text-[var(--text-muted-compact)]">이름 *</p>
           <div className="flex h-11 items-center rounded-[0.85rem] border border-[var(--border-muted)] bg-[var(--surface-input)] px-4">
             <input
+              autoComplete="name"
               className="w-full bg-transparent text-sm text-[var(--brand-primary)] placeholder:text-[var(--text-muted-light)]"
               onChange={(event) => onChangeName(event.target.value)}
               placeholder="홍길동"
               value={name}
             />
           </div>
-        </div>
-
-        <div>
-          <p className="mb-2 text-xs font-medium text-[var(--text-muted-compact)]">휴대폰 번호 *</p>
-          <div className="flex gap-2">
-            <div className="flex h-11 flex-1 items-center rounded-[0.85rem] border border-[var(--border-muted)] bg-[var(--surface-input)] px-4">
-              <input
-                className="w-full bg-transparent text-sm text-[var(--brand-primary)] placeholder:text-[var(--text-muted-light)]"
-                onChange={(event) => onChangePhone(event.target.value)}
-                placeholder="010-0000-0000"
-                value={phone}
-              />
-            </div>
-            <button
-              className="h-11 rounded-[0.85rem] bg-[var(--brand-primary)] px-4 text-xs font-semibold text-[var(--text-inverse)]"
-              onClick={onRequestPhoneVerification}
-              type="button"
-            >
-              인증요청
-            </button>
-          </div>
-        </div>
-
-        <div>
-          <p className="mb-2 text-xs font-medium text-[var(--text-muted-compact)]">인증번호 *</p>
-          <div className="flex gap-2">
-            <div className="flex h-11 flex-1 items-center rounded-[0.85rem] border-[1.5px] border-[var(--brand-primary)] bg-[var(--surface-base)] px-4">
-              <input
-                className="w-full bg-transparent text-sm text-[var(--brand-primary)] placeholder:text-[var(--text-muted-light)]"
-                onChange={(event) => onChangeVerificationCode(event.target.value)}
-                placeholder="인증번호 입력"
-                value={verificationCode}
-              />
-              <span className="font-heading text-sm font-semibold text-[var(--state-danger)]">02:58</span>
-            </div>
-            <button
-              className="h-11 rounded-[0.85rem] bg-[var(--brand-primary)] px-5 text-sm font-semibold text-[var(--text-inverse)]"
-              onClick={onVerifyPhone}
-              type="button"
-            >
-              확인
-            </button>
-          </div>
-          {phoneVerified ? <p className="mt-2 text-xs text-[var(--brand-primary)]">휴대폰 번호 인증이 완료되었습니다</p> : null}
+          {name && !isNameValid ? (
+            <p className="mt-2 text-xs text-[var(--state-danger)]">이름을 입력해 주세요</p>
+          ) : null}
         </div>
       </div>
 

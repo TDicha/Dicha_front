@@ -47,11 +47,11 @@ export function CartItemCard({
       </button>
 
       <div className="flex size-[clamp(6.4rem,31vw,8.5rem)] shrink-0 items-center justify-center rounded-[1.5rem] bg-[var(--surface-cart-image)]">
-        {product ? (
+        {item.productImage || product ? (
           <img
             alt={item.productName}
             className="size-[clamp(4.75rem,22vw,6rem)] rounded-full object-cover"
-            src={product.image}
+            src={item.productImage ?? product?.image}
           />
         ) : (
           <div className="text-4xl">☕</div>

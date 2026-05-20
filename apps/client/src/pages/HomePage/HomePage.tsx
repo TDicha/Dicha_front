@@ -8,17 +8,17 @@ import {
 
 export function HomePage() {
   const {
+    bestProducts,
     heroSlide,
     heroSlides,
-    roasterPick,
-    roasterPickMeta,
   } = useHomeData();
+  const monthlyBestProduct = bestProducts[0];
 
   return (
     <div className="page-content space-y-7 bg-[var(--surface-base)] pb-24 pt-0">
       <HomeHeroSection heroSlide={heroSlide} heroSlides={heroSlides} />
-      <HomeBestProductsSection />
-      <HomeRoasterPickSection product={roasterPick} roasterPickMeta={roasterPickMeta} />
+      <HomeBestProductsSection products={bestProducts} />
+      <HomeRoasterPickSection product={monthlyBestProduct} />
       {/* <HomeReviewSection reviews={reviews} /> */}
       <HomeStoryCard />
     </div>

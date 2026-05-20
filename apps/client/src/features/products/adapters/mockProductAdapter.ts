@@ -1,5 +1,5 @@
 import { mockProducts } from "@/mock/products";
-import type { Product } from "@/shared/types/models";
+import type { Product, ProductCategory } from "@/shared/types/models";
 
 import type { ProductListParams, ProductRepository } from "../types";
 
@@ -15,15 +15,33 @@ function matchesQuery(product: Product, query?: string) {
     .includes(normalizedQuery);
 }
 
-function matchesCategory(product: Product, category?: Product["category"]) {
-  return category ? product.category === category : true;
+function matchesCategory(product: Product, categoryId?: string) {
+  return categoryId ? product.category === categoryId : true;
+}
+
+function getMockCategories(): ProductCategory[] {
+  const categories = new Map<string, ProductCategory>();
+
+  mockProducts.forEach((product) => {
+    categories.set(product.category, {
+      id: product.category,
+      name: product.categoryLabel ?? product.category,
+      slug: product.category,
+      displayOrder: categories.size + 1,
+    });
+  });
+
+  return Array.from(categories.values());
 }
 
 export const mockProductAdapter: ProductRepository = {
+  async listCategories() {
+    return getMockCategories();
+  },
   async list(params?: ProductListParams) {
     return mockProducts.filter(
       (product) =>
-        matchesCategory(product, params?.category) &&
+        matchesCategory(product, params?.categoryId) &&
         matchesQuery(product, params?.query),
     );
   },

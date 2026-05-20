@@ -1,6 +1,7 @@
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { useCartStore, useCheckoutStore } from "@/app/store";
+import { useAuthStore, useCartStore, useCheckoutStore } from "@/app/store";
 import {
   calculateCartPricing,
   CartBottomCheckoutBar,
@@ -8,12 +9,19 @@ import {
   CartItemList,
   CartPricingSection,
   CartSelectToolbar,
+  useCartItems,
+  useClearCartItems,
+  useRemoveCartItem,
+  useUpdateCartItemQuantity,
 } from "@/features/cart";
 import { ROUTES } from "@/shared/constants/routes";
+import { env } from "@/shared/lib/env";
 
 export function CartPage() {
   const navigate = useNavigate();
+  const authStatus = useAuthStore((state) => state.status);
   const items = useCartStore((state) => state.items);
+  const setItems = useCartStore((state) => state.setItems);
   const updateQuantity = useCartStore((state) => state.updateQuantity);
   const removeItem = useCartStore((state) => state.removeItem);
   const toggleSelected = useCartStore((state) => state.toggleSelected);
@@ -21,10 +29,21 @@ export function CartPage() {
   const unselectAll = useCartStore((state) => state.unselectAll);
   const clearPurchasedItems = useCartStore((state) => state.clearPurchasedItems);
   const createCheckoutFromCart = useCheckoutStore((state) => state.createFromCart);
+  const shouldUseCartApi = authStatus === "authenticated" && !env.enableMock;
+  const cartQuery = useCartItems(shouldUseCartApi);
+  const updateCartItemQuantityMutation = useUpdateCartItemQuantity();
+  const removeCartItemMutation = useRemoveCartItem();
+  const clearCartItemsMutation = useClearCartItems();
   const selectedItems = items.filter((item) => item.selected);
 
   const pricing = calculateCartPricing(selectedItems);
   const isAllSelected = items.length > 0 && selectedItems.length === items.length;
+
+  useEffect(() => {
+    if (shouldUseCartApi && cartQuery.data) {
+      setItems(cartQuery.data);
+    }
+  }, [cartQuery.data, setItems, shouldUseCartApi]);
 
   function handleToggleAll() {
     if (isAllSelected) {
@@ -36,7 +55,41 @@ export function CartPage() {
   }
 
   function handleRemoveSelected() {
-    clearPurchasedItems(selectedItems.map((item) => item.cartItemId));
+    const selectedCartItemIds = selectedItems.map((item) => item.cartItemId);
+
+    clearPurchasedItems(selectedCartItemIds);
+
+    if (!shouldUseCartApi) {
+      return;
+    }
+
+    if (isAllSelected) {
+      clearCartItemsMutation.mutate();
+      return;
+    }
+
+    selectedCartItemIds.forEach((cartItemId) => {
+      removeCartItemMutation.mutate(cartItemId);
+    });
+  }
+
+  function handleUpdateQuantity(cartItemId: string, quantity: number) {
+    updateQuantity(cartItemId, quantity);
+
+    if (shouldUseCartApi) {
+      updateCartItemQuantityMutation.mutate({
+        cartItemId,
+        quantity: Math.max(1, quantity),
+      });
+    }
+  }
+
+  function handleRemoveItem(cartItemId: string) {
+    removeItem(cartItemId);
+
+    if (shouldUseCartApi) {
+      removeCartItemMutation.mutate(cartItemId);
+    }
   }
 
   function handleCheckout() {
@@ -46,6 +99,14 @@ export function CartPage() {
 
     createCheckoutFromCart(selectedItems);
     navigate(ROUTES.purchase);
+  }
+
+  if (shouldUseCartApi && cartQuery.isLoading) {
+    return (
+      <div className="bg-[var(--surface-page-alt)] px-[var(--page-x)] py-10 text-center text-sm text-[var(--text-muted)]">
+        장바구니를 불러오는 중입니다
+      </div>
+    );
   }
 
   if (!items.length) {
@@ -62,9 +123,9 @@ export function CartPage() {
       />
       <CartItemList
         items={items}
-        onRemove={removeItem}
+        onRemove={handleRemoveItem}
         onToggleSelected={toggleSelected}
-        onUpdateQuantity={updateQuantity}
+        onUpdateQuantity={handleUpdateQuantity}
       />
       <CartPricingSection pricing={pricing} />
       <CartBottomCheckoutBar

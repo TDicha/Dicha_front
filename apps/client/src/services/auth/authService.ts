@@ -1,6 +1,7 @@
 import { mockUser } from "@/mock/user";
 import { endpoints } from "@/services/api/endpoints";
 import { apiClient } from "@/services/api/client";
+import axios from "axios";
 import {
   clearAccessToken,
   getAccessToken,
@@ -18,6 +19,11 @@ interface MemberResponse {
   email: string;
   name: string;
 }
+
+const publicAuthClient = axios.create({
+  baseURL: env.apiBaseUrl,
+  timeout: 10000,
+});
 
 function toUserProfile(member: MemberResponse): UserProfile {
   return {
@@ -52,7 +58,7 @@ export async function login(payload: { email: string; password: string }) {
     return Promise.resolve({ user: mockUser, ...payload });
   }
 
-  const { data } = await apiClient.post<LoginResponse>(endpoints.auth.login, payload, {
+  const { data } = await publicAuthClient.post<LoginResponse>(endpoints.auth.login, payload, {
     headers: {
       "Content-Type": "application/json",
     },
@@ -84,7 +90,7 @@ export async function signup(payload: {
     });
   }
 
-  await apiClient.post(endpoints.auth.signup, payload, {
+  await publicAuthClient.post(endpoints.auth.signup, payload, {
     headers: {
       "Content-Type": "application/json",
     },

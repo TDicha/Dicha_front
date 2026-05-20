@@ -11,7 +11,7 @@ import {
   type ProductCategoryKey,
   type ProductSortKey,
 } from "@/features/products";
-import { useProducts } from "@/features/products";
+import { useProductCategories, useProducts } from "@/features/products";
 import type { Product, ProductBadge } from "@/shared/types/models";
 
 const productPageSize = 4;
@@ -50,13 +50,24 @@ export function ProductListPage() {
   const [selectedSort, setSelectedSort] = useState<ProductSortKey>("recommended");
   const [visibleCount, setVisibleCount] = useState(productPageSize);
   const productParams = {
-    ...(selectedCategory === "all" ? {} : { category: selectedCategory }),
+    ...(selectedCategory === "all" ? {} : { categoryId: selectedCategory }),
     ...(query.trim() ? { query: query.trim() } : {}),
   };
   const { data: products = [], isError, isLoading } = useProducts(productParams);
+  const { data: apiCategories = [] } = useProductCategories();
   const { data: allProducts = [] } = useProducts();
 
   const categories = useMemo(() => {
+    if (apiCategories.length) {
+      return [
+        { key: "all" as const, label: "전체" },
+        ...apiCategories.map((category) => ({
+          key: category.id,
+          label: category.name,
+        })),
+      ];
+    }
+
     const productCategories = new Map<Product["category"], string>();
 
     allProducts.forEach((product) => {
@@ -67,7 +78,7 @@ export function ProductListPage() {
       { key: "all" as const, label: "전체" },
       ...Array.from(productCategories, ([key, label]) => ({ key, label })),
     ];
-  }, [allProducts]);
+  }, [allProducts, apiCategories]);
 
   const filteredProducts = useMemo(() => {
     return [...products].sort((first, second) => {

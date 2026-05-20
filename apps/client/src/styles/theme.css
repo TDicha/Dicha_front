@@ -506,10 +506,12 @@
   --radius: 1.25rem;
   --app-min-width: 320px;
   --app-max-width: 28rem;
-  --page-x: clamp(1rem, 4.8vw, 1.25rem);
+  --app-safe-min-height: 100dvh;
+  --page-x: clamp(1rem, calc(0.88rem + 1vw), 1.25rem);
   --header-height: 4.5rem;
-  --tabbar-height: 5.5rem;
-  --tabbar-dock-offset: 0.85rem;
+  --tabbar-height: 4.75rem;
+  --tabbar-dock-offset: 0.625rem;
+  --mobile-card-width: clamp(9.75rem, 44vw, 10.75rem);
   --bottom-safe-padding: calc(env(safe-area-inset-bottom) + 1rem);
   --bottom-compact-safe-padding: calc(env(safe-area-inset-bottom) + 0.625rem);
   --fixed-action-page-padding: calc(8.5rem + env(safe-area-inset-bottom));

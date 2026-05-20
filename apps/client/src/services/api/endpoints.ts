@@ -8,6 +8,19 @@ export const endpoints = {
     list: "/api/products",
     detail: (productId: string) => `/api/products/${productId}`,
   },
+  categories: {
+    list: "/api/categories",
+  },
+  cart: {
+    list: "/api/cart",
+    addItem: "/api/cart/items",
+    updateItem: (cartItemId: string) => `/api/cart/items/${cartItemId}`,
+    removeItem: (cartItemId: string) => `/api/cart/items/${cartItemId}`,
+    clear: "/api/cart",
+  },
+  tasteTest: {
+    submit: "/api/taste-test",
+  },
   orders: {
     list: "/api/orders",
     create: "/api/orders",

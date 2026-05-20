@@ -7,7 +7,6 @@ import {
   LoginBrandHeader,
   LoginEmailForm,
   LoginHelpLinks,
-  LoginSocialButtons,
 } from "@/features/auth";
 import { ROUTES } from "@/shared/constants/routes";
 
@@ -51,7 +50,6 @@ export function LoginPage() {
       <main className="flex-1 px-[var(--page-x)] pb-10 pt-8">
         <div className="mx-auto max-w-[22rem]">
           <LoginBrandHeader />
-          <LoginSocialButtons />
           <LoginEmailForm
             email={email}
             error={error}

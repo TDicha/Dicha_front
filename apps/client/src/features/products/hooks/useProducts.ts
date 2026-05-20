@@ -5,6 +5,7 @@ import type { ProductListParams } from "../types";
 
 export const productQueryKeys = {
   all: ["products"] as const,
+  categories: () => [...productQueryKeys.all, "categories"] as const,
   list: (params?: ProductListParams) =>
     [...productQueryKeys.all, "list", params ?? {}] as const,
   detail: (productId: string) =>
@@ -12,6 +13,13 @@ export const productQueryKeys = {
   options: (productId: string) =>
     [...productQueryKeys.all, "options", productId] as const,
 };
+
+export function useProductCategories() {
+  return useQuery({
+    queryKey: productQueryKeys.categories(),
+    queryFn: () => productRepository.listCategories(),
+  });
+}
 
 export function useProducts(params?: ProductListParams) {
   return useQuery({

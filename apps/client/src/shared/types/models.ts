@@ -7,6 +7,13 @@ export interface ProductOption {
   extraPrice?: number;
 }
 
+export interface ProductCategory {
+  id: string;
+  name: string;
+  slug: string;
+  displayOrder: number;
+}
+
 export interface Product {
   id: string;
   name: string;
@@ -15,7 +22,7 @@ export interface Product {
   price: number;
   image: string;
   badges: ProductBadge[];
-  category: "blend" | "single-origin" | "drip-bag" | "capsule";
+  category: string;
   categoryLabel?: string;
   originLabel?: string;
   roastLabel?: string;

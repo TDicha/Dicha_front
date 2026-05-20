@@ -27,12 +27,6 @@ export function LoginEmailForm({
 }: LoginEmailFormProps) {
   return (
     <>
-      <div className="mt-6 flex items-center gap-3">
-        <div className="h-px flex-1 bg-[var(--border-muted)]" />
-        <span className="text-[0.82rem] text-[var(--text-placeholder)]">또는</span>
-        <div className="h-px flex-1 bg-[var(--border-muted)]" />
-      </div>
-
       <div className="mt-6 space-y-3">
         <label className="block">
           <span className="sr-only">이메일 주소</span>
