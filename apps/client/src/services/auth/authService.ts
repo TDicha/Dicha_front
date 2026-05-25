@@ -22,6 +22,7 @@ interface MemberResponse {
 
 const publicAuthClient = axios.create({
   baseURL: env.apiBaseUrl,
+  withCredentials: true,
   timeout: 10000,
 });
 
@@ -50,6 +51,23 @@ export async function fetchSession() {
   } catch (error) {
     clearAccessToken();
     throw error;
+  }
+}
+
+export async function restoreSession() {
+  if (env.enableMock) {
+    return null;
+  }
+
+  clearAccessToken();
+
+  try {
+    const { data } = await publicAuthClient.post<LoginResponse>(endpoints.auth.refresh);
+    setAccessToken(data.accessToken);
+    return await fetchSession();
+  } catch {
+    clearAccessToken();
+    return null;
   }
 }
 
@@ -107,6 +125,10 @@ export async function logout() {
     return Promise.resolve(true);
   }
 
-  clearAccessToken();
-  return Promise.resolve(true);
+  try {
+    await apiClient.post(endpoints.auth.logout);
+    return true;
+  } finally {
+    clearAccessToken();
+  }
 }

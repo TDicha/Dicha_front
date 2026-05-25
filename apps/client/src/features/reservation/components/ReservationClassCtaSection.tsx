@@ -1,19 +1,20 @@
-import { Link } from "react-router-dom";
-
 import { PrimaryButton } from "@/components/common/PrimaryButton";
-import { ROUTES } from "@/shared/constants/routes";
 
-export function ReservationClassCtaSection() {
+interface ReservationClassCtaSectionProps {
+  onApply: () => void;
+}
+
+export function ReservationClassCtaSection({ onApply }: ReservationClassCtaSectionProps) {
   return (
-    <section className="px-5 pt-8">
-      <h2 className="text-[1.55rem] font-bold tracking-[-0.04em] text-[var(--text-title)]">
+    <section className="px-[var(--page-x)] pt-8">
+      <h2 className="text-[clamp(1.25rem,5.5vw,1.45rem)] font-bold text-[var(--text-title)]">
         직접 커피를 만들어 보는건 어떨까요?
       </h2>
       <PrimaryButton
-        asChild
-        className="mt-6 h-12 w-full rounded-[0.95rem] text-[1rem] shadow-none"
+        className="mt-6 h-12 w-full text-[var(--text-muted)] text-[1rem] shadow-none"
+        onClick={onApply}
       >
-        <Link to={ROUTES.reservationClass}>클래스 신청하기</Link>
+        클래스 신청하기
       </PrimaryButton>
     </section>
   );

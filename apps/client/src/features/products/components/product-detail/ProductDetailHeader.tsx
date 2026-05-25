@@ -10,7 +10,7 @@ interface ProductDetailHeaderProps {
 
 export function ProductDetailHeader({ itemCount, onBack }: ProductDetailHeaderProps) {
   return (
-    <header className="sticky top-0 z-30 flex h-14 items-center justify-between border-b border-[var(--border-muted)] bg-[var(--surface-base)] px-4">
+    <header className="sticky top-0 z-30 flex h-[var(--header-height)] items-center justify-between border-b border-[var(--border-muted)] bg-[var(--surface-base)] px-[var(--page-x)]">
       <button
         aria-label="뒤로가기"
         className="flex size-8 items-center justify-center text-[var(--text-title)]"
@@ -25,8 +25,8 @@ export function ProductDetailHeader({ itemCount, onBack }: ProductDetailHeaderPr
         to={ROUTES.cart}
       >
         <ShoppingCart className="size-5" />
-        <span className="absolute -right-1 -top-1 flex size-3.5 items-center justify-center rounded-full bg-[var(--state-danger)] text-[0.45rem] font-bold text-[var(--text-inverse)]">
-          {itemCount}
+        <span className="absolute -right-1.5 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-[var(--brand-accent)] px-1 text-[9px] font-bold text-[var(--text-on-accent)]">
+          {itemCount > 99 ? "99+" : itemCount}
         </span>
       </Link>
     </header>

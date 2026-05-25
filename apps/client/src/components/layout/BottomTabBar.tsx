@@ -21,16 +21,14 @@ export function BottomTabBar() {
 
   return (
     <div className="sticky bottom-0 z-30 bg-transparent px-[var(--page-x)] pb-[calc(env(safe-area-inset-bottom)+0.625rem)] pt-[var(--tabbar-dock-offset)]">
-      <nav className="flex h-[var(--tabbar-height)] w-full items-center justify-around rounded-[1.35rem] border border-[var(--border-ink-8)] bg-[var(--overlay-white-55)] px-1.5 shadow-[0_8px_24px_var(--shadow-ink-alpha-8)] backdrop-blur-xl">
+      <nav className="flex h-[var(--tabbar-height)] w-full items-center justify-around rounded-[var(--radius-card)] border border-[var(--border-ink-8)] bg-[var(--surface-card-glass-strong)] px-1.5 shadow-[0_8px_24px_var(--shadow-ink-alpha-8)] backdrop-blur-xl">
         {bottomTabItems.map(({ icon: Icon, label, to }) => (
           <NavLink
             key={to}
             className={({ isActive }: { isActive: boolean }) =>
               [
                 "relative flex min-h-14 min-w-0 flex-1 flex-col items-center justify-center gap-1 rounded-[1rem] px-1.5 text-[11px] font-medium transition max-[360px]:text-[10px]",
-                isActive
-                  ? "text-[var(--brand-primary)]"
-                  : "text-[var(--overlay-ink-52)]",
+                isActive ? "text-[var(--brand-primary)]" : "text-[var(--text-muted)]",
               ].join(" ")
             }
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}

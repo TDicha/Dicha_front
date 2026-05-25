@@ -26,8 +26,8 @@ export function LoginEmailForm({
   onToggleRememberId,
 }: LoginEmailFormProps) {
   return (
-    <>
-      <div className="mt-6 space-y-3">
+    <div className="mt-6 flex flex-col gap-3">
+      <div className="flex flex-col gap-3">
         <label className="block">
           <span className="sr-only">이메일 주소</span>
           <div className="flex h-12 items-center rounded-[0.85rem] border border-[var(--border-muted)] bg-[var(--surface-base)] px-4">
@@ -36,7 +36,6 @@ export function LoginEmailForm({
               className="w-full bg-transparent text-sm text-[var(--brand-primary)] placeholder:text-[var(--text-placeholder)]"
               onChange={(event) => onChangeEmail(event.target.value)}
               placeholder="이메일 주소 입력"
-              value={email}
             />
           </div>
         </label>
@@ -50,13 +49,12 @@ export function LoginEmailForm({
               onChange={(event) => onChangePassword(event.target.value)}
               placeholder="비밀번호 입력"
               type="password"
-              value={password}
             />
           </div>
         </label>
       </div>
 
-      <label className="mt-4 flex items-center gap-2 text-[0.82rem] text-[var(--text-muted-compact)]">
+      <label className="flex items-center gap-2 text-[0.82rem] text-[var(--text-muted-compact)]">
         <input
           checked={rememberId}
           className="size-4 rounded-[4px] border border-[var(--border-neutral-muted)]"
@@ -67,14 +65,14 @@ export function LoginEmailForm({
       </label>
 
       {error ? (
-        <div className="mt-4 rounded-[0.95rem] bg-[var(--surface-danger-soft)] px-4 py-3 text-sm text-[var(--state-danger)]">
+        <div className="rounded-[0.95rem] bg-[var(--surface-danger-soft)] px-4 py-3 text-sm text-[var(--state-danger)]">
           {error}
         </div>
       ) : null}
 
-      <PrimaryButton className="mt-4 h-12 w-full rounded-[0.85rem]" disabled={isPending} onClick={onLogin}>
+      <PrimaryButton className="h-12 w-full rounded-[0.85rem]" disabled={isPending} onClick={onLogin}>
         {isPending ? "로그인 중..." : "로그인"}
       </PrimaryButton>
-    </>
+    </div>
   );
 }

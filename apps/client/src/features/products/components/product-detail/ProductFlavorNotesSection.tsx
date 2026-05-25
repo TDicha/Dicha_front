@@ -18,7 +18,7 @@ export function ProductFlavorNotesSection({
   noteLabels,
 }: ProductFlavorNotesSectionProps) {
   return (
-    <section className="border-b border-[var(--border-muted)] bg-[var(--surface-base)] px-4 py-4">
+    <section className="border-b border-[var(--border-muted)] bg-[var(--surface-base)] px-[var(--page-x)] py-4">
       <h2 className="text-[1.1rem] font-black text-[var(--text-title)]">향미 노트</h2>
       <div className="mt-4 flex flex-wrap gap-2">
         {noteLabels.map((note, index) => (

@@ -1,27 +1,30 @@
-const ACCESS_TOKEN_KEY = "dicha.accessToken";
+const LEGACY_ACCESS_TOKEN_KEY = "dicha.accessToken";
+let accessToken: string | null = null;
 
-function canUseStorage() {
-  return typeof window !== "undefined" && typeof window.localStorage !== "undefined";
+function removeLegacyAccessToken() {
+  try {
+    window.localStorage.removeItem(LEGACY_ACCESS_TOKEN_KEY);
+  } catch {
+    // Storage may be unavailable in private or restricted browser contexts.
+  }
+}
+
+if (typeof window !== "undefined") {
+  removeLegacyAccessToken();
 }
 
 export function getAccessToken() {
-  if (!canUseStorage()) return null;
-
-  return window.localStorage.getItem(ACCESS_TOKEN_KEY);
+  return accessToken;
 }
 
 export function setAccessToken(token: string) {
-  if (!canUseStorage()) return;
-
-  window.localStorage.setItem(ACCESS_TOKEN_KEY, token);
+  accessToken = token;
 }
 
 export function clearAccessToken() {
-  if (!canUseStorage()) return;
+  accessToken = null;
 
-  window.localStorage.removeItem(ACCESS_TOKEN_KEY);
-}
-
-export function hasAccessToken() {
-  return Boolean(getAccessToken());
+  if (typeof window !== "undefined") {
+    removeLegacyAccessToken();
+  }
 }

@@ -69,7 +69,7 @@ export function TasteResultView({
   const spectrumRows = getSpectrumRows(preference);
 
   return (
-    <div className="page-content space-y-5 bg-[var(--surface-base)] pt-4">
+    <div className="page-content flex flex-col gap-5 bg-[var(--surface-base)] pt-4">
       <AppCard
         className="rounded-[1.8rem] px-5 py-6"
         padding="none"
@@ -197,7 +197,7 @@ export function TasteResultView({
         </div>
       </section>
 
-      <div className="space-y-3">
+      <div className="my-5 flex flex-col gap-1">
         <PrimaryButton asChild className="w-full">
           <Link to={ROUTES.products}>
             추천 원두 보러가기

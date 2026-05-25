@@ -3,6 +3,10 @@ export const endpoints = {
     session: "/api/members/me",
     login: "/api/members/login",
     signup: "/api/members/signup",
+    logout: "/api/members/logout",
+    refresh: "/api/members/refresh",
+    findEmail: "/api/members/find-email",
+    findPassword: "/api/members/find-password",
   },
   products: {
     list: "/api/products",

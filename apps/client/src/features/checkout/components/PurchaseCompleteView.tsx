@@ -24,11 +24,11 @@ export function PurchaseCompleteView({
 }: PurchaseCompleteViewProps) {
   return (
     <div className="bg-[var(--surface-page-alt)] px-[var(--page-x)] pb-10 pt-8">
-      <section className="rounded-[1.9rem] bg-[var(--surface-base)] px-[var(--page-x)] py-10 text-center">
+      <section className="rounded-[var(--radius-card)] bg-[var(--surface-base)] px-[var(--page-x)] py-10 text-center">
         <div className="mx-auto flex size-24 items-center justify-center rounded-full bg-[var(--surface-icon-green)]">
           <CheckCircle2 className="size-12 text-[var(--brand-secondary)]" />
         </div>
-        <h1 className="mt-7 break-keep text-[clamp(1.65rem,7vw,2rem)] font-bold tracking-[-0.04em] text-[var(--text-heading)]">
+        <h1 className="mt-7 break-keep text-[clamp(1.4rem,6vw,1.65rem)] font-bold text-[var(--text-heading)]">
           결제가 완료되었어요
         </h1>
         <p className="mt-3 text-[1.05rem] leading-7 text-[var(--text-muted-subtle)]">
@@ -38,7 +38,7 @@ export function PurchaseCompleteView({
         </p>
       </section>
 
-      <section className="mt-5 rounded-[1.6rem] bg-[var(--surface-base)] px-[var(--page-x)] py-6">
+      <section className="mt-5 rounded-[var(--radius-card)] bg-[var(--surface-base)] px-[var(--page-x)] py-6">
         <div className="flex items-center justify-between gap-3 border-b border-[var(--border-list)] pb-4">
           <span className="text-[1rem] text-[var(--text-muted-warm)]">주문번호</span>
           <span className="min-w-0 truncate text-[1rem] font-bold text-[var(--text-heading)]">
@@ -60,12 +60,12 @@ export function PurchaseCompleteView({
       <div className="mt-6 grid grid-cols-2 gap-3">
         <PrimaryButton
           asChild
-          className="h-14 rounded-[1.15rem] bg-[var(--surface-base)] text-[var(--brand-secondary)] shadow-none"
+          className="h-12 bg-[var(--surface-base)] text-[var(--brand-secondary)] shadow-none"
           variant="outline"
         >
           <Link to={ROUTES.home}>홈으로</Link>
         </PrimaryButton>
-        <PrimaryButton className="h-14 rounded-[1.15rem] shadow-none" onClick={onGoOrders}>
+        <PrimaryButton className="h-12 shadow-none" onClick={onGoOrders}>
           주문 조회
         </PrimaryButton>
       </div>

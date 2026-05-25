@@ -34,7 +34,7 @@ export function TasteTestPage() {
     preference.roastLevel,
   );
   const displayedRecommendedProducts =
-    apiRecommendedProducts?.length ? apiRecommendedProducts : recommendedProducts;
+    env.enableMock ? recommendedProducts : (apiRecommendedProducts ?? []);
 
   const currentQuestion = tasteQuestions[currentQuestionIndex];
   const selectedValue = currentQuestion

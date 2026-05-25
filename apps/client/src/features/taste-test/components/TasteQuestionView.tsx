@@ -29,7 +29,7 @@ export function TasteQuestionView({
   onSelect,
 }: TasteQuestionViewProps) {
   return (
-    <div className="page-content space-y-5 bg-[var(--surface-base)] pt-4">
+    <div className="page-content flex flex-col gap-5 bg-[var(--surface-base)] pt-4">
       <AppCard
         className="rounded-[1.8rem] px-5 py-6"
         padding="none"
@@ -54,7 +54,7 @@ export function TasteQuestionView({
         </div>
       </AppCard>
 
-      <div className="space-y-3">
+      <div className="my-3 flex flex-col gap-3">
         {currentQuestion.options.map((option) => (
           <button
             key={option.value}

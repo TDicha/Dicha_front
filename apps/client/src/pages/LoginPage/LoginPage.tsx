@@ -47,8 +47,8 @@ export function LoginPage() {
         <div className="size-8" />
       </header>
 
-      <main className="flex-1 px-[var(--page-x)] pb-10 pt-8">
-        <div className="mx-auto max-w-[22rem]">
+      <main className="flex flex-1 flex-col items-center px-[var(--page-x)] pb-10 pt-8">
+        <div className="w-full max-w-[22rem]">
           <LoginBrandHeader />
           <LoginEmailForm
             email={email}

@@ -28,26 +28,22 @@ export function ProductTileCard({
 
   return (
     <Link className={["min-w-0", className].filter(Boolean).join(" ")} to={href}>
-      <AppCard className="overflow-hidden rounded-[1.35rem]" padding="none">
+      <AppCard className="overflow-hidden" padding="none">
         <div
           className={[
             "relative flex items-center justify-center bg-[linear-gradient(180deg,var(--gradient-product-tile-start)_0%,var(--gradient-product-tile-end)_100%)]",
             imageHeightClassName,
           ].join(" ")}
         >
-          <img
-            alt={product.name}
-            className="absolute inset-0 h-full w-full object-cover opacity-25"
-            src={product.image}
-          />
-          <span className="relative text-4xl">☕</span>
+          <img alt={product.name} className="absolute inset-0 h-full w-full object-cover" src={product.image} />
+          <div className="absolute inset-x-0 bottom-0 h-16 bg-[linear-gradient(180deg,var(--overlay-black-0)_0%,var(--overlay-scrim)_100%)]" />
           {product.roastLabel ? (
-            <span className="absolute bottom-3 left-2 rounded-md bg-[var(--surface-card-glass)] px-2 py-1 text-[11px] font-medium text-[var(--brand-primary)]">
+            <span className="absolute bottom-3 left-2 rounded-[var(--radius-control)] bg-[var(--surface-card-glass-strong)] px-2 py-1 text-[11px] font-medium text-[var(--brand-primary)]">
               {product.roastLabel}
             </span>
           ) : null}
           {product.badges[0] ? (
-            <span className="absolute left-2 top-2 rounded-md bg-[var(--badge-bg)] px-1.5 py-1 text-[10px] font-bold tracking-[0.08em] text-[var(--badge-text)]">
+            <span className="absolute left-2 top-2 rounded-[var(--radius-control)] bg-[var(--badge-bg)] px-1.5 py-1 text-[10px] font-bold text-[var(--badge-text)]">
               {product.badges[0]}
             </span>
           ) : null}

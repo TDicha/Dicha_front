@@ -1,7 +1,6 @@
 import { create } from "zustand";
 
-import { fetchSession, login, logout, signup } from "@/services/auth/authService";
-import { hasAccessToken } from "@/services/auth/tokenStorage";
+import { login, logout, restoreSession, signup } from "@/services/auth/authService";
 import type { UserProfile } from "@/shared/types/models";
 
 type AuthStatus = "checking" | "authenticated" | "anonymous";
@@ -22,7 +21,7 @@ interface AuthState {
 
 export const useAuthStore = create<AuthState>((set) => ({
   user: null,
-  status: hasAccessToken() ? "checking" : "anonymous",
+  status: "checking",
   isPending: false,
   error: null,
   login: (user) => set({ user, status: "authenticated" }),
@@ -80,24 +79,15 @@ export const useAuthStore = create<AuthState>((set) => ({
     }
   },
   hydrateSession: async () => {
-    if (!hasAccessToken()) {
+    set({ status: "checking", error: null });
+
+    const user = await restoreSession();
+
+    if (!user) {
       set({ user: null, status: "anonymous" });
       return;
     }
 
-    set({ status: "checking", error: null });
-
-    try {
-      const user = await fetchSession();
-
-      if (!user) {
-        set({ user: null, status: "anonymous" });
-        return;
-      }
-
-      set({ user, status: "authenticated" });
-    } catch {
-      set({ user: null, status: "anonymous" });
-    }
+    set({ user, status: "authenticated" });
   },
 }));

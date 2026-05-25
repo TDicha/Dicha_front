@@ -1,5 +1,6 @@
 import { apiClient } from "@/services/api/client";
 import { endpoints } from "@/services/api/endpoints";
+import { resolveApiMediaUrl } from "@/services/api/media";
 import type { Product, ProductBadge, ProductCategory, ProductOption } from "@/shared/types/models";
 
 import type { ProductListParams, ProductRepository } from "../types";
@@ -25,15 +26,16 @@ export interface ApiProduct {
   subtitle?: string;
   description?: string;
   price?: number;
-  image?: string;
-  imageUrl?: string;
-  thumbnailUrl?: string;
+  image?: string | null;
+  imageUrl?: string | null;
+  thumbnailUrl?: string | null;
   badges?: string[];
   badgeList?: string[];
   category?: ApiCategory | string;
   categoryId?: number | string;
   categoryName?: string;
   categorySlug?: string;
+  origin?: string | null;
   originLabel?: string;
   roastLabel?: string;
   roastLevel?: string;
@@ -54,6 +56,15 @@ function normalizeRoastLevel(roastLevel?: string): Product["roastLevel"] {
   if (normalized === "DARK") return "Dark";
 
   return "Medium";
+}
+
+function toRoastLabel(roastLevel?: string) {
+  const normalized = normalizeRoastLevel(roastLevel);
+
+  if (normalized === "Light") return "라이트";
+  if (normalized === "Dark") return "다크";
+
+  return "미디엄";
 }
 
 function normalizeBadges(badges?: string[]): ProductBadge[] {
@@ -106,12 +117,14 @@ export function toProduct(product: ApiProduct): Product {
     subtitle: product.subtitle ?? description,
     description,
     price: product.price ?? 0,
-    image: product.imageUrl ?? product.thumbnailUrl ?? product.image ?? fallbackProductImage,
+    image:
+      resolveApiMediaUrl(product.imageUrl ?? product.thumbnailUrl ?? product.image) ??
+      fallbackProductImage,
     badges: normalizeBadges(product.badges ?? product.badgeList),
     category: String(category.id),
     categoryLabel: category.label,
-    originLabel: product.originLabel,
-    roastLabel: product.roastLabel,
+    originLabel: product.originLabel ?? product.origin ?? undefined,
+    roastLabel: product.roastLabel ?? toRoastLabel(product.roastLevel),
     roastLevel: normalizeRoastLevel(product.roastLevel),
     rating: product.rating,
     reviewCount: product.reviewCount,

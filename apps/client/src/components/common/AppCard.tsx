@@ -46,7 +46,7 @@ export function AppCard({
   return (
     <section
       className={cn(
-        "rounded-[1.45rem]",
+        "rounded-[var(--radius-card)]",
         cardVariants[variant],
         paddingVariants[padding],
         className,

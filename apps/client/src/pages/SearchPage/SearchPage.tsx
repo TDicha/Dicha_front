@@ -35,11 +35,11 @@ export function SearchPage() {
       />
 
       {!isSearching ? (
-        <>
+        <div className="grid gap-5">
           <SearchIntroCard />
           <RecommendedKeywordSection keywords={recommendedKeywords} onSelectKeyword={setQuery} />
           <RecentKeywordSection keywords={recentKeywords} onSelectKeyword={setQuery} />
-        </>
+        </div>
       ) : isLoading ? (
         <AppCard className="text-center text-sm text-[var(--text-muted)]">
           검색 결과를 불러오는 중입니다

@@ -1,30 +1,17 @@
 import { apiClient } from "@/services/api/client";
 import { endpoints } from "@/services/api/endpoints";
+import { resolveApiMediaUrl } from "@/services/api/media";
 import type { CartItem } from "@/app/store/cartStore";
 
-interface ApiCartProduct {
-  id?: number | string;
-  name?: string;
-  price?: number;
-  image?: string;
-  imageUrl?: string;
-  thumbnailUrl?: string;
-}
-
-interface ApiCartProductOption {
-  id?: number | string;
-  name?: string;
-  optionName?: string;
-  extraPrice?: number;
-}
-
 interface ApiCartItem {
-  id?: number | string;
   cartItemId?: number | string;
   productId?: number | string;
   productOptionId?: number | string | null;
-  product?: ApiCartProduct;
-  productOption?: ApiCartProductOption | null;
+  productName?: string;
+  productImageUrl?: string | null;
+  productOptionName?: string | null;
+  basePrice?: number;
+  extraPrice?: number;
   quantity?: number;
   unitPrice?: number;
   subtotal?: number;
@@ -42,19 +29,16 @@ export interface UpdateCartItemPayload {
 }
 
 function toCartItem(item: ApiCartItem): CartItem {
-  const product = item.product;
-  const option = item.productOption;
-  const optionId = item.productOptionId ?? option?.id ?? "default";
-  const basePrice = product?.price ?? 0;
-  const unitPrice = item.unitPrice ?? basePrice + (option?.extraPrice ?? 0);
+  const optionId = item.productOptionId ?? "default";
+  const unitPrice = item.unitPrice ?? (item.basePrice ?? 0) + (item.extraPrice ?? 0);
 
   return {
-    cartItemId: String(item.id ?? item.cartItemId ?? `${product?.id ?? item.productId}:${optionId}`),
-    productId: String(item.productId ?? product?.id ?? ""),
+    cartItemId: String(item.cartItemId ?? `${item.productId}:${optionId}`),
+    productId: String(item.productId ?? ""),
     optionId: String(optionId),
-    productName: product?.name ?? "상품명 없음",
-    optionName: option?.name ?? option?.optionName ?? "기본 옵션",
-    productImage: product?.imageUrl ?? product?.thumbnailUrl ?? product?.image,
+    productName: item.productName ?? "상품명 없음",
+    optionName: item.productOptionName ?? "기본 옵션",
+    productImage: resolveApiMediaUrl(item.productImageUrl),
     unitPrice,
     quantity: item.quantity ?? 1,
     selected: true,

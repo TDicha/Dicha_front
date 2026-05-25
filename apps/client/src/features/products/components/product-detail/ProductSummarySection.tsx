@@ -15,7 +15,7 @@ export function ProductSummarySection({
   salesCount,
 }: ProductSummarySectionProps) {
   return (
-    <section className="border-b border-[var(--border-muted)] bg-[var(--surface-base)] px-4 py-4">
+    <section className="border-b border-[var(--border-muted)] bg-[var(--surface-base)] px-[var(--page-x)] py-4">
       <div className="flex flex-wrap gap-1.5">
         {product.originLabel ? (
           <span className="rounded-full bg-[var(--surface-badge-green)] px-2.5 py-1 text-[0.56rem] text-[var(--brand-primary)]">
@@ -34,13 +34,13 @@ export function ProductSummarySection({
         ) : null}
       </div>
 
-      <h1 className="mt-4 text-[1.7rem] font-black tracking-[-0.05em] text-[var(--text-title)]">
+      <h1 className="mt-4 text-[clamp(1.35rem,6vw,1.6rem)] font-bold text-[var(--text-title)]">
         {product.name}
       </h1>
       <p className="mt-1 text-[0.82rem] text-[var(--text-muted-subtle)]">{product.subtitle}</p>
 
       <div className="mt-3 flex items-end gap-2">
-        <p className="text-[2.1rem] font-black tracking-[-0.05em] text-[var(--state-danger)]">
+        <p className="text-[clamp(1.55rem,7vw,1.9rem)] font-bold text-[var(--state-danger)]">
           ₩{formatPrice(product.price)}
         </p>
         <p className="pb-1 text-[0.7rem] text-[var(--text-muted-subtle)]">{baseWeightLabel} 기준</p>

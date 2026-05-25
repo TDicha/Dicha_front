@@ -4,7 +4,6 @@ import { useAuthStore } from "@/app/store";
 import { ProfileCard } from "@/components/common/ProfileCard";
 import {
   MyAccountMenuCard,
-  MyAuthTestCard,
   MyQuickLinksCard,
   MyStatsSection,
   MyTasteNoteCard,
@@ -29,8 +28,14 @@ export function MyPage() {
       <MyStatsSection />
       <MyTasteNoteCard user={user} />
       <MyAccountMenuCard />
-      <MyAuthTestCard onSignOut={handleSignOut} />
       <MyQuickLinksCard />
+      <button
+          className="mt-3 w-full rounded-[1rem] bg-[var(--brand-primary)] px-4 py-3 text-sm font-semibold text-[var(--text-inverse)]"
+          onClick={handleSignOut}
+          type="button"
+        >
+          로그아웃
+      </button>
     </div>
   );
 }

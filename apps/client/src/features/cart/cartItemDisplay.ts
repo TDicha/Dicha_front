@@ -10,7 +10,7 @@ export function buildCartItemOptionLabel(
   product?: Product,
 ) {
   if (!product) {
-    return "기본 옵션";
+    return item.optionName;
   }
 
   const detail = getProductDetail(product);

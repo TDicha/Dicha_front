@@ -4,12 +4,12 @@ import { reservationPlans, type ReservationPlanId } from "../reservationPlans";
 
 interface ReservationPlanSelectionSectionProps {
   selectedPlanId: ReservationPlanId;
-  onSelectPlan: (planId: ReservationPlanId) => void;
+  onSubscribe: (planId: ReservationPlanId) => void;
 }
 
 export function ReservationPlanSelectionSection({
   selectedPlanId,
-  onSelectPlan,
+  onSubscribe,
 }: ReservationPlanSelectionSectionProps) {
   return (
     <section className="px-[var(--page-x)] pb-6 pt-5">
@@ -52,7 +52,7 @@ export function ReservationPlanSelectionSection({
                       className={[
                         "inline-flex rounded-full px-2.5 py-1 text-[0.68rem] font-bold",
                         plan.badgeTone === "gold"
-                          ? "bg-[var(--state-accent)] text-[var(--text-inverse)]"
+                          ? "bg-[var(--state-accent)] text-[var(--text-on-accent)]"
                           : "bg-[var(--surface-success)] text-[var(--text-inverse)]",
                       ].join(" ")}
                     >
@@ -84,7 +84,7 @@ export function ReservationPlanSelectionSection({
                           ? "bg-[var(--brand-secondary)] text-[var(--text-inverse)]"
                           : "bg-[var(--surface-green-pale)] text-[var(--brand-secondary)]",
                       ].join(" ")}
-                      onClick={() => onSelectPlan(plan.id)}
+                      onClick={() => onSubscribe(plan.id)}
                       type="button"
                     >
                       구독하기

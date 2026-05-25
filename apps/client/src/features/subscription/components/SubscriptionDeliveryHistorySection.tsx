@@ -4,19 +4,22 @@ import type { SubscriptionDeliveryHistory } from "@/mock/subscriptionDetails";
 
 interface SubscriptionDeliveryHistorySectionProps {
   deliveryHistory: SubscriptionDeliveryHistory[];
+  onViewAll: () => void;
 }
 
 export function SubscriptionDeliveryHistorySection({
   deliveryHistory,
+  onViewAll,
 }: SubscriptionDeliveryHistorySectionProps) {
   return (
-    <section className="mt-1 border-t border-[var(--border-list)] bg-[var(--surface-base)] px-4 py-5">
+    <section className="mt-1 border-t border-[var(--border-list)] bg-[var(--surface-base)] px-[var(--page-x)] py-5">
       <div className="flex items-center justify-between">
-        <h2 className="text-[1.8rem] font-bold tracking-[-0.04em] text-[var(--text-heading)]">
+        <h2 className="text-xl font-bold text-[var(--text-heading)]">
           배송 내역
         </h2>
         <button
           className="flex items-center gap-1 text-[1rem] font-semibold text-[var(--brand-secondary)]"
+          onClick={onViewAll}
           type="button"
         >
           전체보기
@@ -40,11 +43,11 @@ export function SubscriptionDeliveryHistorySection({
               <p className="text-[0.98rem] text-[var(--text-timeline-muted)]">
                 {history.date}
               </p>
-              <p className="mt-1 text-[1.18rem] font-semibold tracking-[-0.03em] text-[var(--text-heading)]">
+              <p className="mt-1 break-keep text-base font-semibold text-[var(--text-heading)]">
                 {history.name}
               </p>
             </div>
-            <span className="rounded-full bg-[var(--surface-tag-green)] px-3 py-1.5 text-[0.95rem] font-semibold text-[var(--text-success-muted)]">
+            <span className="shrink-0 rounded-full bg-[var(--surface-tag-green)] px-3 py-1.5 text-sm font-semibold text-[var(--text-success-muted)]">
               {history.status}
             </span>
           </div>

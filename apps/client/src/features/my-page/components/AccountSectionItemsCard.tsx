@@ -4,10 +4,12 @@ import { AppCard } from "@/components/common/AppCard";
 
 interface AccountSectionItemsCardProps {
   items: readonly string[];
+  onSelectItem: (item: string) => void;
 }
 
 export function AccountSectionItemsCard({
   items,
+  onSelectItem,
 }: AccountSectionItemsCardProps) {
   return (
     <AppCard className="py-2">
@@ -23,6 +25,7 @@ export function AccountSectionItemsCard({
               ? "border-b border-[var(--border-ink-6)]"
               : "",
           ].join(" ")}
+          onClick={() => onSelectItem(item)}
           type="button"
         >
           <span>{item}</span>

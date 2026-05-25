@@ -26,8 +26,8 @@ export function GuestOrderLookupPage() {
   const order = lookupGuestOrder.data;
 
   return (
-    <div className="bg-[var(--surface-page)] px-5 pb-10 pt-8">
-      <section className="rounded-[1.5rem] bg-[var(--surface-base)] px-5 py-7 shadow-[0_8px_24px_var(--shadow-neutral-alpha-6)]">
+    <div className="bg-[var(--surface-page)] px-[var(--page-x)] pb-10 pt-8">
+      <section className="rounded-[var(--radius-card)] bg-[var(--surface-base)] px-5 py-7 shadow-[0_8px_24px_var(--shadow-neutral-alpha-6)]">
         <GuestOrderLookupForm
           canLookup={canLookup}
           isPending={lookupGuestOrder.isPending}

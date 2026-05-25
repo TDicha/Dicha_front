@@ -1,15 +1,28 @@
-import type { AxiosError, AxiosInstance } from "axios";
+import axios, {
+  type AxiosError,
+  type AxiosInstance,
+  type InternalAxiosRequestConfig,
+} from "axios";
 
-import { clearAccessToken, getAccessToken } from "@/services/auth/tokenStorage";
+import { endpoints } from "@/services/api/endpoints";
+import {
+  clearAccessToken,
+  getAccessToken,
+  setAccessToken,
+} from "@/services/auth/tokenStorage";
 
-function sanitizeError(error: AxiosError) {
-  const status = error.response?.status;
+interface RetryableRequestConfig extends InternalAxiosRequestConfig {
+  _retry?: boolean;
+}
 
-  if (status === 401) {
-    clearAccessToken();
-  }
+interface TokenResponse {
+  accessToken: string;
+}
 
-  return Promise.reject({
+let refreshRequest: Promise<string> | null = null;
+
+function toClientError(status?: number) {
+  return {
     status,
     message:
       status === 401
@@ -17,7 +30,22 @@ function sanitizeError(error: AxiosError) {
         : status === 403
           ? "요청이 허용되지 않았습니다."
           : "요청 처리 중 문제가 발생했습니다.",
-  });
+  };
+}
+
+async function refreshAccessToken(client: AxiosInstance) {
+  const { data } = await axios.post<TokenResponse>(
+    endpoints.auth.refresh,
+    undefined,
+    {
+      baseURL: client.defaults.baseURL,
+      timeout: client.defaults.timeout,
+      withCredentials: true,
+    },
+  );
+
+  setAccessToken(data.accessToken);
+  return data.accessToken;
 }
 
 export function applyInterceptors(client: AxiosInstance) {
@@ -30,5 +58,35 @@ export function applyInterceptors(client: AxiosInstance) {
 
     return config;
   });
-  client.interceptors.response.use((response) => response, sanitizeError);
+  client.interceptors.response.use(
+    (response) => response,
+    async (error: AxiosError) => {
+      const status = error.response?.status;
+      const originalRequest = error.config as RetryableRequestConfig | undefined;
+      const shouldRefresh =
+        status === 401 &&
+        originalRequest &&
+        !originalRequest._retry &&
+        originalRequest.url !== endpoints.auth.refresh;
+
+      if (!shouldRefresh) {
+        return Promise.reject(toClientError(status));
+      }
+
+      originalRequest._retry = true;
+
+      try {
+        refreshRequest ??= refreshAccessToken(client).finally(() => {
+          refreshRequest = null;
+        });
+
+        const accessToken = await refreshRequest;
+        originalRequest.headers.set("Authorization", `Bearer ${accessToken}`);
+        return client.request(originalRequest);
+      } catch {
+        clearAccessToken();
+        return Promise.reject(toClientError(401));
+      }
+    },
+  );
 }

@@ -9,6 +9,7 @@ import {
   QrUseCaseSection,
 } from "@/features/qr";
 import { ROUTES } from "@/shared/constants/routes";
+import { env } from "@/shared/lib/env";
 
 export function QrPage() {
   const navigate = useNavigate();
@@ -30,7 +31,9 @@ export function QrPage() {
 
     const target = normalized.toLowerCase().includes("blend")
       ? ROUTES.myBlend
-      : `${ROUTES.products}/${qrTargetId ?? "ethiopia-yirgacheffe"}`;
+      : env.enableMock
+        ? `${ROUTES.products}/${qrTargetId ?? "ethiopia-yirgacheffe"}`
+        : ROUTES.products;
 
     navigate(target);
   }

@@ -40,7 +40,7 @@ export function OrderListPage() {
   }, [filter, orders]);
 
   return (
-    <div className="bg-[var(--surface-page)] px-4 pb-10 pt-3">
+    <div className="bg-[var(--surface-page)] px-[var(--page-x)] pb-10 pt-3">
       <OrderFilterTabs filter={filter} onChange={setFilter} options={filterOptions} />
 
       <p className="px-1 pt-2 text-[1rem] text-[var(--text-list-count)]">총 {filteredOrders.length}건</p>

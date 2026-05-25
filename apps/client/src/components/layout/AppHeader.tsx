@@ -36,10 +36,10 @@ export function AppHeader() {
   }
 
   return (
-    <header className="sticky top-0 z-20 flex h-14 items-center justify-between border-b border-[var(--border-ink-6)] bg-[var(--surface-card-glass-strong)] px-[var(--page-x)] backdrop-blur-md">
+    <header className="sticky top-0 z-20 flex h-[var(--header-height)] items-center justify-between border-b border-[var(--border-ink-6)] bg-[var(--surface-card-glass-strong)] px-[var(--page-x)] backdrop-blur-md">
       {isHome ? (
         <>
-          <div className="font-heading text-[1.7rem] font-semibold tracking-[-0.04em] text-[var(--brand-primary)]">
+          <div className="font-heading text-[1.55rem] font-semibold text-[var(--brand-primary)]">
             DICHA
           </div>
           <div className="flex items-center gap-3 text-[var(--brand-primary)]">
@@ -58,8 +58,8 @@ export function AppHeader() {
               to={ROUTES.cart}
             >
               <ShoppingCart className="size-4.5" />
-              <span className="absolute -right-1 -top-1 flex size-4 items-center justify-center rounded-full bg-[var(--brand-accent)] text-[9px] font-semibold text-[var(--text-inverse)]">
-                {itemCount}
+              <span className="absolute -right-1.5 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-[var(--brand-accent)] px-1 text-[9px] font-semibold text-[var(--text-on-accent)]">
+                {itemCount > 99 ? "99+" : itemCount}
               </span>
             </Link>
           </div>
@@ -93,8 +93,8 @@ export function AppHeader() {
               to={ROUTES.cart}
             >
               <ShoppingCart className="size-4.5" />
-              <span className="absolute -right-1 -top-1 flex size-4 items-center justify-center rounded-full bg-[var(--brand-accent)] text-[9px] font-semibold text-[var(--text-inverse)]">
-                {itemCount}
+              <span className="absolute -right-1.5 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-[var(--brand-accent)] px-1 text-[9px] font-semibold text-[var(--text-on-accent)]">
+                {itemCount > 99 ? "99+" : itemCount}
               </span>
             </Link>
           </div>

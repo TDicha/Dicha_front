@@ -10,14 +10,16 @@ const manageItemIcons = [CalendarDays, RotateCcw, CreditCard, MapPin] as const;
 
 interface SubscriptionManageSectionProps {
   perks: string[];
+  onAction: (label: string) => void;
 }
 
 export function SubscriptionManageSection({
   perks,
+  onAction,
 }: SubscriptionManageSectionProps) {
   return (
-    <section className="border-t border-b border-[var(--border-list)] bg-[var(--surface-base)] px-4 py-5">
-      <h2 className="text-[1.8rem] font-bold tracking-[-0.04em] text-[var(--text-heading)]">
+    <section className="border-t border-b border-[var(--border-list)] bg-[var(--surface-base)] px-[var(--page-x)] py-5">
+      <h2 className="text-xl font-bold text-[var(--text-heading)]">
         구독 관리
       </h2>
       <div className="mt-5">
@@ -33,11 +35,12 @@ export function SubscriptionManageSection({
                   ? "border-b border-[var(--border-list)]"
                   : "",
               ].join(" ")}
+              onClick={() => onAction(label)}
               type="button"
             >
               <span className="flex items-center gap-4">
                 <Icon className="size-5 text-[var(--icon-muted-blue)]" />
-                <span className="text-[1.15rem] font-semibold text-[var(--text-heading)]">
+                <span className="text-base font-semibold text-[var(--text-heading)]">
                   {label}
                 </span>
               </span>

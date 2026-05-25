@@ -2,9 +2,11 @@ import { AppCard } from "@/components/common/AppCard";
 
 interface ClassScheduleCardProps {
   slots: string[];
+  selectedSlot: string;
+  onSelectSlot: (slot: string) => void;
 }
 
-export function ClassScheduleCard({ slots }: ClassScheduleCardProps) {
+export function ClassScheduleCard({ slots, selectedSlot, onSelectSlot }: ClassScheduleCardProps) {
   return (
     <AppCard>
       <div className="flex items-center justify-between">
@@ -22,15 +24,16 @@ export function ClassScheduleCard({ slots }: ClassScheduleCardProps) {
       </div>
 
       <div className="mt-4 grid grid-cols-3 gap-2">
-        {slots.map((slot, index) => (
+        {slots.map((slot) => (
           <button
             key={slot}
             className={[
               "rounded-[1rem] border px-3 py-3 text-sm font-medium transition",
-              index === 2
+              selectedSlot === slot
                 ? "border-[var(--brand-primary)] bg-[var(--brand-primary)] text-[var(--text-inverse)]"
                 : "border-[var(--border-ink-8)] bg-[var(--surface-base)] text-[var(--brand-primary)]",
             ].join(" ")}
+            onClick={() => onSelectSlot(slot)}
             type="button"
           >
             {slot}

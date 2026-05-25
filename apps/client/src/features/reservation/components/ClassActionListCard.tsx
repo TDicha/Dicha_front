@@ -8,7 +8,11 @@ const classActions = [
   { icon: MapPin, label: "지점 위치 보기" },
 ] as const;
 
-export function ClassActionListCard() {
+interface ClassActionListCardProps {
+  onAction: (label: string) => void;
+}
+
+export function ClassActionListCard({ onAction }: ClassActionListCardProps) {
   return (
     <AppCard className="py-2">
       {classActions.map(({ icon: Icon, label }, index) => (
@@ -20,6 +24,7 @@ export function ClassActionListCard() {
               ? "border-b border-[var(--border-ink-6)]"
               : "",
           ].join(" ")}
+          onClick={() => onAction(label)}
           type="button"
         >
           <span className="flex items-center gap-3 text-sm font-medium text-[var(--brand-primary)]">

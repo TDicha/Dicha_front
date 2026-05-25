@@ -4,31 +4,34 @@ import { Link } from "react-router-dom";
 import { homeHeroSlides } from "@/mock/home";
 
 interface HomeHeroSectionProps {
+  heroImage?: string;
   heroSlide: (typeof homeHeroSlides)[number];
   heroSlides: typeof homeHeroSlides;
 }
 
-export function HomeHeroSection({ heroSlide, heroSlides }: HomeHeroSectionProps) {
+export function HomeHeroSection({ heroImage, heroSlide, heroSlides }: HomeHeroSectionProps) {
   return (
-    <section className="relative overflow-hidden rounded-b-[2rem] rounded-t-none bg-[linear-gradient(180deg,var(--gradient-home-hero-start)_0%,var(--gradient-home-hero-end)_100%)] px-[var(--page-x)] pb-5 pt-6 text-[var(--text-inverse)]">
-      <div className="absolute right-2 top-5 size-[clamp(7.5rem,36vw,10rem)] rounded-full bg-[radial-gradient(circle_at_35%_35%,var(--surface-accent-glow),var(--surface-accent-glow-soft)_58%,transparent_70%)] opacity-90" />
-      <div className="absolute right-8 top-12 size-[clamp(4.5rem,24vw,6rem)] rounded-full border border-[var(--overlay-white-20)] bg-[var(--overlay-white-10)]" />
+    <section className="relative min-h-[18rem] overflow-hidden rounded-b-[var(--radius-hero)] rounded-t-none bg-[var(--brand-primary)] px-[var(--page-x)] pb-5 pt-6 text-[var(--text-inverse)]">
+      {heroImage ? (
+        <img alt="" className="absolute inset-0 h-full w-full object-cover" src={heroImage} />
+      ) : null}
+      <div className="absolute inset-0 bg-[linear-gradient(90deg,var(--brand-primary)_0%,var(--surface-brand-solid-alpha)_52%,var(--overlay-scrim)_100%)]" />
       <div className="relative">
-        <span className="inline-flex rounded-full bg-[var(--surface-hero-chip)] px-3 py-1 text-[10px] font-semibold tracking-[0.18em] text-[var(--text-hero-eyebrow)]">
+        <span className="inline-flex rounded-full bg-[var(--surface-hero-chip)] px-3 py-1 text-[10px] font-semibold text-[var(--text-hero-eyebrow)]">
           {heroSlide.eyebrow}
         </span>
-        <h2 className="mt-3 max-w-[clamp(12rem,62vw,13.5rem)] font-heading text-[clamp(1.65rem,7vw,1.9rem)] font-semibold leading-[1.2] tracking-[-0.04em]">
+        <h2 className="mt-3 max-w-[clamp(12rem,62vw,13.5rem)] font-heading text-[clamp(1.65rem,7vw,1.9rem)] font-semibold leading-[1.2]">
           {heroSlide.title.map((line) => (
             <span key={line} className="block">
               {line}
             </span>
           ))}
         </h2>
-        <p className="mt-[clamp(1.75rem,9vw,2.5rem)] max-w-[clamp(12rem,70vw,16rem)] text-xs font-medium tracking-[0.04em] text-[var(--overlay-white-74)]">
+        <p className="mt-[clamp(1.75rem,9vw,2.5rem)] max-w-[clamp(12rem,70vw,16rem)] text-xs font-medium text-[var(--text-primary-inverse)]">
           {heroSlide.description}
         </p>
         <Link
-          className="mt-3 inline-flex h-9 items-center rounded-full bg-[var(--surface-base)] px-4 text-sm font-semibold text-[var(--brand-primary)]"
+          className="relative z-10 mt-3 inline-flex h-9 items-center rounded-[var(--radius-control)] bg-[var(--surface-base)] px-4 text-sm font-semibold !text-[var(--brand-primary)]"
           to={heroSlide.ctaTo}
         >
           {heroSlide.ctaLabel}

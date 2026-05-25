@@ -5,6 +5,11 @@ import type { Product, RoastPreference } from "@/shared/types/models";
 
 type TasteAnswers = Record<string, string | undefined>;
 
+interface ApiTasteAnswer {
+  questionId: "q1_acidity" | "q2_body" | "q3_sweetness" | "q4_flavor";
+  answerValue: string;
+}
+
 interface ApiTasteProfile {
   acidity?: number | string;
   body?: number | string;
@@ -15,10 +20,8 @@ interface ApiTasteProfile {
 }
 
 interface ApiTasteTestResponse {
-  tasteProfile?: ApiTasteProfile;
-  profile?: ApiTasteProfile;
-  recommendedProducts?: ApiProduct[];
-  products?: ApiProduct[];
+  userTasteProfile?: ApiTasteProfile;
+  recommendedProducts: ApiProduct[];
 }
 
 export interface TasteTestResult {
@@ -66,19 +69,48 @@ function toPreference(profile: ApiTasteProfile = {}): RoastPreference {
   };
 }
 
+function toApiAnswers(answers: TasteAnswers): ApiTasteAnswer[] {
+  const acidity =
+    answers.brew === "pour-over"
+      ? "높은 산미"
+      : answers.brew === "espresso"
+        ? "낮은 산미"
+        : "적당한 산미";
+  const body =
+    answers.mood === "deep" || answers.brew === "espresso"
+      ? "묵직한 바디감"
+      : answers.mood === "bright"
+        ? "가벼운 바디감"
+        : "부드러운 바디감";
+  const sweetness =
+    answers.flavor === "chocolate"
+      ? "강한 단맛"
+      : answers.mood === "bright"
+        ? "단맛 없는"
+        : "은은한 단맛";
+  const flavor =
+    answers.flavor === "floral"
+      ? "FLORAL"
+      : answers.flavor === "chocolate"
+        ? "CHOCOLATY"
+        : "CARAMEL";
+
+  return [
+    { questionId: "q1_acidity", answerValue: acidity },
+    { questionId: "q2_body", answerValue: body },
+    { questionId: "q3_sweetness", answerValue: sweetness },
+    { questionId: "q4_flavor", answerValue: flavor },
+  ];
+}
+
 export async function submitTasteTest(answers: TasteAnswers): Promise<TasteTestResult> {
-  const orderedAnswers = Object.values(answers).filter(
-    (answer): answer is string => Boolean(answer),
-  );
   const { data } = await apiClient.post<ApiTasteTestResponse>(
     endpoints.tasteTest.submit,
-    { answers: orderedAnswers },
+    { answers: toApiAnswers(answers) },
   );
-  const profile = data.tasteProfile ?? data.profile ?? {};
-  const recommendedProducts = data.recommendedProducts ?? data.products ?? [];
 
   return {
-    preference: toPreference(profile),
-    recommendedProducts: recommendedProducts.map(toProduct),
+    preference: toPreference(data.userTasteProfile),
+    recommendedProducts: data.recommendedProducts.map(toProduct),
   };
 }

@@ -2,8 +2,8 @@ import { ShieldAlert } from "lucide-react";
 
 export function QrPermissionNotice() {
   return (
-    <section className="px-4 pt-4">
-      <div className="rounded-[1.45rem] border border-[var(--border-danger)] bg-[var(--surface-danger-tint)] px-4 py-4">
+    <section className="px-[var(--page-x)] pt-4">
+      <div className="rounded-[var(--radius-card)] border border-[var(--border-danger)] bg-[var(--surface-danger-tint)] px-4 py-4">
         <div className="flex items-start gap-3">
           <div className="flex size-10 items-center justify-center rounded-full bg-[var(--overlay-white-85)]">
             <ShieldAlert className="size-5 text-[var(--state-danger)]" />

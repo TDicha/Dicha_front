@@ -62,11 +62,11 @@ export function OrderCard({ order }: OrderCardProps) {
   const detailLabel = firstItem ? `${firstItem.optionName} · ${firstItem.quantity}개` : "주문 상품";
 
   return (
-    <article className="overflow-hidden rounded-[1.6rem] bg-[var(--surface-base)] shadow-[0_8px_24px_var(--shadow-neutral-alpha-6)]">
+    <article className="overflow-hidden rounded-[var(--radius-card)] bg-[var(--surface-base)] shadow-[0_8px_24px_var(--shadow-neutral-alpha-6)]">
       <div className="flex items-start justify-between gap-4 px-4 pb-3 pt-4">
-        <div>
+        <div className="min-w-0">
           <p className="text-[1rem] text-[var(--text-muted-stone)]">{formatOrderDate(order.orderedAt)}</p>
-          <p className="mt-1 text-[0.92rem] text-[var(--border-warm-muted)]">주문번호 {order.orderNo}</p>
+          <p className="mt-1 truncate text-sm text-[var(--text-muted-warm)]">주문번호 {order.orderNo}</p>
         </div>
         <button className="pt-0.5 text-[1rem] text-[var(--brand-primary-deep)]" type="button">
           상세보기
@@ -76,18 +76,22 @@ export function OrderCard({ order }: OrderCardProps) {
       <div className="border-y border-[var(--border-list)] px-4 py-4">
         <div className="flex gap-3">
           <div className="flex size-20 shrink-0 items-center justify-center rounded-[0.8rem] bg-[var(--surface-empty-icon)]">
-            {product ? (
-              <img alt={productName} className="h-12 w-12 rounded-full object-cover" src={product.image} />
+            {firstItem?.productImage || product ? (
+              <img
+                alt={productName}
+                className="h-12 w-12 rounded-full object-cover"
+                src={firstItem?.productImage ?? product?.image}
+              />
             ) : (
               <div className="text-3xl">☕</div>
             )}
           </div>
           <div className="min-w-0 flex-1">
-            <h2 className="text-[1.18rem] font-bold leading-7 tracking-[-0.03em] text-[var(--text-heading)]">
+            <h2 className="break-keep text-base font-bold leading-6 text-[var(--text-heading)]">
               {productName}
             </h2>
-            <p className="mt-1 text-[0.98rem] text-[var(--text-muted-cool)]">{detailLabel}</p>
-            <p className="mt-2 text-[1.05rem] font-bold text-[var(--text-heading)]">
+            <p className="mt-1 break-keep text-sm text-[var(--text-muted-cool)]">{detailLabel}</p>
+            <p className="mt-2 text-base font-bold text-[var(--text-heading)]">
               ₩{formatPrice(order.totalAmount)}
             </p>
           </div>
@@ -109,14 +113,14 @@ export function OrderCard({ order }: OrderCardProps) {
 
         <div className="mt-3 grid grid-cols-2 gap-2">
           <Link
-            className="flex h-12 items-center justify-center rounded-[1rem] border border-[var(--brand-secondary)] bg-[var(--surface-base)] text-[1rem] font-semibold text-[var(--brand-secondary)]"
+            className="flex h-12 items-center justify-center rounded-[var(--radius-control)] border border-[var(--brand-secondary)] bg-[var(--surface-base)] text-sm font-semibold text-[var(--brand-secondary)]"
             to={ROUTES.products}
           >
             재주문
           </Link>
           <button
             className={[
-              "h-12 rounded-[1rem] text-[1rem] font-semibold",
+              "h-12 rounded-[var(--radius-control)] text-sm font-semibold",
               meta.reviewEnabled
                 ? "bg-[var(--brand-accent-solid)] text-[var(--text-brand-deep)]"
                 : "bg-[var(--surface-chip)] text-[var(--border-subtle-warm)]",

@@ -1,30 +1,36 @@
 import { useMemo } from "react";
 
 import { useAuthStore } from "@/app/store";
+import { useProducts } from "@/features/products";
 import {
   homeBestProductIds,
   homeHeroSlides,
   homeRoasterPick,
 } from "@/mock/home";
-import { mockProducts } from "@/mock/products";
 import { mockReviews } from "@/mock/reviews";
 import { ROUTES } from "@/shared/constants/routes";
 
 export function useHomeData() {
   const status = useAuthStore((state) => state.status);
+  const { data: products = [] } = useProducts();
 
   return useMemo(() => {
     const heroSlide = homeHeroSlides[0];
-    const bestProducts = homeBestProductIds
+    const preferredProducts = homeBestProductIds
       .map((productId) =>
-        mockProducts.find((product) => product.id === productId),
+        products.find((product) => product.id === productId),
       )
-      .filter((product): product is (typeof mockProducts)[number] =>
-        Boolean(product),
-      );
-    const roasterPick = mockProducts.find(
-      (product) => product.id === homeRoasterPick.productId,
-    );
+      .filter((product): product is NonNullable<typeof product> => Boolean(product));
+    const badgeProducts = products.filter((product) => product.badges.includes("BEST"));
+    const bestProducts = preferredProducts.length
+      ? preferredProducts
+      : badgeProducts.length
+        ? badgeProducts
+        : products.slice(0, 3);
+    const roasterPick =
+      products.find((product) => product.id === homeRoasterPick.productId) ??
+      products.find((product) => product.badges.includes("PICK")) ??
+      bestProducts[0];
     const quickLinks =
       status === "authenticated"
         ? [
@@ -81,7 +87,7 @@ export function useHomeData() {
       roasterPick,
       roasterPickMeta: homeRoasterPick,
     };
-  }, [status]);
+  }, [products, status]);
 }
 
 export * from "@/features/home/components";

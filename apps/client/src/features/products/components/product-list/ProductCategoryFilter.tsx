@@ -12,7 +12,7 @@ export function ProductCategoryFilter({
   onSelectCategory,
 }: ProductCategoryFilterProps) {
   return (
-    <section className="overflow-x-auto border-b border-[var(--border-ink-6)] px-4 py-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+    <section className="overflow-x-auto border-b border-[var(--border-ink-6)] px-[var(--page-x)] py-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
       <div className="flex min-w-max gap-2">
         {categories.map((category) => {
           const isSelected = category.key === selectedCategory;
@@ -21,7 +21,7 @@ export function ProductCategoryFilter({
             <button
               key={category.key}
               className={[
-                "rounded-full border px-3 py-2 text-sm font-medium transition",
+                "rounded-[var(--radius-control)] border px-3 py-2 text-sm font-medium transition",
                 isSelected
                   ? "border-[var(--brand-primary)] bg-[var(--brand-primary)] text-[var(--text-inverse)]"
                   : "border-[var(--border-ink-8)] bg-[var(--surface-base)] text-[var(--brand-primary)]",

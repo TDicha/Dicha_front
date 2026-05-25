@@ -21,7 +21,7 @@ export type PaymentStatus =
 
 export type CheckoutItem = Pick<
   CartItem,
-  "productId" | "optionId" | "productName" | "optionName" | "unitPrice" | "quantity"
+  "productId" | "optionId" | "productName" | "optionName" | "productImage" | "unitPrice" | "quantity"
 >;
 
 export interface OrderItem extends CheckoutItem {

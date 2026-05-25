@@ -4,7 +4,6 @@ export { AccountSectionNotFound } from "@/features/my-page/components/AccountSec
 export { AccountSectionNoticeCard } from "@/features/my-page/components/AccountSectionNoticeCard";
 export { AccountSectionStatusCard } from "@/features/my-page/components/AccountSectionStatusCard";
 export { MyAccountMenuCard } from "@/features/my-page/components/MyAccountMenuCard";
-export { MyAuthTestCard } from "@/features/my-page/components/MyAuthTestCard";
 export { MyBlendCardList } from "@/features/my-page/components/MyBlendCardList";
 export { MyBlendEmptyState } from "@/features/my-page/components/MyBlendEmptyState";
 export { MyBlendHeader } from "@/features/my-page/components/MyBlendHeader";

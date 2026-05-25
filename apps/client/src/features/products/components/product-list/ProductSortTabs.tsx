@@ -8,7 +8,7 @@ interface ProductSortTabsProps {
 
 export function ProductSortTabs({ options, selectedSort, onSelectSort }: ProductSortTabsProps) {
   return (
-    <section className="flex items-center gap-3 border-b border-[var(--border-ink-6)] px-4 py-3 text-sm text-[var(--text-muted)]">
+    <section className="flex items-center gap-3 border-b border-[var(--border-ink-6)] px-[var(--page-x)] py-3 text-sm text-[var(--text-muted)]">
       {options.map((sort, index) => (
         <div key={sort.key} className="flex items-center gap-3">
           <button

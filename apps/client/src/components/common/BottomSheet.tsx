@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { createPortal } from "react-dom";
 
 import { cn } from "@/lib/utils";
 
@@ -15,11 +16,11 @@ export function BottomSheet({
   onClose,
   children,
 }: BottomSheetProps) {
-  return (
+  const sheet = (
     <div
       aria-hidden={!open}
       className={cn(
-        "sticky inset-0 z-40 transition-[background-color,backdrop-filter] duration-300",
+        "fixed inset-0 z-40 transition-[background-color,backdrop-filter] duration-300",
         open
           ? "pointer-events-auto bg-[var(--overlay-black-28)] backdrop-blur-[2px]"
           : "pointer-events-none bg-[var(--overlay-black-0)] backdrop-blur-none",
@@ -61,4 +62,8 @@ export function BottomSheet({
       </section>
     </div>
   );
+
+  return typeof document === "undefined"
+    ? sheet
+    : createPortal(sheet, document.body);
 }

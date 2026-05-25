@@ -3,14 +3,16 @@ import { Link } from "react-router-dom";
 
 import { PrimaryButton } from "@/components/common/PrimaryButton";
 import { ROUTES } from "@/shared/constants/routes";
+import { env } from "@/shared/lib/env";
 
 import type { MyBlendCardWithRecipe } from "../useMyBlendCards";
 
 interface MyBlendCardListProps {
   blendCards: MyBlendCardWithRecipe[];
+  onDelete: (blendName: string) => void;
 }
 
-export function MyBlendCardList({ blendCards }: MyBlendCardListProps) {
+export function MyBlendCardList({ blendCards, onDelete }: MyBlendCardListProps) {
   return (
     <section className="mt-4 space-y-4">
       {blendCards.map((blend) => (
@@ -67,12 +69,19 @@ export function MyBlendCardList({ blendCards }: MyBlendCardListProps) {
                   asChild
                   className="h-[3.25rem] rounded-[1rem] text-[1.15rem] shadow-none"
                 >
-                  <Link to={`${ROUTES.products}/${blend.productId}`}>
+                  <Link
+                    to={
+                      env.enableMock
+                        ? `${ROUTES.products}/${blend.productId}`
+                        : ROUTES.products
+                    }
+                  >
                     주문하기
                   </Link>
                 </PrimaryButton>
                 <button
                   className="h-[3.25rem] rounded-[1rem] border border-[var(--border-input-muted)] bg-[var(--surface-base)] text-[1.1rem] font-medium text-[var(--text-control-disabled)]"
+                  onClick={() => onDelete(`${blend.title} 삭제`)}
                   type="button"
                 >
                   삭제

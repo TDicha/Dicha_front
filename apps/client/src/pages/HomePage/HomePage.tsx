@@ -16,7 +16,7 @@ export function HomePage() {
 
   return (
     <div className="page-content space-y-7 bg-[var(--surface-base)] pb-24 pt-0">
-      <HomeHeroSection heroSlide={heroSlide} heroSlides={heroSlides} />
+      <HomeHeroSection heroImage={monthlyBestProduct?.image} heroSlide={heroSlide} heroSlides={heroSlides} />
       <HomeBestProductsSection products={bestProducts} />
       <HomeRoasterPickSection product={monthlyBestProduct} />
       {/* <HomeReviewSection reviews={reviews} /> */}

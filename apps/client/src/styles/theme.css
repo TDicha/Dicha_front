@@ -234,7 +234,7 @@
   --badge-bg: var(--badge-bg-color);
   --badge-text: var(--badge-text-color);
 
-  --surface-base: white;
+  --surface-base: var(--palette-fffdf9);
   --surface-transparent: transparent;
   --surface-app: var(--background-color);
   --surface-app-start: var(--palette-faf7f0);
@@ -315,7 +315,7 @@
   --surface-danger-tint-10: var(--rgba-148-35-30-01);
 
   --text-ink: var(--ink-color);
-  --text-inverse: white;
+  --text-inverse: var(--palette-fcfbf8);
   --text-transparent: transparent;
   --text-heading: var(--palette-171717);
   --text-title: var(--palette-121212);
@@ -349,6 +349,7 @@
   --text-control-disabled: var(--palette-c1bdb5);
   --text-brand-deep: var(--palette-173726);
   --text-accent-foreground: var(--palette-241a07);
+  --text-on-accent: var(--palette-241a07);
   --text-primary-inverse: var(--palette-f7f3eb);
   --text-hero-eyebrow: var(--palette-f6edcf);
   --text-warm-inverse: var(--palette-ffd8b5);
@@ -503,19 +504,23 @@
   --color-badge-text: var(--badge-text);
   --color-success: var(--state-success);
   --color-warning: var(--state-warning);
-  --radius: 1.25rem;
+  --radius: 1rem;
+  --radius-control: 0.75rem;
+  --radius-card: 1rem;
+  --radius-hero: 1.25rem;
+  --control-height: 3rem;
   --app-min-width: 320px;
   --app-max-width: 28rem;
   --app-safe-min-height: 100dvh;
   --page-x: clamp(1rem, calc(0.88rem + 1vw), 1.25rem);
-  --header-height: 4.5rem;
+  --header-height: 3.5rem;
   --tabbar-height: 4.75rem;
   --tabbar-dock-offset: 0.625rem;
   --mobile-card-width: clamp(9.75rem, 44vw, 10.75rem);
   --bottom-safe-padding: calc(env(safe-area-inset-bottom) + 1rem);
   --bottom-compact-safe-padding: calc(env(safe-area-inset-bottom) + 0.625rem);
-  --fixed-action-page-padding: calc(8.5rem + env(safe-area-inset-bottom));
-  --product-action-page-padding: calc(6.5rem + env(safe-area-inset-bottom));
+  --fixed-action-page-padding: calc(7.5rem + env(safe-area-inset-bottom));
+  --product-action-page-padding: calc(6.75rem + env(safe-area-inset-bottom));
 
   --background: var(--surface-app);
   --foreground: var(--text-ink);

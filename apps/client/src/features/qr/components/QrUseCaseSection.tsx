@@ -23,16 +23,16 @@ const qrUseCases = [
 
 export function QrUseCaseSection() {
   return (
-    <section className="px-4 pt-4">
-      <div className="rounded-[1.55rem] bg-[var(--surface-base)] px-4 py-5 shadow-[0_10px_26px_var(--shadow-neutral-alpha-6)]">
-        <h2 className="text-[1.35rem] font-black tracking-[-0.04em] text-[var(--text-title)]">
+    <section className="px-[var(--page-x)] pt-4">
+      <div className="rounded-[var(--radius-card)] bg-[var(--surface-base)] px-4 py-5 shadow-[0_10px_26px_var(--shadow-neutral-alpha-6)]">
+        <h2 className="text-xl font-bold text-[var(--text-title)]">
           언제 QR을 쓰면 좋을까요?
         </h2>
         <div className="mt-4 space-y-3">
           {qrUseCases.map(({ icon: Icon, title, description }) => (
             <article
               key={title}
-              className="rounded-[1.2rem] border border-[var(--surface-warm-muted)] bg-[var(--surface-offwhite)] px-4 py-4"
+              className="rounded-[var(--radius-control)] border border-[var(--surface-warm-muted)] bg-[var(--surface-offwhite)] px-4 py-4"
             >
               <div className="flex items-start gap-3">
                 <div className="flex size-10 items-center justify-center rounded-full bg-[var(--surface-icon-green)]">

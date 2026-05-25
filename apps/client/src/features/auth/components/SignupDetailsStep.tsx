@@ -42,7 +42,7 @@ export function SignupDetailsStep({
     password === passwordConfirm;
 
   return (
-    <main className="flex-1 px-[var(--page-x)] pb-10 pt-4">
+    <main className="flex-1  px-[var(--page-x)] pb-10 pt-4 grid gap-3">
       <h2 className="font-heading text-[2rem] font-semibold tracking-[-0.04em] text-[var(--text-ink)]">
         정보 입력
       </h2>

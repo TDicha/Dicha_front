@@ -10,7 +10,7 @@ export function PrimaryButton({
   return (
     <Button
       className={cn(
-        "h-12 rounded-[1rem] bg-[var(--brand-primary)] px-5 text-sm font-semibold text-[var(--text-inverse)] shadow-[var(--shadow-button-brand)] hover:bg-[color:var(--surface-brand-solid-alpha)]",
+        "h-[var(--control-height)] rounded-[var(--radius-control)] bg-[var(--brand-primary)] px-5 text-sm font-semibold text-[var(--text-inverse)] shadow-[var(--shadow-button-brand)] hover:bg-[color:var(--surface-brand-solid-alpha)] disabled:shadow-none",
         className,
       )}
       {...props}
