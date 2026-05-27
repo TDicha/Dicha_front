@@ -1,4 +1,5 @@
 export type ProductBadge = "BEST" | "NEW" | "PICK";
+export type ProductType = "beans" | "drip-bag" | "gift-set";
 
 export interface ProductOption {
   id: string;
@@ -16,6 +17,7 @@ export interface ProductCategory {
 
 export interface Product {
   id: string;
+  productType: ProductType;
   name: string;
   subtitle: string;
   description: string;

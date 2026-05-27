@@ -95,6 +95,44 @@ const productDetails: Record<string, ProductDetailContent> = {
 };
 
 export function getProductDetail(product: Product): ProductDetailContent {
+  if (product.productType === "drip-bag") {
+    return {
+      noteLabels: [...product.notes.slice(0, 3), "간편 추출", "데일리"],
+      storyLines: [
+        `${product.name}은 한 잔씩 간편하게 즐길 수 있도록`,
+        "디차의 향미를 드립백 한 봉에 담았습니다.",
+        "",
+        "뜨거운 물만 준비하면 어디서든",
+        "신선한 카페의 한 잔을 만날 수 있습니다.",
+      ],
+      brewingGuide: "컵 위에 드립백을 걸고 90°C 물로 2~3회 나누어 추출",
+      baseWeightLabel: product.options[0]?.name ?? "1세트",
+      defaultRoastLabel: product.roastLabel ?? "",
+      salesCount: 0,
+      reviewMoreCount: 0,
+      reviews: defaultReviews,
+    };
+  }
+
+  if (product.productType === "gift-set") {
+    return {
+      noteLabels: [...product.notes.slice(0, 3), "선물 포장", "시그니처"],
+      storyLines: [
+        `${product.name}은 디차의 인기 메뉴를 골라`,
+        "소중한 마음과 함께 전할 수 있도록 구성했습니다.",
+        "",
+        "받는 순간부터 즐거운 경험이 되도록",
+        "정갈한 패키지로 준비해 보내드립니다.",
+      ],
+      brewingGuide: "구성품별 권장 추출법과 보관 안내를 패키지에서 확인하세요",
+      baseWeightLabel: product.options[0]?.name ?? "1세트",
+      defaultRoastLabel: product.roastLabel ?? "",
+      salesCount: 0,
+      reviewMoreCount: 0,
+      reviews: defaultReviews,
+    };
+  }
+
   return (
     productDetails[product.id] ?? {
       noteLabels: [...product.notes.slice(0, 3), "산미", "밸런스"],

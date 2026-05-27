@@ -1,4 +1,4 @@
-import { Minus, Plus, X } from "lucide-react";
+import { Check, Minus, Plus, X } from "lucide-react";
 
 import type { CartItem } from "@/app/store/cartStore";
 import { buildCartItemOptionLabel } from "@/features/cart/cartItemDisplay";
@@ -7,7 +7,6 @@ import { formatPrice } from "@/shared/utils/format";
 
 interface CartItemCardProps {
   item: CartItem;
-  isLast: boolean;
   onRemove: (cartItemId: string) => void;
   onToggleSelected: (cartItemId: string) => void;
   onUpdateQuantity: (cartItemId: string, quantity: number) => void;
@@ -15,7 +14,6 @@ interface CartItemCardProps {
 
 export function CartItemCard({
   item,
-  isLast,
   onRemove,
   onToggleSelected,
   onUpdateQuantity,
@@ -24,12 +22,7 @@ export function CartItemCard({
   const lineTotal = item.unitPrice * item.quantity;
 
   return (
-    <article
-      className={[
-        "flex gap-3 px-[var(--page-x)] py-6 max-[360px]:gap-2 min-[380px]:gap-4",
-        !isLast ? "border-b border-[var(--border-list)]" : "",
-      ].join(" ")}
-    >
+    <article className="flex gap-3 bg-[var(--surface-menu-board)] px-[var(--page-x)] py-6 max-[360px]:gap-2 min-[380px]:gap-4">
       <button
         aria-label={`${item.productName} 선택`}
         className="mt-11 shrink-0 min-[380px]:mt-14"
@@ -38,19 +31,21 @@ export function CartItemCard({
       >
         <span
           className={[
-            "flex size-7 items-center justify-center rounded-[var(--radius-control)] border min-[380px]:size-9",
+            "flex size-7 items-center justify-center min-[380px]:size-9",
             item.selected
-              ? "border-[var(--brand-secondary)] bg-[var(--brand-secondary)]"
-              : "border-[var(--border-warm)] bg-[var(--surface-base)]",
+              ? "bg-[var(--surface-chalkboard)] text-[var(--text-chalk)]"
+              : "bg-[var(--surface-cafe-tile)] text-transparent",
           ].join(" ")}
-        />
+        >
+          <Check className="size-4 min-[380px]:size-5" />
+        </span>
       </button>
 
-      <div className="flex size-[clamp(5rem,28vw,8.5rem)] shrink-0 items-center justify-center rounded-[var(--radius-card)] bg-[var(--surface-cart-image)]">
+      <div className="flex size-[clamp(5rem,28vw,8.5rem)] shrink-0 items-center justify-center bg-[var(--surface-cafe-tile)]">
         {item.productImage || product ? (
           <img
             alt={item.productName}
-            className="size-[clamp(4rem,21vw,6rem)] rounded-[var(--radius-control)] object-cover"
+            className="size-[clamp(4rem,21vw,6rem)] object-cover"
             src={item.productImage ?? product?.image}
           />
         ) : (
@@ -70,7 +65,7 @@ export function CartItemCard({
           </div>
           <button
             aria-label={`${item.productName} 삭제`}
-            className="text-[var(--icon-muted)]"
+            className="text-[var(--text-muted)]"
             onClick={() => onRemove(item.cartItemId)}
             type="button"
           >
@@ -80,7 +75,7 @@ export function CartItemCard({
 
         <div className="mt-3 flex flex-wrap items-end justify-between gap-2 min-[380px]:mt-5">
           <div className="min-w-0">
-            <p className="text-base font-bold text-[var(--text-price-danger)]">
+            <p className="text-base font-bold text-[var(--text-cafe-ink)]">
               ₩{formatPrice(item.unitPrice)}
             </p>
             {item.quantity > 1 ? (
@@ -90,19 +85,19 @@ export function CartItemCard({
             ) : null}
           </div>
 
-          <div className="flex shrink-0 items-center rounded-[var(--radius-control)] bg-[var(--surface-control-muted)] px-1 py-1">
+          <div className="flex shrink-0 items-center bg-[var(--surface-cafe-tile)] px-1 py-1">
             <button
-              className="flex size-8 items-center justify-center text-[var(--text-control)] min-[380px]:size-10"
+              className="flex size-8 items-center justify-center text-[var(--text-cafe-ink)] min-[380px]:size-10"
               onClick={() => onUpdateQuantity(item.cartItemId, item.quantity - 1)}
               type="button"
             >
               <Minus className="size-5" />
             </button>
-            <span className="min-w-8 text-center text-base font-semibold text-[var(--text-deep)] min-[380px]:min-w-10">
+            <span className="min-w-8 text-center text-base font-semibold text-[var(--text-cafe-ink)] min-[380px]:min-w-10">
               {item.quantity}
             </span>
             <button
-              className="flex size-8 items-center justify-center text-[var(--brand-secondary)] min-[380px]:size-10"
+              className="flex size-8 items-center justify-center text-[var(--text-cafe-ink)] min-[380px]:size-10"
               onClick={() => onUpdateQuantity(item.cartItemId, item.quantity + 1)}
               type="button"
             >

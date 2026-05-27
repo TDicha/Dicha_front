@@ -1,11 +1,3 @@
-const noteColorMap = [
-  "var(--flavor-green)",
-  "var(--brand-accent)",
-  "var(--flavor-orange)",
-  "var(--state-info)",
-  "var(--state-danger)",
-];
-
 interface ProductFlavorNotesSectionProps {
   description: string;
   descriptionSuffix?: string;
@@ -18,22 +10,24 @@ export function ProductFlavorNotesSection({
   noteLabels,
 }: ProductFlavorNotesSectionProps) {
   return (
-    <section className="border-b border-[var(--border-muted)] bg-[var(--surface-base)] px-[var(--page-x)] py-4">
-      <h2 className="text-[1.1rem] font-black text-[var(--text-title)]">향미 노트</h2>
+    <section className="bg-[var(--surface-menu-board)] px-[var(--page-x)] py-5">
+      <p className="text-[0.6rem] font-semibold tracking-[0.18em] text-[var(--text-muted)]">
+        TASTING NOTE
+      </p>
+      <h2 className="mt-2 text-[1.1rem] font-black text-[var(--text-cafe-ink)]">
+        향미 노트
+      </h2>
       <div className="mt-4 flex flex-wrap gap-2">
-        {noteLabels.map((note, index) => (
+        {noteLabels.map((note) => (
           <span
             key={note}
-            className="rounded-full px-3 py-1.5 text-[0.75rem] font-medium text-[var(--text-inverse)]"
-            style={{
-              backgroundColor: noteColorMap[index % noteColorMap.length],
-            }}
+            className="bg-[var(--surface-cafe-tile)] px-3 py-1.5 text-[0.75rem] font-medium text-[var(--text-cafe-ink)]"
           >
             {note}
           </span>
         ))}
       </div>
-      <p className="mt-4 text-[0.86rem] leading-7 text-[var(--text-title)]">
+      <p className="mt-4 pt-4 text-[0.86rem] leading-7 text-[var(--text-cafe-ink)]">
         {description} {descriptionSuffix ?? ""}
       </p>
     </section>

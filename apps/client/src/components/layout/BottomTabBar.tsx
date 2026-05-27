@@ -20,32 +20,24 @@ export function BottomTabBar() {
   }
 
   return (
-    <div className="sticky bottom-0 z-30 bg-transparent px-[var(--page-x)] pb-[calc(env(safe-area-inset-bottom)+0.625rem)] pt-[var(--tabbar-dock-offset)]">
-      <nav className="flex h-[var(--tabbar-height)] w-full items-center justify-around rounded-[var(--radius-card)] border border-[var(--border-ink-8)] bg-[var(--surface-card-glass-strong)] px-1.5 shadow-[0_8px_24px_var(--shadow-ink-alpha-8)] backdrop-blur-xl">
+    <div className="sticky bottom-0 z-30 bg-[var(--surface-menu-board)] pb-[env(safe-area-inset-bottom)] pt-1 shadow-[var(--shadow-tabbar-dock)]">
+      <nav className="flex h-[var(--tabbar-height)] w-full items-center justify-around px-[var(--page-x)]">
         {bottomTabItems.map(({ icon: Icon, label, to }) => (
           <NavLink
             key={to}
             className={({ isActive }: { isActive: boolean }) =>
               [
-                "relative flex min-h-14 min-w-0 flex-1 flex-col items-center justify-center gap-1 rounded-[1rem] px-1.5 text-[11px] font-medium transition max-[360px]:text-[10px]",
-                isActive ? "text-[var(--brand-primary)]" : "text-[var(--text-muted)]",
+                "relative flex min-h-14 min-w-0 flex-1 flex-col items-center justify-center gap-1 px-1.5 text-[11px] font-medium transition-[color,transform] duration-200 max-[360px]:text-[10px]",
+                isActive
+                  ? "-translate-y-1 font-semibold text-[var(--text-cafe-ink)]"
+                  : "text-[var(--text-muted)]",
               ].join(" ")
             }
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
             to={to}
           >
-            {({ isActive }: { isActive: boolean }) => (
-              <>
-                <span
-                  className={[
-                    "absolute left-1/2 top-0 h-[3px] w-6 -translate-x-1/2 rounded-b-full transition-opacity",
-                    isActive ? "bg-[var(--brand-primary)] opacity-100" : "opacity-0",
-                  ].join(" ")}
-                />
-                <Icon className="size-[1.1rem]" strokeWidth={2.1} />
-                <span className="whitespace-nowrap">{label}</span>
-              </>
-            )}
+            <Icon className="size-[1.1rem]" strokeWidth={2.1} />
+            <span className="whitespace-nowrap">{label}</span>
           </NavLink>
         ))}
       </nav>

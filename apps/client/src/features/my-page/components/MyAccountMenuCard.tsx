@@ -21,18 +21,24 @@ const accountMenuItems = [
 
 export function MyAccountMenuCard() {
   return (
-    <AppCard className="py-2">
-      <h2 className="py-3 font-heading text-lg font-semibold text-[var(--brand-primary)]">
+    <AppCard
+      className="mx-[var(--page-x)] rounded-[1.55rem] py-2"
+      variant="menu-board"
+    >
+      <p className="pt-3 text-[0.62rem] font-semibold uppercase tracking-[0.3em] text-[var(--text-muted)]">
+        Account Menu
+      </p>
+      <h2 className="pb-3 pt-1 font-heading text-lg font-semibold text-[var(--text-cafe-ink)]">
         계정 관리
       </h2>
       <div className="space-y-0">
         {accountMenuItems.map(({ icon: Icon, label, sectionId }) => (
           <Link
             key={label}
-            className="flex w-full items-center justify-between border-b border-[var(--border-ink-6)] py-4 text-left last:border-b-0"
+            className="flex w-full items-center justify-between border-b border-[var(--border-tile-grout)] py-4 text-left last:border-b-0"
             to={accountSectionRoute(sectionId)}
           >
-            <span className="flex items-center gap-3 text-sm font-medium text-[var(--brand-primary)]">
+            <span className="flex items-center gap-3 text-sm font-medium text-[var(--text-cafe-ink)]">
               <Icon className="size-4" />
               {label}
             </span>

@@ -3,8 +3,17 @@
     font-family: var(--font-sans);
     color: var(--foreground);
     background:
-      radial-gradient(circle at top, var(--surface-accent-glow-soft), transparent 26%),
-      linear-gradient(180deg, var(--surface-app-start) 0%, var(--background) 18%, var(--surface-app-end) 100%);
+      radial-gradient(
+        circle at top,
+        var(--surface-accent-glow-soft),
+        transparent 26%
+      ),
+      linear-gradient(
+        180deg,
+        var(--surface-app-start) 0%,
+        var(--background) 18%,
+        var(--surface-app-end) 100%
+      );
     font-synthesis: none;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
@@ -52,6 +61,38 @@
     @apply space-y-4;
   }
 
+  .cafe-tile-bg {
+    background-color: var(--surface-cafe-tile);
+    background-image:
+      linear-gradient(to right, var(--border-tile-grout) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--border-tile-grout) 1px, transparent 1px);
+    background-size: 3.75rem 1.875rem;
+  }
+
+  .cafe-wood-grain {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cafe-wood-grain::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: repeating-linear-gradient(
+      3deg,
+      transparent 0,
+      transparent 0.5rem,
+      var(--overlay-wood-grain) 0.55rem,
+      transparent 0.63rem
+    );
+    opacity: 0.55;
+    pointer-events: none;
+  }
+
+  .cafe-wood-grain > * {
+    position: relative;
+  }
+
   .mobile-horizontal-scroll {
     @apply overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden;
     overscroll-behavior-x: contain;
@@ -65,7 +106,7 @@
   }
 
   .fixed-checkout-bar {
-    @apply fixed bottom-0 left-1/2 z-30 grid w-full max-w-[var(--app-max-width)] -translate-x-1/2 grid-cols-[minmax(0,1fr)_minmax(7.75rem,11.25rem)] items-center gap-3 border-t border-[var(--border-section)] bg-[var(--surface-base)] px-[var(--page-x)] pb-[var(--bottom-safe-padding)] pt-3 shadow-[0_-8px_20px_var(--shadow-ink-alpha-5)];
+    @apply fixed inset-x-0 bottom-0 z-30 grid w-full grid-cols-[minmax(0,1fr)_minmax(7.75rem,11.25rem)] items-center gap-3 bg-[var(--surface-menu-board)] px-[var(--page-x)] pb-[var(--bottom-safe-padding)] pt-3 shadow-[var(--shadow-tabbar-dock)];
   }
 
   @media (max-width: 360px) {

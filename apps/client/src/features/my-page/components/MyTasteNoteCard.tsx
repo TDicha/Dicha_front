@@ -9,13 +9,16 @@ interface MyTasteNoteCardProps {
 
 export function MyTasteNoteCard({ user }: MyTasteNoteCardProps) {
   return (
-    <AppCard variant="warm">
+    <AppCard
+      className="mx-[var(--page-x)] rounded-[1.55rem]"
+      variant="menu-board"
+    >
       <div className="flex items-start justify-between gap-4">
         <div>
-          <p className="text-xs font-semibold tracking-[0.18em] text-[var(--text-muted)]">
+          <p className="text-[0.62rem] font-semibold uppercase tracking-[0.3em] text-[var(--text-muted)]">
             TASTE NOTE
           </p>
-          <h2 className="mt-2 font-heading text-lg font-semibold text-[var(--brand-primary)]">
+          <h2 className="mt-2 font-heading text-lg font-semibold text-[var(--text-cafe-ink)]">
             {user.favoriteFlavor}
           </h2>
           <p className="mt-2 text-sm leading-6 text-[var(--text-muted)]">
@@ -23,7 +26,7 @@ export function MyTasteNoteCard({ user }: MyTasteNoteCardProps) {
             업데이트하고 있어요.
           </p>
         </div>
-        <div className="flex size-11 shrink-0 items-center justify-center rounded-full bg-[var(--overlay-white-75)] text-[var(--brand-primary)]">
+        <div className="flex size-11 shrink-0 items-center justify-center bg-[var(--surface-cafe-tile)] text-[var(--text-cafe-ink)]">
           <Gift className="size-5" />
         </div>
       </div>

@@ -1,7 +1,8 @@
-import type { Product } from "@/shared/types/models";
+import type { Product, ProductType } from "@/shared/types/models";
 
 export type ProductSortKey = "recommended" | "popular" | "price";
 export type ProductCategoryKey = Product["category"] | "all";
+export type ProductTypeKey = ProductType;
 
 export interface ProductCategoryOption {
   key: ProductCategoryKey;
@@ -11,4 +12,10 @@ export interface ProductCategoryOption {
 export interface ProductSortOption {
   key: ProductSortKey;
   label: string;
+}
+
+export interface ProductTypeOption {
+  key: ProductTypeKey;
+  label: string;
+  description: string;
 }

@@ -12,25 +12,28 @@ export function CartRecommendedProducts() {
   }
 
   return (
-    <section className="border-t border-[var(--border-card-list)] px-[var(--page-x)] pt-6">
-      <h3 className="text-xl font-bold text-[var(--text-heading)]">
+    <section className="mt-2 bg-[var(--surface-menu-board)] px-[var(--page-x)] py-6">
+      <p className="text-[0.62rem] font-semibold uppercase tracking-[0.3em] text-[var(--text-muted)]">
+        Recommended
+      </p>
+      <h3 className="mt-1 text-xl font-bold text-[var(--text-cafe-ink)]">
         지금 인기 있는 원두
       </h3>
       <div className="mt-5 grid grid-cols-2 gap-3 min-[380px]:gap-4">
         {recommendedProducts.map((product) => (
           <Link
             key={product.id}
-            className="min-w-0 overflow-hidden rounded-[var(--radius-card)] bg-[var(--surface-product-card)] pb-5"
+            className="min-w-0 overflow-hidden bg-[var(--surface-cafe-tile)] pb-5"
             to={`/products/${product.id}`}
           >
             <div className="flex h-[clamp(9rem,42vw,11rem)] items-center justify-center">
-              <img alt={product.name} className="size-[clamp(5rem,22vw,6rem)] rounded-full object-cover" src={product.image} />
+              <img alt={product.name} className="size-[clamp(5rem,22vw,6rem)] object-cover" src={product.image} />
             </div>
             <div className="px-3 min-[380px]:px-4">
               <p className="min-h-12 break-keep text-sm font-semibold leading-5 text-[var(--text-product-title)]">
                 {product.name}
               </p>
-              <p className="mt-2 text-[1rem] font-bold text-[var(--text-price-danger)]">
+              <p className="mt-2 text-[1rem] font-bold text-[var(--text-cafe-ink)]">
                 ₩{formatPrice(product.price)}
               </p>
             </div>

@@ -9,20 +9,23 @@ interface PurchaseItemsSectionProps {
 
 export function PurchaseItemsSection({ items }: PurchaseItemsSectionProps) {
   return (
-    <section className="mt-4 bg-[var(--surface-base)] px-[var(--page-x)] py-6">
-      <h2 className="text-[1.2rem] font-bold text-[var(--text-heading)]">주문 상품</h2>
-      <div className="mt-5 space-y-4">
-        {items.map((item, index) => {
+    <section className="mt-2 bg-[var(--surface-menu-board)] px-[var(--page-x)] py-6">
+      <p className="text-[0.6rem] font-semibold uppercase tracking-[0.28em] text-[var(--text-muted)]">
+        Items
+      </p>
+      <h2 className="mt-1 text-[1.2rem] font-bold text-[var(--text-cafe-ink)]">주문 상품</h2>
+      <div className="mt-5 space-y-2">
+        {items.map((item) => {
           const product = mockProducts.find((candidate) => candidate.id === item.productId);
 
           return (
             <div
               key={item.cartItemId}
-              className={index < items.length - 1 ? "border-b border-[var(--border-list)] pb-4" : ""}
+              className="bg-[var(--surface-cafe-tile)] px-4 py-4"
             >
               <div className="flex items-start justify-between gap-3">
                 <div className="min-w-0">
-                  <p className="break-keep text-[1.05rem] font-semibold text-[var(--text-heading)]">
+                  <p className="break-keep text-[1.05rem] font-semibold text-[var(--text-cafe-ink)]">
                     {item.productName}
                   </p>
                   <p className="mt-1 text-[0.95rem] text-[var(--text-muted-warm)]">
@@ -30,7 +33,7 @@ export function PurchaseItemsSection({ items }: PurchaseItemsSectionProps) {
                   </p>
                   <p className="mt-1 text-[0.95rem] text-[var(--text-muted-warm)]">수량 {item.quantity}개</p>
                 </div>
-                <span className="shrink-0 text-[1rem] font-semibold text-[var(--text-heading)]">
+                <span className="shrink-0 text-[1rem] font-semibold text-[var(--text-cafe-ink)]">
                   ₩{formatPrice(item.unitPrice * item.quantity)}
                 </span>
               </div>

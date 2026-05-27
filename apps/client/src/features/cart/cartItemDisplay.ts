@@ -13,6 +13,10 @@ export function buildCartItemOptionLabel(
     return item.optionName;
   }
 
+  if (product.productType !== "beans") {
+    return item.optionName;
+  }
+
   const detail = getProductDetail(product);
   return `${detail.defaultRoastLabel} / ${item.optionName} / ${detail.baseWeightLabel}`;
 }

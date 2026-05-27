@@ -15,11 +15,10 @@ export function CartItemList({
   onUpdateQuantity,
 }: CartItemListProps) {
   return (
-    <section className="bg-[var(--surface-base)]">
-      {items.map((item, index) => (
+    <section className="space-y-2 py-2">
+      {items.map((item) => (
         <CartItemCard
           key={item.cartItemId}
-          isLast={index === items.length - 1}
           item={item}
           onRemove={onRemove}
           onToggleSelected={onToggleSelected}

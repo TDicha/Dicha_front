@@ -119,7 +119,7 @@ export function PurchasePage() {
   }
 
   return (
-    <div className="bg-[var(--surface-page-alt)] pb-[var(--fixed-action-page-padding)]">
+    <div className="cafe-tile-bg min-h-full pb-[var(--fixed-action-page-padding)]">
       <PurchaseHeaderSection />
       <PurchaseShippingAddressSection />
       <PurchasePaymentMethodSection

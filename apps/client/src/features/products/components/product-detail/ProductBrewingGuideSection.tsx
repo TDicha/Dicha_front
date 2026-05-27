@@ -5,15 +5,29 @@ interface ProductBrewingGuideSectionProps {
   onClick?: () => void;
 }
 
-export function ProductBrewingGuideSection({ brewingGuide, onClick }: ProductBrewingGuideSectionProps) {
+export function ProductBrewingGuideSection({
+  brewingGuide,
+  onClick,
+}: ProductBrewingGuideSectionProps) {
   return (
-    <section className="border-b border-[var(--border-muted)] bg-[var(--surface-base)] px-[var(--page-x)] py-4">
-      <button className="flex w-full items-center justify-between text-left" onClick={onClick} type="button">
+    <section className="bg-[var(--surface-chalkboard)] px-[var(--page-x)] py-4">
+      <button
+        className="flex w-full items-center justify-between text-left"
+        onClick={onClick}
+        type="button"
+      >
         <div>
-          <h2 className="text-[1rem] font-bold text-[var(--text-title)]">브루잉 가이드</h2>
-          <p className="mt-1 text-[0.7rem] text-[var(--text-muted-subtle)]">{brewingGuide}</p>
+          <p className="text-[0.6rem] font-semibold tracking-[0.18em] text-[var(--text-chalk-muted)]">
+            BREWING GUIDE
+          </p>
+          <h2 className="mt-1 text-[1rem] font-bold text-[var(--text-chalk)]">
+            브루잉 가이드
+          </h2>
+          <p className="mt-1 text-[0.7rem] text-[var(--text-chalk-muted)]">
+            {brewingGuide}
+          </p>
         </div>
-        <ChevronRight className="size-4 text-[var(--text-muted-subtle)]" />
+        <ChevronRight className="size-4 text-[var(--text-chalk)]" />
       </button>
     </section>
   );

@@ -34,31 +34,29 @@ export function BottomSheet({
       />
       <section
         className={cn(
-          "absolute bottom-0 left-1/2 max-h-[84vh] w-full max-w-[var(--app-max-width)] -translate-x-1/2 overflow-y-auto rounded-t-[1.9rem] border border-[var(--border-overlay-70)] bg-[var(--surface-card-panel)] px-[var(--page-x)] pb-[calc(env(safe-area-inset-bottom)+1.25rem)] pt-3 shadow-[var(--shadow-bottom-sheet)] transition-[transform,opacity] duration-300 ease-out",
+          "absolute inset-x-0 bottom-0 max-h-[84vh] w-full overflow-y-auto bg-[var(--surface-menu-board)] px-[var(--page-x)] pb-[calc(env(safe-area-inset-bottom)+1.25rem)] pt-3 shadow-[var(--shadow-bottom-sheet)] transition-[transform,opacity] duration-300 ease-out",
           open ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0",
         )}
       >
-        <div className="mx-auto mb-4 h-1.5 w-12 rounded-full bg-[var(--surface-brand-tint-18)]" />
-        <div className="mb-5 flex items-start justify-between gap-3 border-b border-[var(--surface-brand-tint-8)] pb-4">
+        <div className="mx-auto mb-4 h-1 w-12 bg-[var(--text-cafe-ink)]" />
+        <div className="mb-5 flex items-start justify-between gap-3 pb-4">
           <div>
             <p className="text-[11px] font-semibold tracking-[0.16em] text-[var(--text-muted)]">
               CUSTOMIZE ORDER
             </p>
-            <h3 className="mt-1 font-heading text-[1.1rem] font-semibold text-[var(--brand-primary)]">
+            <h3 className="mt-1 font-heading text-[1.1rem] font-semibold text-[var(--text-cafe-ink)]">
               {title}
             </h3>
           </div>
           <button
-            className="rounded-full border border-[var(--surface-brand-tint-10)] bg-[var(--surface-base)] px-3 py-1.5 text-sm font-medium text-[var(--brand-primary)] shadow-[0_6px_16px_var(--surface-brand-tint-6)]"
+            className="bg-[var(--surface-cafe-tile)] px-3 py-1.5 text-sm font-medium text-[var(--text-cafe-ink)]"
             onClick={onClose}
             type="button"
           >
             닫기
           </button>
         </div>
-        <div className="pb-1">
-          {children}
-        </div>
+        <div className="pb-1">{children}</div>
       </section>
     </div>
   );

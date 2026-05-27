@@ -12,17 +12,23 @@ const quickLinks = [
 
 export function MyQuickLinksCard() {
   return (
-    <AppCard className="py-2">
-      <h2 className="py-3 font-heading text-lg font-semibold text-[var(--brand-primary)]">
+    <AppCard
+      className="mx-[var(--page-x)] rounded-[1.55rem] py-2"
+      variant="menu-board"
+    >
+      <p className="pt-3 text-[0.62rem] font-semibold uppercase tracking-[0.3em] text-[var(--text-muted)]">
+        Quick Link
+      </p>
+      <h2 className="pb-3 pt-1 font-heading text-lg font-semibold text-[var(--text-cafe-ink)]">
         활동 바로가기
       </h2>
       {quickLinks.map(({ label, to }, index) => (
         <Link
           key={label}
           className={[
-            "flex w-full items-center justify-between py-4 text-left text-sm font-medium text-[var(--brand-primary)]",
+            "flex w-full items-center justify-between py-4 text-left text-sm font-medium text-[var(--text-cafe-ink)]",
             index < quickLinks.length - 1
-              ? "border-b border-[var(--border-ink-6)]"
+              ? "border-b border-[var(--border-tile-grout)]"
               : "",
           ].join(" ")}
           to={to}

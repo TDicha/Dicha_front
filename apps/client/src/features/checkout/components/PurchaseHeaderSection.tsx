@@ -1,7 +1,10 @@
 export function PurchaseHeaderSection() {
   return (
-    <section className="border-b border-[var(--border-section-strong)] bg-[var(--surface-base)] px-[var(--page-x)] py-6">
-      <h1 className="text-[clamp(1.6rem,6vw,1.85rem)] font-bold tracking-[-0.04em] text-[var(--text-heading)]">
+    <section className="bg-[var(--surface-menu-board)] px-[var(--page-x)] py-6">
+      <p className="text-[0.62rem] font-semibold uppercase tracking-[0.3em] text-[var(--text-muted)]">
+        Checkout
+      </p>
+      <h1 className="mt-1 text-[clamp(1.6rem,6vw,1.85rem)] font-bold tracking-[-0.04em] text-[var(--text-cafe-ink)]">
         주문 상세
       </h1>
       <p className="mt-2 text-[1rem] text-[var(--text-muted-warm)]">

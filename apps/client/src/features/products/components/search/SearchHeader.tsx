@@ -17,10 +17,18 @@ export function SearchHeader({
   onResetQuery,
 }: SearchHeaderProps) {
   return (
-    <section className="space-y-3">
-      <SearchInput onChange={onChangeQuery} placeholder="원두, 블렌드, 드립백 검색" value={query} />
+    <section className="cafe-tile-bg border-b-[5px] border-[var(--border-cafe-stripe)] px-[var(--page-x)] pb-4 pt-3">
+      <SearchInput
+        onChange={onChangeQuery}
+        placeholder="원두, 드립백, 선물세트 검색"
+        value={query}
+      />
       {isSearching ? (
-        <SearchResultSummary onReset={onResetQuery} query={query} resultCount={resultCount} />
+        <SearchResultSummary
+          onReset={onResetQuery}
+          query={query}
+          resultCount={resultCount}
+        />
       ) : null}
     </section>
   );

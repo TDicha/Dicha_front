@@ -23,19 +23,20 @@ export function MyPage() {
   }
 
   return (
-    <div className="page-content space-y-5 bg-[var(--surface-base)] pt-4">
+    <div className="page-content cafe-tile-bg space-y-5 px-0 pb-24 pt-5">
       <ProfileCard user={user} />
       <MyStatsSection />
-      <MyTasteNoteCard user={user} />
-      <MyAccountMenuCard />
       <MyQuickLinksCard />
-      <button
-          className="mt-3 w-full rounded-[1rem] bg-[var(--brand-primary)] px-4 py-3 text-sm font-semibold text-[var(--text-inverse)]"
+      <MyAccountMenuCard />
+      <div className="px-[var(--page-x)] pb-4 pt-1">
+        <button
+          className="w-full rounded-[1.55rem] border-[3px] border-[var(--border-menu-board)] bg-[var(--surface-menu-board)] px-4 py-4 text-sm font-semibold text-[var(--text-cafe-ink)] shadow-[var(--shadow-card-subtle)]"
           onClick={handleSignOut}
           type="button"
         >
           로그아웃
-      </button>
+        </button>
+      </div>
     </div>
   );
 }

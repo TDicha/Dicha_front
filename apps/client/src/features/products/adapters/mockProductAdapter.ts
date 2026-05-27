@@ -10,7 +10,7 @@ function matchesQuery(product: Product, query?: string) {
     return true;
   }
 
-  return `${product.name} ${product.subtitle} ${product.originLabel ?? ""} ${product.notes.join(" ")}`
+  return `${product.name} ${product.subtitle} ${product.categoryLabel ?? ""} ${product.originLabel ?? ""} ${product.notes.join(" ")}`
     .toLowerCase()
     .includes(normalizedQuery);
 }

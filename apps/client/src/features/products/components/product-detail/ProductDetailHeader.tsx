@@ -8,12 +8,15 @@ interface ProductDetailHeaderProps {
   onBack: () => void;
 }
 
-export function ProductDetailHeader({ itemCount, onBack }: ProductDetailHeaderProps) {
+export function ProductDetailHeader({
+  itemCount,
+  onBack,
+}: ProductDetailHeaderProps) {
   return (
-    <header className="sticky top-0 z-30 flex h-[var(--header-height)] items-center justify-between border-b border-[var(--border-muted)] bg-[var(--surface-base)] px-[var(--page-x)]">
+    <header className="cafe-tile-bg sticky top-0 z-30 flex h-[var(--header-height)] items-center justify-between px-[var(--page-x)]">
       <button
         aria-label="뒤로가기"
-        className="flex size-8 items-center justify-center text-[var(--text-title)]"
+        className="flex size-9 items-center justify-center bg-[var(--surface-menu-board)] text-[var(--text-cafe-ink)]"
         onClick={onBack}
         type="button"
       >
@@ -21,11 +24,11 @@ export function ProductDetailHeader({ itemCount, onBack }: ProductDetailHeaderPr
       </button>
       <Link
         aria-label="장바구니로 이동"
-        className="relative flex size-8 items-center justify-center text-[var(--text-title)]"
+        className="relative flex size-9 items-center justify-center bg-[var(--surface-menu-board)] text-[var(--text-cafe-ink)]"
         to={ROUTES.cart}
       >
         <ShoppingCart className="size-5" />
-        <span className="absolute -right-1.5 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-[var(--brand-accent)] px-1 text-[9px] font-bold text-[var(--text-on-accent)]">
+        <span className="absolute -right-1.5 -top-1 flex h-4 min-w-4 items-center justify-center bg-[var(--surface-chalkboard)] px-1 text-[9px] font-bold text-[var(--text-chalk)]">
           {itemCount > 99 ? "99+" : itemCount}
         </span>
       </Link>

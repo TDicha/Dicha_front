@@ -15,39 +15,46 @@ export function ProductSummarySection({
   salesCount,
 }: ProductSummarySectionProps) {
   return (
-    <section className="border-b border-[var(--border-muted)] bg-[var(--surface-base)] px-[var(--page-x)] py-4">
+    <section className="bg-[var(--surface-menu-board)] px-[var(--page-x)] py-5">
       <div className="flex flex-wrap gap-1.5">
         {product.originLabel ? (
-          <span className="rounded-full bg-[var(--surface-badge-green)] px-2.5 py-1 text-[0.56rem] text-[var(--brand-primary)]">
+          <span className="bg-[var(--surface-cafe-tile)] px-2.5 py-1 text-[0.6rem] font-semibold text-[var(--text-cafe-ink)]">
             {product.originLabel}
           </span>
         ) : null}
         {product.roastLabel ? (
-          <span className="rounded-full bg-[var(--surface-badge-accent)] px-2.5 py-1 text-[0.56rem] text-[var(--brand-accent)]">
+          <span className="bg-[var(--surface-cafe-tile)] px-2.5 py-1 text-[0.6rem] font-semibold text-[var(--text-cafe-ink)]">
             {product.roastLabel}
           </span>
         ) : null}
         {product.categoryLabel ? (
-          <span className="rounded-full bg-[var(--surface-purple)] px-2.5 py-1 text-[0.56rem] text-[var(--flavor-purple)]">
+          <span className="bg-[var(--surface-chalkboard)] px-2.5 py-1 text-[0.6rem] font-semibold text-[var(--text-chalk)]">
             {product.categoryLabel.replace(" ", "")}
           </span>
         ) : null}
       </div>
 
-      <h1 className="mt-4 text-[clamp(1.35rem,6vw,1.6rem)] font-bold text-[var(--text-title)]">
+      <p className="mt-5 text-[0.62rem] font-semibold tracking-[0.18em] text-[var(--text-muted)]">
+        MENU DETAIL
+      </p>
+      <h1 className="mt-2 text-[clamp(1.35rem,6vw,1.6rem)] font-bold text-[var(--text-cafe-ink)]">
         {product.name}
       </h1>
-      <p className="mt-1 text-[0.82rem] text-[var(--text-muted-subtle)]">{product.subtitle}</p>
+      <p className="mt-1 text-[0.82rem] text-[var(--text-muted-subtle)]">
+        {product.subtitle}
+      </p>
 
       <div className="mt-3 flex items-end gap-2">
-        <p className="text-[clamp(1.55rem,7vw,1.9rem)] font-bold text-[var(--state-danger)]">
+        <p className="text-[clamp(1.55rem,7vw,1.9rem)] font-bold text-[var(--text-cafe-ink)]">
           ₩{formatPrice(product.price)}
         </p>
-        <p className="pb-1 text-[0.7rem] text-[var(--text-muted-subtle)]">{baseWeightLabel} 기준</p>
+        <p className="pb-1 text-[0.7rem] text-[var(--text-muted-subtle)]">
+          {baseWeightLabel} 기준
+        </p>
       </div>
 
-      <div className="mt-1 flex items-center gap-2">
-        <p className="text-[0.92rem] font-bold text-[var(--brand-accent)]">
+      <div className="mt-3 flex items-center gap-2 pt-3">
+        <p className="text-[0.92rem] font-bold text-[var(--text-cafe-ink)]">
           ★ {product.rating?.toFixed(1) ?? "4.8"}
         </p>
         <p className="text-[0.78rem] text-[var(--text-muted-subtle)]">

@@ -18,12 +18,17 @@ export function PurchasePaymentMethodSection<TOption extends PaymentOption>({
   onSelectPayment,
 }: PurchasePaymentMethodSectionProps<TOption>) {
   return (
-    <section className="mt-4 bg-[var(--surface-base)] px-[var(--page-x)] py-6">
+    <section className="mt-2 bg-[var(--surface-menu-board)] px-[var(--page-x)] py-6">
       <div className="flex items-center gap-3">
-        <div className="flex size-10 items-center justify-center rounded-full bg-[var(--surface-icon-green)]">
-          <CreditCard className="size-5 text-[var(--brand-secondary)]" />
+        <div className="flex size-10 items-center justify-center bg-[var(--surface-cafe-tile)]">
+          <CreditCard className="size-5 text-[var(--text-cafe-ink)]" />
         </div>
-        <h2 className="text-[1.2rem] font-bold text-[var(--text-heading)]">결제 수단 선택</h2>
+        <div>
+          <p className="text-[0.6rem] font-semibold uppercase tracking-[0.28em] text-[var(--text-muted)]">
+            Payment
+          </p>
+          <h2 className="mt-1 text-[1.2rem] font-bold text-[var(--text-cafe-ink)]">결제 수단 선택</h2>
+        </div>
       </div>
 
       <div className="mt-5 space-y-3">
@@ -34,27 +39,41 @@ export function PurchasePaymentMethodSection<TOption extends PaymentOption>({
             <button
               key={option.id}
               className={[
-                "flex w-full items-center justify-between gap-3 rounded-[1.25rem] border px-4 py-4 text-left transition",
+                "flex w-full items-center justify-between gap-3 px-4 py-4 text-left transition",
                 isSelected
-                  ? "border-[var(--brand-secondary)] bg-[var(--surface-page-green)]"
-                  : "border-[var(--border-payment)] bg-[var(--surface-base)]",
+                  ? "bg-[var(--surface-chalkboard)]"
+                  : "bg-[var(--surface-cafe-tile)]",
               ].join(" ")}
               onClick={() => onSelectPayment(option.id)}
               type="button"
             >
               <div className="min-w-0">
-                <p className="break-keep text-[1rem] font-semibold text-[var(--text-heading)]">{option.label}</p>
-                <p className="mt-1 text-[0.92rem] text-[var(--text-muted-warm)]">{option.description}</p>
+                <p
+                  className={[
+                    "break-keep text-[1rem] font-semibold",
+                    isSelected ? "text-[var(--text-chalk)]" : "text-[var(--text-cafe-ink)]",
+                  ].join(" ")}
+                >
+                  {option.label}
+                </p>
+                <p
+                  className={[
+                    "mt-1 text-[0.92rem]",
+                    isSelected ? "text-[var(--text-chalk-muted)]" : "text-[var(--text-muted-warm)]",
+                  ].join(" ")}
+                >
+                  {option.description}
+                </p>
               </div>
               <span
                 className={[
-                  "flex size-6 shrink-0 items-center justify-center rounded-full border",
+                  "flex size-6 shrink-0 items-center justify-center",
                   isSelected
-                    ? "border-[var(--brand-secondary)] bg-[var(--brand-secondary)]"
-                    : "border-[var(--border-warm-strong)] bg-[var(--surface-base)]",
+                    ? "bg-[var(--surface-chalkboard)] text-[var(--text-chalk)]"
+                    : "bg-[var(--surface-menu-board)] text-transparent",
                 ].join(" ")}
               >
-                {isSelected ? <span className="size-2 rounded-full bg-[var(--surface-base)]" /> : null}
+                <span className="size-2 bg-current" />
               </span>
             </button>
           );

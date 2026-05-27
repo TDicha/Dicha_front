@@ -1,7 +1,12 @@
 import { useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
-import { useAppStore, useAuthStore, useCartStore, useCheckoutStore } from "@/app/store";
+import {
+  useAppStore,
+  useAuthStore,
+  useCartStore,
+  useCheckoutStore,
+} from "@/app/store";
 import { EmptyState } from "@/components/common/EmptyState";
 import { ImplementationNoticeModal } from "@/components/common/ImplementationNoticeModal";
 import { PrimaryButton } from "@/components/common/PrimaryButton";
@@ -18,7 +23,10 @@ import {
   ProductSummarySection,
 } from "@/features/products";
 import { useAddCartItem } from "@/features/cart";
-import { useProduct, useProductOptions } from "@/features/products/hooks/useProducts";
+import {
+  useProduct,
+  useProductOptions,
+} from "@/features/products/hooks/useProducts";
 import { getProductDetail } from "@/mock/productDetails";
 import { ROUTES } from "@/shared/constants/routes";
 import { env } from "@/shared/lib/env";
@@ -56,32 +64,42 @@ export function ProductDetailPage() {
     isError: isProductError,
     isLoading: isProductLoading,
   } = useProduct(productId);
-  const {
-    data: productOptions = [],
-    isLoading: isProductOptionsLoading,
-  } = useProductOptions(productId);
+  const { data: productOptions = [], isLoading: isProductOptionsLoading } =
+    useProductOptions(productId);
 
-  const detail = useMemo(() => (product ? getProductDetail(product) : null), [product]);
-  const weightOptions = useMemo(
-    () =>
-      !env.enableMock && productOptions.length > 0
-        ? productOptions
-        : TEMPORARY_WEIGHT_OPTIONS,
-    [productOptions],
+  const detail = useMemo(
+    () => (product ? getProductDetail(product) : null),
+    [product],
   );
+  const enablesRoastCustomization = product?.productType === "beans";
+  const weightOptions = useMemo(() => {
+    if (product && product.productType !== "beans") {
+      return !env.enableMock && productOptions.length > 0
+        ? productOptions
+        : product.options;
+    }
+
+    return !env.enableMock && productOptions.length > 0
+      ? productOptions
+      : TEMPORARY_WEIGHT_OPTIONS;
+  }, [product, productOptions]);
   const [selectedRoast, setSelectedRoast] = useState<string | null>(null);
   const [selectedGrind, setSelectedGrind] = useState<string>(GRIND_OPTIONS[0]);
   const [selectedWeightId, setSelectedWeightId] = useState("");
   const [quantity, setQuantity] = useState(1);
-  const [implementationFeature, setImplementationFeature] = useState<string | null>(null);
+  const [implementationFeature, setImplementationFeature] = useState<
+    string | null
+  >(null);
 
-  const selectedRoastLabel = selectedRoast ??
-    (product ? getDefaultRoast(product.roastLevel) : "");
-  const activeWeightId = weightOptions.some((option) => option.id === selectedWeightId)
+  const selectedRoastLabel =
+    selectedRoast ?? (product ? getDefaultRoast(product.roastLevel) : "");
+  const activeWeightId = weightOptions.some(
+    (option) => option.id === selectedWeightId,
+  )
     ? selectedWeightId
     : isProductOptionsLoading
       ? ""
-      : weightOptions[0]?.id ?? "";
+      : (weightOptions[0]?.id ?? "");
   const selectedWeight = weightOptions.find(
     (option) => option.id === activeWeightId,
   );
@@ -90,23 +108,33 @@ export function ProductDetailPage() {
   )
     ? activeWeightId
     : undefined;
-  const reviewTotal = product && detail
-    ? env.enableMock
-      ? product.reviewCount ?? detail.reviews.length
-      : product.reviewCount ?? 0
+  const reviewTotal =
+    product && detail
+      ? env.enableMock
+        ? (product.reviewCount ?? detail.reviews.length)
+        : (product.reviewCount ?? 0)
+      : 0;
+  const visibleReviews = env.enableMock ? (detail?.reviews ?? []) : [];
+  const reviewMoreCount = env.enableMock
+    ? (detail?.reviewMoreCount ?? 0)
+    : reviewTotal;
+  const unitPrice = product
+    ? product.price + (selectedWeight?.extraPrice ?? 0)
     : 0;
-  const visibleReviews = env.enableMock ? detail?.reviews ?? [] : [];
-  const reviewMoreCount = env.enableMock ? detail?.reviewMoreCount ?? 0 : reviewTotal;
-  const unitPrice = product ? product.price + (selectedWeight?.extraPrice ?? 0) : 0;
   const totalPrice = unitPrice * quantity;
   const selectedSummary =
-    selectedRoastLabel && selectedGrind && selectedWeight
-      ? `${selectedRoastLabel} · ${selectedGrind} · ${selectedWeight.name}`
-      : "옵션을 선택해주세요";
+    selectedWeight && !enablesRoastCustomization
+      ? selectedWeight.name
+      : selectedRoastLabel && selectedGrind && selectedWeight
+        ? `${selectedRoastLabel} · ${selectedGrind} · ${selectedWeight.name}`
+        : "옵션을 선택해주세요";
   const shouldUseCartApi = authStatus === "authenticated" && !env.enableMock;
 
   function ensureOptionSelected() {
-    if (selectedRoastLabel && selectedGrind && selectedWeight) {
+    if (
+      selectedWeight &&
+      (!enablesRoastCustomization || (selectedRoastLabel && selectedGrind))
+    ) {
       return true;
     }
 
@@ -124,9 +152,11 @@ export function ProductDetailPage() {
     }
 
     addItem({
-      cartItemId: `${product.id}:${selectedRoastLabel}:${selectedGrind}:${selectedWeight.id}`,
+      cartItemId: `${product.id}:${selectedSummary}:${selectedWeight.id}`,
       productId: product.id,
-      optionId: `${selectedRoastLabel}:${selectedGrind}:${selectedWeight.id}`,
+      optionId: enablesRoastCustomization
+        ? `${selectedRoastLabel}:${selectedGrind}:${selectedWeight.id}`
+        : selectedWeight.id,
       productName: product.name,
       optionName: selectedSummary,
       productImage: product.image,
@@ -156,9 +186,11 @@ export function ProductDetailPage() {
     }
 
     createDirectCheckout({
-      cartItemId: `direct:${product.id}:${selectedRoastLabel}:${selectedGrind}:${selectedWeight.id}`,
+      cartItemId: `direct:${product.id}:${selectedSummary}:${selectedWeight.id}`,
       productId: product.id,
-      optionId: `${selectedRoastLabel}:${selectedGrind}:${selectedWeight.id}`,
+      optionId: enablesRoastCustomization
+        ? `${selectedRoastLabel}:${selectedGrind}:${selectedWeight.id}`
+        : selectedWeight.id,
       productName: product.name,
       optionName: selectedSummary,
       productImage: product.image,
@@ -182,7 +214,7 @@ export function ProductDetailPage() {
 
   if (isProductLoading) {
     return (
-      <div className="min-h-[100dvh] bg-[var(--surface-base)] px-[var(--page-x)] py-12 text-center text-sm text-[var(--text-muted)]">
+      <div className="cafe-tile-bg min-h-[100dvh] px-[var(--page-x)] py-12 text-center text-sm text-[var(--text-cafe-ink)]">
         상품 정보를 불러오는 중입니다
       </div>
     );
@@ -190,10 +222,13 @@ export function ProductDetailPage() {
 
   if (isProductError || !product || !detail) {
     return (
-      <div className="min-h-[100dvh] bg-[var(--surface-base)] px-[var(--page-x)] py-10">
+      <div className="cafe-tile-bg min-h-[100dvh] px-[var(--page-x)] py-10">
         <EmptyState
           action={
-            <PrimaryButton asChild className="h-12 rounded-[0.95rem] shadow-none">
+            <PrimaryButton
+              asChild
+              className="h-12 rounded-none bg-[var(--surface-chalkboard)] shadow-none"
+            >
               <Link to={ROUTES.products}>상품 목록으로 이동</Link>
             </PrimaryButton>
           }
@@ -205,9 +240,12 @@ export function ProductDetailPage() {
   }
 
   return (
-    <div className="min-h-[100dvh] bg-[var(--surface-app)] pb-[var(--product-action-page-padding)]">
+    <div className="cafe-tile-bg min-h-[100dvh] pb-[var(--product-action-page-padding)]">
       <ProductDetailHeader itemCount={itemCount} onBack={() => navigate(-1)} />
-      <ProductHeroSection productImage={product.image} productName={product.name} />
+      <ProductHeroSection
+        productImage={product.image}
+        productName={product.name}
+      />
       <ProductSummarySection
         baseWeightLabel={detail.baseWeightLabel}
         product={product}
@@ -215,6 +253,7 @@ export function ProductDetailPage() {
         salesCount={detail.salesCount}
       />
       <ProductOptionSection
+        enablesRoastCustomization={enablesRoastCustomization}
         onApplyRecommendation={handleApplyRecommendation}
         onOpenOptions={openBottomSheet}
         selectedGrindLabel={selectedGrind}
@@ -234,7 +273,16 @@ export function ProductDetailPage() {
         descriptionSuffix={detail.descriptionSuffix}
         noteLabels={detail.noteLabels}
       />
-      <ProductStorySection storyLines={detail.storyLines} />
+      <ProductStorySection
+        storyLines={detail.storyLines}
+        title={
+          product.productType === "gift-set"
+            ? "선물 구성 이야기"
+            : product.productType === "drip-bag"
+              ? "드립백 이야기"
+              : "원두 스토리"
+        }
+      />
       <ProductReviewSection
         rating={product.rating}
         onViewMore={() => setImplementationFeature("리뷰 더 보기")}
@@ -249,9 +297,12 @@ export function ProductDetailPage() {
         totalPrice={totalPrice}
       />
       <ProductOptionBottomSheet
+        enablesRoastCustomization={enablesRoastCustomization}
         grindOptions={GRIND_OPTIONS}
         onClose={closeBottomSheet}
-        onDecreaseQuantity={() => setQuantity((current) => Math.max(1, current - 1))}
+        onDecreaseQuantity={() =>
+          setQuantity((current) => Math.max(1, current - 1))
+        }
         onIncreaseQuantity={() => setQuantity((current) => current + 1)}
         onSelectGrind={setSelectedGrind}
         onSelectRoast={setSelectedRoast}

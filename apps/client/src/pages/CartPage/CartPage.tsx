@@ -103,7 +103,7 @@ export function CartPage() {
 
   if (shouldUseCartApi && cartQuery.isLoading) {
     return (
-      <div className="bg-[var(--surface-page-alt)] px-[var(--page-x)] py-10 text-center text-sm text-[var(--text-muted)]">
+      <div className="cafe-tile-bg min-h-full px-[var(--page-x)] py-10 text-center text-sm text-[var(--text-cafe-ink)]">
         장바구니를 불러오는 중입니다
       </div>
     );
@@ -114,7 +114,7 @@ export function CartPage() {
   }
 
   return (
-    <div className="bg-[var(--surface-page-alt)] pb-[var(--fixed-action-page-padding)]">
+    <div className="cafe-tile-bg min-h-full pb-[var(--fixed-action-page-padding)]">
       <CartSelectToolbar
         isAllSelected={isAllSelected}
         onRemoveSelected={handleRemoveSelected}

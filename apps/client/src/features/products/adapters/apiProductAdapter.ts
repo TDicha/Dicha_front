@@ -1,7 +1,13 @@
 import { apiClient } from "@/services/api/client";
 import { endpoints } from "@/services/api/endpoints";
 import { resolveApiMediaUrl } from "@/services/api/media";
-import type { Product, ProductBadge, ProductCategory, ProductOption } from "@/shared/types/models";
+import type {
+  Product,
+  ProductBadge,
+  ProductCategory,
+  ProductOption,
+  ProductType,
+} from "@/shared/types/models";
 
 import type { ProductListParams, ProductRepository } from "../types";
 
@@ -22,6 +28,8 @@ interface ApiProductOption {
 
 export interface ApiProduct {
   id?: number | string;
+  productType?: string;
+  type?: string;
   name?: string;
   subtitle?: string;
   description?: string;
@@ -71,12 +79,25 @@ function normalizeBadges(badges?: string[]): ProductBadge[] {
   return (badges ?? []).flatMap((badge) => {
     const normalized = badge.toUpperCase();
 
-    if (normalized === "BEST" || normalized === "NEW" || normalized === "PICK") {
+    if (
+      normalized === "BEST" ||
+      normalized === "NEW" ||
+      normalized === "PICK"
+    ) {
       return [normalized];
     }
 
     return [];
   });
+}
+
+function normalizeProductType(productType?: string): ProductType {
+  const normalized = productType?.toLowerCase().replaceAll("_", "-");
+
+  if (normalized === "drip-bag" || normalized === "dripbag") return "drip-bag";
+  if (normalized === "gift-set" || normalized === "giftset") return "gift-set";
+
+  return "beans";
 }
 
 function getCategoryValue(product: ApiProduct) {
@@ -91,9 +112,16 @@ function getCategoryValue(product: ApiProduct) {
   const category = product.category;
 
   return {
-    id: product.categoryId ?? category?.id ?? product.categorySlug ?? "uncategorized",
+    id:
+      product.categoryId ??
+      category?.id ??
+      product.categorySlug ??
+      "uncategorized",
     label: product.categoryName ?? category?.name ?? "카테고리",
-    slug: product.categorySlug ?? category?.slug ?? String(product.categoryId ?? category?.id ?? "uncategorized"),
+    slug:
+      product.categorySlug ??
+      category?.slug ??
+      String(product.categoryId ?? category?.id ?? "uncategorized"),
   };
 }
 
@@ -113,13 +141,15 @@ export function toProduct(product: ApiProduct): Product {
 
   return {
     id: String(product.id ?? ""),
+    productType: normalizeProductType(product.productType ?? product.type),
     name: product.name ?? "상품명 없음",
     subtitle: product.subtitle ?? description,
     description,
     price: product.price ?? 0,
     image:
-      resolveApiMediaUrl(product.imageUrl ?? product.thumbnailUrl ?? product.image) ??
-      fallbackProductImage,
+      resolveApiMediaUrl(
+        product.imageUrl ?? product.thumbnailUrl ?? product.image,
+      ) ?? fallbackProductImage,
     badges: normalizeBadges(product.badges ?? product.badgeList),
     category: String(category.id),
     categoryLabel: category.label,
@@ -146,17 +176,22 @@ function toProductCategory(category: ApiCategory): ProductCategory {
 
 export const apiProductAdapter: ProductRepository = {
   async listCategories() {
-    const { data } = await apiClient.get<ApiCategory[]>(endpoints.categories.list);
+    const { data } = await apiClient.get<ApiCategory[]>(
+      endpoints.categories.list,
+    );
 
     return data.map(toProductCategory);
   },
   async list(params?: ProductListParams) {
-    const { data } = await apiClient.get<ApiProduct[]>(endpoints.products.list, {
-      params: {
-        categoryId: params?.categoryId,
-        keyword: params?.query,
+    const { data } = await apiClient.get<ApiProduct[]>(
+      endpoints.products.list,
+      {
+        params: {
+          categoryId: params?.categoryId,
+          keyword: params?.query,
+        },
       },
-    });
+    );
 
     return data.map(toProduct);
   },
