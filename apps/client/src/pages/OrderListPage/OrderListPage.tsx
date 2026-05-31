@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 
+import { LoadingScreen } from "@/components/common/LoadingScreen";
 import {
   OrderCard,
   OrderEmptyState,
@@ -20,7 +21,8 @@ function isActiveOrder(order: Order) {
 }
 
 export function OrderListPage() {
-  const [filter, setFilter] = useState<(typeof filterOptions)[number]["key"]>("all");
+  const [filter, setFilter] =
+    useState<(typeof filterOptions)[number]["key"]>("all");
   const { data: orders = [], isError, isLoading } = useOrders();
 
   const filteredOrders = useMemo(() => {
@@ -41,14 +43,21 @@ export function OrderListPage() {
 
   return (
     <div className="bg-[var(--surface-page)] px-[var(--page-x)] pb-10 pt-3">
-      <OrderFilterTabs filter={filter} onChange={setFilter} options={filterOptions} />
+      <OrderFilterTabs
+        filter={filter}
+        onChange={setFilter}
+        options={filterOptions}
+      />
 
-      <p className="px-1 pt-2 text-[1rem] text-[var(--text-list-count)]">총 {filteredOrders.length}건</p>
+      <p className="px-1 pt-2 text-[1rem] text-[var(--text-list-count)]">
+        총 {filteredOrders.length}건
+      </p>
 
       {isLoading ? (
-        <section className="px-1 pt-8 text-center text-sm text-[var(--text-muted-warm)]">
-          주문 내역을 불러오는 중입니다
-        </section>
+        <LoadingScreen
+          className="min-h-[13rem]"
+          message="주문 내역을 불러오는 중"
+        />
       ) : isError ? (
         <section className="px-1 pt-8 text-center text-sm text-[var(--state-danger)]">
           주문 내역을 불러오지 못했어요.

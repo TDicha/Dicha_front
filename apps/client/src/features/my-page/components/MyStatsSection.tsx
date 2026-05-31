@@ -1,5 +1,3 @@
-import { AppCard } from "@/components/common/AppCard";
-
 const stats = [
   { label: "주문 횟수", value: "12" },
   { label: "저장 블렌드", value: "4" },
@@ -8,11 +6,8 @@ const stats = [
 
 export function MyStatsSection() {
   return (
-    <AppCard
-      className="mx-[var(--page-x)] rounded-[1.55rem] py-2"
-      variant="menu-board"
-    >
-      <p className="pt-3 text-[0.62rem] font-semibold uppercase tracking-[0.3em] text-[var(--text-muted)]">
+    <section className="px-5 py-5">
+      <p className="text-[0.62rem] font-semibold uppercase tracking-[0.3em] text-[var(--text-muted)]">
         My Activity
       </p>
       <h2 className="pb-3 pt-1 font-heading text-lg font-semibold text-[var(--text-cafe-ink)]">
@@ -34,6 +29,6 @@ export function MyStatsSection() {
           </div>
         ))}
       </div>
-    </AppCard>
+    </section>
   );
 }

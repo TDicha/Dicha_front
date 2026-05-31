@@ -5,7 +5,7 @@ import { AppCard } from "@/components/common/AppCard";
 export function ProfileCard({ user }: { user: UserProfile }) {
   return (
     <AppCard
-      className="mx-[var(--page-x)] overflow-hidden rounded-[0.4rem]"
+      className="mx-[var(--page-x)] overflow-hidden rounded-none"
       padding="none"
       variant="chalkboard"
     >

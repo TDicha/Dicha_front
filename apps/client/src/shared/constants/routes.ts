@@ -5,6 +5,7 @@ export const ROUTES = {
   subscription: "/subscription",
   reservation: "/reservation",
   reservationClass: "/reservation/class",
+  brewingStory: "/brewing-story",
   tasteTest: "/taste-test",
   myPage: "/mypage",
   myPageManage: "/mypage/manage/:sectionId",

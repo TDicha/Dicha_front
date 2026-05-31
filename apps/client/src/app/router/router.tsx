@@ -5,6 +5,7 @@ import { AppShell } from "@/components/layout/AppShell";
 import { HomePage } from "@/pages/HomePage/HomePage";
 import { AccountSectionPage } from "@/pages/AccountSectionPage/AccountSectionPage";
 import { CartPage } from "@/pages/CartPage/CartPage";
+import { BrewingStoryPage } from "@/pages/BrewingStoryPage/BrewingStoryPage";
 import { ClassReservationPage } from "@/pages/ClassReservationPage/ClassReservationPage";
 import { GuestOrderLookupPage } from "@/pages/GuestOrderLookupPage/GuestOrderLookupPage";
 import { LoginPage } from "@/pages/LoginPage/LoginPage";
@@ -57,6 +58,11 @@ export const router = createBrowserRouter([
         path: "reservation/class",
         element: <ClassReservationPage />,
         handle: { title: "클래스 예약" },
+      },
+      {
+        path: "brewing-story",
+        element: <BrewingStoryPage />,
+        handle: { title: "브루잉 스토리" },
       },
       {
         path: "taste-test",

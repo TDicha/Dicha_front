@@ -109,6 +109,38 @@
     @apply fixed inset-x-0 bottom-0 z-30 grid w-full grid-cols-[minmax(0,1fr)_minmax(7.75rem,11.25rem)] items-center gap-3 bg-[var(--surface-menu-board)] px-[var(--page-x)] pb-[var(--bottom-safe-padding)] pt-3 shadow-[var(--shadow-tabbar-dock)];
   }
 
+  .dicha-loading-window {
+    width: min(22.625rem, 82vw);
+    height: min(22.625rem, 82vw);
+    overflow: hidden;
+  }
+
+  .dicha-loading-sprite {
+    display: block;
+    height: 100%;
+    width: 100px;
+    max-width: none;
+    animation: dicha-loading-frame 0.88s steps(12, end) infinite;
+    will-change: transform;
+  }
+
+  @keyframes dicha-loading-frame {
+    from {
+      transform: translate3d(0, 0, 0);
+    }
+
+    to {
+      transform: translate3d(-100%, 0, 0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .dicha-loading-sprite {
+      animation: none;
+      transform: translate3d(0, 0, 0);
+    }
+  }
+
   @media (max-width: 360px) {
     .fixed-checkout-bar {
       grid-template-columns: minmax(0, 1fr) minmax(7rem, 8.5rem);

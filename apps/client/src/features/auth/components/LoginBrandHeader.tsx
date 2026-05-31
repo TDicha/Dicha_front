@@ -1,9 +1,9 @@
+import { AuthLogoMark } from "@/features/auth/components/AuthLogoMark";
+
 export function LoginBrandHeader() {
   return (
     <div className="flex flex-col items-center text-center">
-      <div className="flex size-[5.5rem] items-center justify-center rounded-full bg-[var(--surface-cream)] shadow-[inset_0_0_0_10px_var(--overlay-white-65)]">
-        <span className="text-[3.1rem]">🐎</span>
-      </div>
+      <AuthLogoMark />
       <h2 className="mt-4 font-heading text-[2.15rem] font-semibold tracking-[-0.04em] text-[var(--brand-primary)]">
         DICHA
       </h2>

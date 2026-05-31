@@ -8,7 +8,6 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
-import { AppCard } from "@/components/common/AppCard";
 import { accountSectionRoute } from "@/shared/constants/accountSections";
 
 const accountMenuItems = [
@@ -21,11 +20,8 @@ const accountMenuItems = [
 
 export function MyAccountMenuCard() {
   return (
-    <AppCard
-      className="mx-[var(--page-x)] rounded-[1.55rem] py-2"
-      variant="menu-board"
-    >
-      <p className="pt-3 text-[0.62rem] font-semibold uppercase tracking-[0.3em] text-[var(--text-muted)]">
+    <section className="px-5 py-5">
+      <p className="text-[0.62rem] font-semibold uppercase tracking-[0.3em] text-[var(--text-muted)]">
         Account Menu
       </p>
       <h2 className="pb-3 pt-1 font-heading text-lg font-semibold text-[var(--text-cafe-ink)]">
@@ -46,6 +42,6 @@ export function MyAccountMenuCard() {
           </Link>
         ))}
       </div>
-    </AppCard>
+    </section>
   );
 }

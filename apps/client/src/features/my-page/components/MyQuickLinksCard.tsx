@@ -1,7 +1,6 @@
 import { ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
 
-import { AppCard } from "@/components/common/AppCard";
 import { ROUTES } from "@/shared/constants/routes";
 
 const quickLinks = [
@@ -12,11 +11,8 @@ const quickLinks = [
 
 export function MyQuickLinksCard() {
   return (
-    <AppCard
-      className="mx-[var(--page-x)] rounded-[1.55rem] py-2"
-      variant="menu-board"
-    >
-      <p className="pt-3 text-[0.62rem] font-semibold uppercase tracking-[0.3em] text-[var(--text-muted)]">
+    <section className="px-5 py-5">
+      <p className="text-[0.62rem] font-semibold uppercase tracking-[0.3em] text-[var(--text-muted)]">
         Quick Link
       </p>
       <h2 className="pb-3 pt-1 font-heading text-lg font-semibold text-[var(--text-cafe-ink)]">
@@ -37,6 +33,6 @@ export function MyQuickLinksCard() {
           <ChevronRight className="size-4 text-[var(--text-muted)]" />
         </Link>
       ))}
-    </AppCard>
+    </section>
   );
 }

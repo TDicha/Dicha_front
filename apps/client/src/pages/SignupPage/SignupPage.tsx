@@ -27,10 +27,10 @@ export function SignupPage() {
     age: true,
     marketing: false,
   });
-  const [email, setEmail] = useState("wooseok@dicha.coffee");
-  const [password, setPassword] = useState("Password123!");
-  const [passwordConfirm, setPasswordConfirm] = useState("Password123!");
-  const [name, setName] = useState("우석");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [passwordConfirm, setPasswordConfirm] = useState("");
+  const [name, setName] = useState("");
 
   useEffect(() => clearError, [clearError]);
 

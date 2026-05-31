@@ -12,7 +12,6 @@ export interface ProductDetailReview {
 export interface ProductDetailContent {
   noteLabels: string[];
   storyLines: string[];
-  brewingGuide: string;
   baseWeightLabel: string;
   defaultRoastLabel: string;
   salesCount: number;
@@ -52,7 +51,6 @@ const productDetails: Record<string, ProductDetailContent> = {
       "DICHA 로스터가 직접 선별하여 주문 당일",
       "신선하게 로스팅하여 발송합니다.",
     ],
-    brewingGuide: "핸드드립 · 에스프레소 · 모카포트 추출 방법",
     baseWeightLabel: "200g",
     defaultRoastLabel: "미디엄",
     salesCount: 1240,
@@ -69,7 +67,6 @@ const productDetails: Record<string, ProductDetailContent> = {
       "밝은 과실감이 살아 있도록",
       "주문 후 신선하게 로스팅해 발송합니다.",
     ],
-    brewingGuide: "핸드드립 · 푸어오버 · 아이스 브루잉 추천",
     baseWeightLabel: "200g",
     defaultRoastLabel: "라이트",
     salesCount: 870,
@@ -85,7 +82,6 @@ const productDetails: Record<string, ProductDetailContent> = {
       "견과류와 카라멜 풍미가 안정적으로 남도록",
       "디차 로스터가 세심하게 배전합니다.",
     ],
-    brewingGuide: "에스프레소 · 라떼 베이스 · 프렌치프레스 추천",
     baseWeightLabel: "200g",
     defaultRoastLabel: "미디엄",
     salesCount: 620,
@@ -105,7 +101,6 @@ export function getProductDetail(product: Product): ProductDetailContent {
         "뜨거운 물만 준비하면 어디서든",
         "신선한 카페의 한 잔을 만날 수 있습니다.",
       ],
-      brewingGuide: "컵 위에 드립백을 걸고 90°C 물로 2~3회 나누어 추출",
       baseWeightLabel: product.options[0]?.name ?? "1세트",
       defaultRoastLabel: product.roastLabel ?? "",
       salesCount: 0,
@@ -124,7 +119,6 @@ export function getProductDetail(product: Product): ProductDetailContent {
         "받는 순간부터 즐거운 경험이 되도록",
         "정갈한 패키지로 준비해 보내드립니다.",
       ],
-      brewingGuide: "구성품별 권장 추출법과 보관 안내를 패키지에서 확인하세요",
       baseWeightLabel: product.options[0]?.name ?? "1세트",
       defaultRoastLabel: product.roastLabel ?? "",
       salesCount: 0,
@@ -143,7 +137,6 @@ export function getProductDetail(product: Product): ProductDetailContent {
         "주문 후 로스팅으로 신선도를 높여",
         "디차만의 기준으로 출고합니다.",
       ],
-      brewingGuide: "핸드드립 · 에스프레소 · 모카포트 추출 방법",
       baseWeightLabel: "200g",
       defaultRoastLabel: product.roastLevel,
       salesCount: 0,

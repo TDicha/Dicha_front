@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { useAuthStore, useCartStore, useCheckoutStore } from "@/app/store";
+import { LoadingScreen } from "@/components/common/LoadingScreen";
 import {
   calculateCartPricing,
   CartBottomCheckoutBar,
@@ -27,8 +28,12 @@ export function CartPage() {
   const toggleSelected = useCartStore((state) => state.toggleSelected);
   const selectAll = useCartStore((state) => state.selectAll);
   const unselectAll = useCartStore((state) => state.unselectAll);
-  const clearPurchasedItems = useCartStore((state) => state.clearPurchasedItems);
-  const createCheckoutFromCart = useCheckoutStore((state) => state.createFromCart);
+  const clearPurchasedItems = useCartStore(
+    (state) => state.clearPurchasedItems,
+  );
+  const createCheckoutFromCart = useCheckoutStore(
+    (state) => state.createFromCart,
+  );
   const shouldUseCartApi = authStatus === "authenticated" && !env.enableMock;
   const cartQuery = useCartItems(shouldUseCartApi);
   const updateCartItemQuantityMutation = useUpdateCartItemQuantity();
@@ -37,7 +42,8 @@ export function CartPage() {
   const selectedItems = items.filter((item) => item.selected);
 
   const pricing = calculateCartPricing(selectedItems);
-  const isAllSelected = items.length > 0 && selectedItems.length === items.length;
+  const isAllSelected =
+    items.length > 0 && selectedItems.length === items.length;
 
   useEffect(() => {
     if (shouldUseCartApi && cartQuery.data) {
@@ -103,9 +109,7 @@ export function CartPage() {
 
   if (shouldUseCartApi && cartQuery.isLoading) {
     return (
-      <div className="cafe-tile-bg min-h-full px-[var(--page-x)] py-10 text-center text-sm text-[var(--text-cafe-ink)]">
-        장바구니를 불러오는 중입니다
-      </div>
+      <LoadingScreen className="min-h-full" message="장바구니를 불러오는 중" />
     );
   }
 

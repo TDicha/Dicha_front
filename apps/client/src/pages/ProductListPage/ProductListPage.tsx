@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 
 import { useAppStore } from "@/app/store";
 import { EmptyState } from "@/components/common/EmptyState";
+import { LoadingScreen } from "@/components/common/LoadingScreen";
 import {
   ProductCategoryFilter,
   ProductGrid,
@@ -246,9 +247,10 @@ export function ProductListPage() {
         />
 
         {isLoading ? (
-          <div className="px-4 py-8 text-center text-sm text-[var(--text-muted)]">
-            상품을 불러오는 중입니다
-          </div>
+          <LoadingScreen
+            className="min-h-[11rem] bg-[var(--surface-menu-board)]"
+            message="상품을 불러오는 중"
+          />
         ) : isError ? (
           <div className="px-4 py-4">
             <EmptyState

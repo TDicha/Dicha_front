@@ -9,10 +9,11 @@ import {
 } from "@/app/store";
 import { EmptyState } from "@/components/common/EmptyState";
 import { ImplementationNoticeModal } from "@/components/common/ImplementationNoticeModal";
+import { LoadingScreen } from "@/components/common/LoadingScreen";
 import { PrimaryButton } from "@/components/common/PrimaryButton";
 import {
   ProductBottomActionBar,
-  ProductBrewingGuideSection,
+  ProductCartAddedDialog,
   ProductDetailHeader,
   ProductFlavorNotesSection,
   ProductHeroSection,
@@ -90,6 +91,7 @@ export function ProductDetailPage() {
   const [implementationFeature, setImplementationFeature] = useState<
     string | null
   >(null);
+  const [isCartAddedDialogOpen, setIsCartAddedDialogOpen] = useState(false);
 
   const selectedRoastLabel =
     selectedRoast ?? (product ? getDefaultRoast(product.roastLevel) : "");
@@ -174,6 +176,7 @@ export function ProductDetailPage() {
     }
 
     closeBottomSheet();
+    setIsCartAddedDialogOpen(true);
   }
 
   function handlePurchase() {
@@ -214,9 +217,10 @@ export function ProductDetailPage() {
 
   if (isProductLoading) {
     return (
-      <div className="cafe-tile-bg min-h-[100dvh] px-[var(--page-x)] py-12 text-center text-sm text-[var(--text-cafe-ink)]">
-        상품 정보를 불러오는 중입니다
-      </div>
+      <LoadingScreen
+        className="min-h-[100dvh]"
+        message="상품 정보를 불러오는 중"
+      />
     );
   }
 
@@ -264,10 +268,6 @@ export function ProductDetailPage() {
             : "선택해주세요"
         }
       />
-      <ProductBrewingGuideSection
-        brewingGuide={detail.brewingGuide}
-        onClick={() => setImplementationFeature("브루잉 가이드")}
-      />
       <ProductFlavorNotesSection
         description={product.description}
         descriptionSuffix={detail.descriptionSuffix}
@@ -295,6 +295,14 @@ export function ProductDetailPage() {
         onPurchase={handlePurchase}
         selectedSummary={selectedSummary}
         totalPrice={totalPrice}
+      />
+      <ProductCartAddedDialog
+        onClose={() => setIsCartAddedDialogOpen(false)}
+        onGoCart={() => {
+          setIsCartAddedDialogOpen(false);
+          navigate(ROUTES.cart);
+        }}
+        open={isCartAddedDialogOpen}
       />
       <ProductOptionBottomSheet
         enablesRoastCustomization={enablesRoastCustomization}

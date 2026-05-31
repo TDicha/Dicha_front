@@ -1,6 +1,6 @@
 import { useAppStore } from "@/app/store";
-import { AppCard } from "@/components/common/AppCard";
 import { EmptyState } from "@/components/common/EmptyState";
+import { LoadingScreen } from "@/components/common/LoadingScreen";
 import {
   RecentKeywordSection,
   RecommendedKeywordSection,
@@ -55,12 +55,10 @@ export function SearchPage() {
         </div>
       ) : isLoading ? (
         <div className="bg-[var(--surface-menu-board)] px-[var(--page-x)] py-6">
-          <AppCard
-            className="text-center text-sm text-[var(--text-muted)]"
-            variant="menu-board"
-          >
-            검색 결과를 불러오는 중입니다
-          </AppCard>
+          <LoadingScreen
+            className="min-h-[11rem] rounded-none bg-[var(--surface-menu-board)]"
+            message="검색 결과를 불러오는 중"
+          />
         </div>
       ) : isError ? (
         <div className="bg-[var(--surface-menu-board)] px-[var(--page-x)] py-6">

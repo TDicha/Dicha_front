@@ -1,3 +1,4 @@
+import { BrandAvatar } from "@/components/common/BrandAvatar";
 import type { ProductDetailReview } from "@/mock/productDetails";
 
 function getRatingText(rating: number) {
@@ -58,16 +59,19 @@ export function ProductReviewSection({
                 index < reviews.length - 1 ? "pb-4" : "",
               ].join(" ")}
             >
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <span className="text-[0.8rem] text-[var(--text-cafe-ink)]">
-                    {getRatingText(review.rating)}
-                  </span>
-                  <span className="text-[0.72rem] font-medium text-[var(--text-cafe-ink)]">
-                    {review.author}
-                  </span>
+              <div className="flex items-start justify-between gap-3">
+                <div className="flex min-w-0 items-start gap-3">
+                  <BrandAvatar className="size-10 border border-[var(--border-menu-board)]" />
+                  <div className="min-w-0">
+                    <p className="truncate text-[0.78rem] font-semibold text-[var(--text-cafe-ink)]">
+                      {review.author}
+                    </p>
+                    <p className="mt-1 text-[0.78rem] text-[var(--text-cafe-ink)]">
+                      {getRatingText(review.rating)}
+                    </p>
+                  </div>
                 </div>
-                <span className="text-[0.66rem] text-[var(--text-muted-subtle)]">
+                <span className="shrink-0 pt-1 text-[0.66rem] text-[var(--text-muted-subtle)]">
                   {review.date}
                 </span>
               </div>

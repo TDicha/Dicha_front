@@ -1,5 +1,5 @@
 export { ProductBottomActionBar } from "@/features/products/components/product-detail/ProductBottomActionBar";
-export { ProductBrewingGuideSection } from "@/features/products/components/product-detail/ProductBrewingGuideSection";
+export { ProductCartAddedDialog } from "@/features/products/components/product-detail/ProductCartAddedDialog";
 export { ProductDetailActionRow } from "@/features/products/components/product-detail/ProductDetailActionRow";
 export { ProductDetailHeader } from "@/features/products/components/product-detail/ProductDetailHeader";
 export { ProductFlavorNotesSection } from "@/features/products/components/product-detail/ProductFlavorNotesSection";
