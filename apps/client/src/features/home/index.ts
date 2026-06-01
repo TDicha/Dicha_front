@@ -7,7 +7,6 @@ import {
   homeHeroSlides,
   homeRoasterPick,
 } from "@/mock/home";
-import { mockReviews } from "@/mock/reviews";
 import { ROUTES } from "@/shared/constants/routes";
 
 export function useHomeData() {
@@ -83,7 +82,6 @@ export function useHomeData() {
       heroSlide,
       heroSlides: homeHeroSlides,
       quickLinks,
-      reviews: mockReviews,
       roasterPick,
       roasterPickMeta: homeRoasterPick,
     };

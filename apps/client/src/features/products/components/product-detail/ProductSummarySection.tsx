@@ -5,15 +5,15 @@ interface ProductSummarySectionProps {
   baseWeightLabel: string;
   product: Product;
   reviewTotal: number;
-  salesCount: number;
 }
 
 export function ProductSummarySection({
   baseWeightLabel,
   product,
   reviewTotal,
-  salesCount,
 }: ProductSummarySectionProps) {
+  const hasReviewSummary = product.rating !== undefined || reviewTotal > 0;
+
   return (
     <section className="bg-[var(--surface-menu-board)] px-[var(--page-x)] py-5">
       <div className="flex flex-wrap gap-1.5">
@@ -53,14 +53,18 @@ export function ProductSummarySection({
         </p>
       </div>
 
-      <div className="mt-3 flex items-center gap-2 pt-3">
-        <p className="text-[0.92rem] font-bold text-[var(--text-cafe-ink)]">
-          ★ {product.rating?.toFixed(1) ?? "4.8"}
-        </p>
-        <p className="text-[0.78rem] text-[var(--text-muted-subtle)]">
-          리뷰 {reviewTotal}건 · 판매 {salesCount.toLocaleString()}건
-        </p>
-      </div>
+      {hasReviewSummary ? (
+        <div className="mt-3 flex items-center gap-2 pt-3">
+          {product.rating !== undefined ? (
+            <p className="text-[0.92rem] font-bold text-[var(--text-cafe-ink)]">
+              ★ {product.rating.toFixed(1)}
+            </p>
+          ) : null}
+          <p className="text-[0.78rem] text-[var(--text-muted-subtle)]">
+            리뷰 {reviewTotal}건
+          </p>
+        </div>
+      ) : null}
     </section>
   );
 }

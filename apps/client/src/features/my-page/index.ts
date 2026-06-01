@@ -4,13 +4,8 @@ export { AccountSectionNotFound } from "@/features/my-page/components/AccountSec
 export { AccountSectionNoticeCard } from "@/features/my-page/components/AccountSectionNoticeCard";
 export { AccountSectionStatusCard } from "@/features/my-page/components/AccountSectionStatusCard";
 export { MyAccountMenuCard } from "@/features/my-page/components/MyAccountMenuCard";
-export { MyBlendCardList } from "@/features/my-page/components/MyBlendCardList";
 export { MyBlendEmptyState } from "@/features/my-page/components/MyBlendEmptyState";
 export { MyBlendHeader } from "@/features/my-page/components/MyBlendHeader";
 export { MyQuickLinksCard } from "@/features/my-page/components/MyQuickLinksCard";
 export { MyStatsSection } from "@/features/my-page/components/MyStatsSection";
 export { MyTasteNoteCard } from "@/features/my-page/components/MyTasteNoteCard";
-export {
-  useMyBlendCards,
-  type MyBlendCardWithRecipe,
-} from "@/features/my-page/useMyBlendCards";

@@ -2,6 +2,7 @@ import { PrimaryButton } from "@/components/common/PrimaryButton";
 import { formatPrice } from "@/shared/utils/format";
 
 interface PurchaseBottomActionBarProps {
+  disabled?: boolean;
   isPending: boolean;
   paymentLabel?: string;
   total: number;
@@ -9,6 +10,7 @@ interface PurchaseBottomActionBarProps {
 }
 
 export function PurchaseBottomActionBar({
+  disabled = false,
   isPending,
   paymentLabel,
   total,
@@ -24,7 +26,7 @@ export function PurchaseBottomActionBar({
       </div>
       <PrimaryButton
         className="h-12 min-w-0 truncate rounded-none bg-[var(--surface-chalkboard)] px-2.5 text-sm text-[var(--text-chalk)] shadow-none max-[360px]:text-xs"
-        disabled={isPending}
+        disabled={disabled || isPending}
         onClick={onPlaceOrder}
       >
         {isPending ? "주문 생성 중..." : "결제하기"}

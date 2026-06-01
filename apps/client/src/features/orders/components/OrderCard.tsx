@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 
 import type { Order, OrderStatus } from "@/features/orders/types";
-import { mockProducts } from "@/mock/products";
 import { ROUTES } from "@/shared/constants/routes";
 import { formatPrice } from "@/shared/utils/format";
 
@@ -57,7 +56,6 @@ interface OrderCardProps {
 export function OrderCard({ order }: OrderCardProps) {
   const firstItem = order.items[0];
   const productName = firstItem?.productName ?? "DICHA Coffee";
-  const product = mockProducts.find((item) => item.name === productName);
   const meta = orderMeta[order.status];
   const detailLabel = firstItem ? `${firstItem.optionName} · ${firstItem.quantity}개` : "주문 상품";
 
@@ -76,11 +74,11 @@ export function OrderCard({ order }: OrderCardProps) {
       <div className="border-y border-[var(--border-list)] px-4 py-4">
         <div className="flex gap-3">
           <div className="flex size-20 shrink-0 items-center justify-center rounded-[0.8rem] bg-[var(--surface-empty-icon)]">
-            {firstItem?.productImage || product ? (
+            {firstItem?.productImage ? (
               <img
                 alt={productName}
                 className="h-12 w-12 rounded-full object-cover"
-                src={firstItem?.productImage ?? product?.image}
+                src={firstItem.productImage}
               />
             ) : (
               <div className="text-3xl">☕</div>

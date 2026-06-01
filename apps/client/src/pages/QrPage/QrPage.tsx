@@ -1,56 +1,12 @@
-import { useNavigate } from "react-router-dom";
-
-import { useAppStore } from "@/app/store";
-import {
-  QrHeroSection,
-  QrManualCodePanel,
-  QrPermissionNotice,
-  QrScannerPanel,
-  QrUseCaseSection,
-} from "@/features/qr";
-import { ROUTES } from "@/shared/constants/routes";
-import { env } from "@/shared/lib/env";
+import { InProgressState } from "@/components/common/InProgressState";
 
 export function QrPage() {
-  const navigate = useNavigate();
-  const qrCode = useAppStore((state) => state.qrDraft.code);
-  const qrTargetId = useAppStore((state) => state.qrDraft.targetId);
-  const resolvedTarget = useAppStore((state) => state.qrResolvedTarget);
-  const setQrCode = useAppStore((state) => state.setQrCode);
-  const resolveQrCode = useAppStore((state) => state.resolveQrCode);
-  const clearQrResult = useAppStore((state) => state.clearQrResult);
-
-  function handleResolve() {
-    const normalized = qrCode.trim();
-
-    if (!normalized) {
-      return;
-    }
-
-    resolveQrCode();
-
-    const target = normalized.toLowerCase().includes("blend")
-      ? ROUTES.myBlend
-      : env.enableMock
-        ? `${ROUTES.products}/${qrTargetId ?? "ethiopia-yirgacheffe"}`
-        : ROUTES.products;
-
-    navigate(target);
-  }
-
   return (
-    <div className="bg-[var(--surface-app)] pb-8">
-      <QrHeroSection />
-      <QrScannerPanel />
-      <QrUseCaseSection />
-      <QrManualCodePanel
-        onChangeQrCode={setQrCode}
-        onClearResult={clearQrResult}
-        onResolve={handleResolve}
-        qrCode={qrCode}
-        resolvedTarget={resolvedTarget}
+    <div className="cafe-tile-bg min-h-full pb-10 pt-6">
+      <InProgressState
+        description="매장 QR 스캔과 코드 연결은 아직 준비 중입니다."
+        title="QR 기능은 구현 중입니다"
       />
-      <QrPermissionNotice />
     </div>
   );
 }

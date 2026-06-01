@@ -1,31 +1,11 @@
-import { useState } from "react";
-
-import { ImplementationNoticeModal } from "@/components/common/ImplementationNoticeModal";
-import {
-  MyBlendCardList,
-  MyBlendEmptyState,
-  MyBlendHeader,
-  useMyBlendCards,
-} from "@/features/my-page";
+import { InProgressState } from "@/components/common/InProgressState";
 
 export function MyBlendPage() {
-  const blendCards = useMyBlendCards();
-  const [implementationFeature, setImplementationFeature] = useState<string | null>(null);
-
-  if (!blendCards.length) {
-    return <MyBlendEmptyState />;
-  }
-
   return (
-    <div className="bg-[var(--surface-blend-page)] px-[var(--page-x)] pb-8 pt-4">
-      <MyBlendHeader blendCount={blendCards.length} />
-      <MyBlendCardList
-        blendCards={blendCards}
-        onDelete={setImplementationFeature}
-      />
-      <ImplementationNoticeModal
-        featureLabel={implementationFeature}
-        onClose={() => setImplementationFeature(null)}
+    <div className="cafe-tile-bg min-h-full pb-10 pt-6">
+      <InProgressState
+        description="취향 기반 블렌드 저장과 관리는 아직 준비 중입니다."
+        title="나의 블렌드는 구현 중입니다"
       />
     </div>
   );

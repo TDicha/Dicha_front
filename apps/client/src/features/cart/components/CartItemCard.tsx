@@ -2,7 +2,6 @@ import { Check, Minus, Plus, X } from "lucide-react";
 
 import type { CartItem } from "@/app/store/cartStore";
 import { buildCartItemOptionLabel } from "@/features/cart/cartItemDisplay";
-import { mockProducts } from "@/mock/products";
 import { formatPrice } from "@/shared/utils/format";
 
 interface CartItemCardProps {
@@ -18,7 +17,6 @@ export function CartItemCard({
   onToggleSelected,
   onUpdateQuantity,
 }: CartItemCardProps) {
-  const product = mockProducts.find((candidate) => candidate.id === item.productId);
   const lineTotal = item.unitPrice * item.quantity;
 
   return (
@@ -42,11 +40,11 @@ export function CartItemCard({
       </button>
 
       <div className="flex size-[clamp(5rem,28vw,8.5rem)] shrink-0 items-center justify-center bg-[var(--surface-cafe-tile)]">
-        {item.productImage || product ? (
+        {item.productImage ? (
           <img
             alt={item.productName}
             className="size-[clamp(4rem,21vw,6rem)] object-cover"
-            src={item.productImage ?? product?.image}
+            src={item.productImage}
           />
         ) : (
           <div className="text-4xl">☕</div>
@@ -60,7 +58,7 @@ export function CartItemCard({
               {item.productName}
             </h2>
             <p className="mt-1 break-keep text-sm leading-5 text-[var(--text-product-muted)]">
-              {buildCartItemOptionLabel(item, product)}
+              {buildCartItemOptionLabel(item)}
             </p>
           </div>
           <button

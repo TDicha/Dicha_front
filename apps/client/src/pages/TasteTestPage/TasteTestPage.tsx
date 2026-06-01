@@ -7,9 +7,7 @@ import {
   TasteTestIntroView,
   tasteQuestions,
   useSubmitTasteTest,
-  useTasteRecommendedProducts,
 } from "@/features/taste-test";
-import { env } from "@/shared/lib/env";
 import type { Product } from "@/shared/types/models";
 
 export function TasteTestPage() {
@@ -30,11 +28,7 @@ export function TasteTestPage() {
   const submitTasteTestMutation = useSubmitTasteTest();
   const [apiRecommendedProducts, setApiRecommendedProducts] = useState<Product[] | null>(null);
 
-  const recommendedProducts = useTasteRecommendedProducts(
-    preference.roastLevel,
-  );
-  const displayedRecommendedProducts =
-    env.enableMock ? recommendedProducts : (apiRecommendedProducts ?? []);
+  const displayedRecommendedProducts = apiRecommendedProducts ?? [];
 
   const currentQuestion = tasteQuestions[currentQuestionIndex];
   const selectedValue = currentQuestion
@@ -53,14 +47,12 @@ export function TasteTestPage() {
       answerQuestion(currentQuestion.key, value);
       completeTest();
 
-      if (!env.enableMock) {
-        submitTasteTestMutation.mutate(nextAnswers, {
-          onSuccess: (result) => {
-            setPreference(result.preference);
-            setApiRecommendedProducts(result.recommendedProducts);
-          },
-        });
-      }
+      submitTasteTestMutation.mutate(nextAnswers, {
+        onSuccess: (result) => {
+          setPreference(result.preference);
+          setApiRecommendedProducts(result.recommendedProducts);
+        },
+      });
 
       return;
     }

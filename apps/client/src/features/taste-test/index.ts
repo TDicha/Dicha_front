@@ -7,4 +7,3 @@ export {
 } from "@/features/taste-test/tasteTestConfig";
 export type { TasteTestAnswerKey } from "@/features/taste-test/tasteTestConfig";
 export { useSubmitTasteTest } from "@/features/taste-test/hooks/useTasteTest";
-export { useTasteRecommendedProducts } from "@/features/taste-test/useTasteRecommendedProducts";

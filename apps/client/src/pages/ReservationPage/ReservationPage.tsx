@@ -1,34 +1,11 @@
-import { useState } from "react";
-
-import { ImplementationNoticeModal } from "@/components/common/ImplementationNoticeModal";
-import {
-  ReservationClassCtaSection,
-  ReservationHeroSection,
-  ReservationPlanSelectionSection,
-  type ReservationPlanId,
-} from "@/features/reservation";
+import { InProgressState } from "@/components/common/InProgressState";
 
 export function ReservationPage() {
-  const [selectedPlanId, setSelectedPlanId] =
-    useState<ReservationPlanId>("home");
-  const [implementationFeature, setImplementationFeature] = useState<string | null>(null);
-
-  function handleSubscriptionRequest(planId: ReservationPlanId) {
-    setSelectedPlanId(planId);
-    setImplementationFeature("구독 신청");
-  }
-
   return (
-    <div className="bg-[var(--surface-app)] pb-8">
-      <ReservationHeroSection />
-      <ReservationPlanSelectionSection
-        onSubscribe={handleSubscriptionRequest}
-        selectedPlanId={selectedPlanId}
-      />
-      <ReservationClassCtaSection onApply={() => setImplementationFeature("클래스 신청")} />
-      <ImplementationNoticeModal
-        featureLabel={implementationFeature}
-        onClose={() => setImplementationFeature(null)}
+    <div className="cafe-tile-bg min-h-full pb-10 pt-6">
+      <InProgressState
+        description="픽업 예약과 클래스 신청은 아직 준비 중입니다."
+        title="예약 기능은 구현 중입니다"
       />
     </div>
   );

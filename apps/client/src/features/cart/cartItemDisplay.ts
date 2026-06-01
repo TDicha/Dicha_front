@@ -1,4 +1,3 @@
-import { getProductDetail } from "@/mock/productDetails";
 import type { Product } from "@/shared/types/models";
 
 interface DisplayCartItem {
@@ -17,6 +16,5 @@ export function buildCartItemOptionLabel(
     return item.optionName;
   }
 
-  const detail = getProductDetail(product);
-  return `${detail.defaultRoastLabel} / ${item.optionName} / ${detail.baseWeightLabel}`;
+  return item.optionName;
 }

@@ -1,5 +1,13 @@
 import { BrandAvatar } from "@/components/common/BrandAvatar";
-import type { ProductDetailReview } from "@/mock/productDetails";
+
+interface ProductReview {
+  id: string;
+  author: string;
+  content: string;
+  date: string;
+  optionLabel: string;
+  rating: number;
+}
 
 function getRatingText(rating: number) {
   return `${"★".repeat(rating)}${"☆".repeat(Math.max(0, 5 - rating))}`;
@@ -9,7 +17,7 @@ interface ProductReviewSectionProps {
   rating?: number;
   onViewMore?: () => void;
   reviewMoreCount: number;
-  reviews: ProductDetailReview[];
+  reviews: ProductReview[];
   reviewTotal: number;
 }
 

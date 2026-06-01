@@ -20,7 +20,6 @@ import {
   ProductOptionBottomSheet,
   ProductOptionSection,
   ProductReviewSection,
-  ProductStorySection,
   ProductSummarySection,
 } from "@/features/products";
 import { useAddCartItem } from "@/features/cart";
@@ -28,7 +27,6 @@ import {
   useProduct,
   useProductOptions,
 } from "@/features/products/hooks/useProducts";
-import { getProductDetail } from "@/mock/productDetails";
 import { ROUTES } from "@/shared/constants/routes";
 import { env } from "@/shared/lib/env";
 import { formatPrice } from "@/shared/utils/format";
@@ -68,10 +66,6 @@ export function ProductDetailPage() {
   const { data: productOptions = [], isLoading: isProductOptionsLoading } =
     useProductOptions(productId);
 
-  const detail = useMemo(
-    () => (product ? getProductDetail(product) : null),
-    [product],
-  );
   const enablesRoastCustomization = product?.productType === "beans";
   const weightOptions = useMemo(() => {
     if (product && product.productType !== "beans") {
@@ -111,15 +105,8 @@ export function ProductDetailPage() {
     ? activeWeightId
     : undefined;
   const reviewTotal =
-    product && detail
-      ? env.enableMock
-        ? (product.reviewCount ?? detail.reviews.length)
-        : (product.reviewCount ?? 0)
-      : 0;
-  const visibleReviews = env.enableMock ? (detail?.reviews ?? []) : [];
-  const reviewMoreCount = env.enableMock
-    ? (detail?.reviewMoreCount ?? 0)
-    : reviewTotal;
+    product ? (product.reviewCount ?? 0) : 0;
+  const reviewMoreCount = reviewTotal;
   const unitPrice = product
     ? product.price + (selectedWeight?.extraPrice ?? 0)
     : 0;
@@ -224,7 +211,7 @@ export function ProductDetailPage() {
     );
   }
 
-  if (isProductError || !product || !detail) {
+  if (isProductError || !product) {
     return (
       <div className="cafe-tile-bg min-h-[100dvh] px-[var(--page-x)] py-10">
         <EmptyState
@@ -251,17 +238,16 @@ export function ProductDetailPage() {
         productName={product.name}
       />
       <ProductSummarySection
-        baseWeightLabel={detail.baseWeightLabel}
+        baseWeightLabel={weightOptions[0]?.name ?? "기본 옵션"}
         product={product}
         reviewTotal={reviewTotal}
-        salesCount={detail.salesCount}
       />
       <ProductOptionSection
         enablesRoastCustomization={enablesRoastCustomization}
         onApplyRecommendation={handleApplyRecommendation}
         onOpenOptions={openBottomSheet}
         selectedGrindLabel={selectedGrind}
-        selectedRoastLabel={selectedRoastLabel || detail.defaultRoastLabel}
+        selectedRoastLabel={selectedRoastLabel || getDefaultRoast(product.roastLevel)}
         selectedWeightLabel={
           selectedWeight
             ? `${selectedWeight.name} - ₩${formatPrice(unitPrice)}`
@@ -270,24 +256,13 @@ export function ProductDetailPage() {
       />
       <ProductFlavorNotesSection
         description={product.description}
-        descriptionSuffix={detail.descriptionSuffix}
-        noteLabels={detail.noteLabels}
-      />
-      <ProductStorySection
-        storyLines={detail.storyLines}
-        title={
-          product.productType === "gift-set"
-            ? "선물 구성 이야기"
-            : product.productType === "drip-bag"
-              ? "드립백 이야기"
-              : "원두 스토리"
-        }
+        noteLabels={product.notes}
       />
       <ProductReviewSection
         rating={product.rating}
         onViewMore={() => setImplementationFeature("리뷰 더 보기")}
         reviewMoreCount={reviewMoreCount}
-        reviews={visibleReviews}
+        reviews={[]}
         reviewTotal={reviewTotal}
       />
       <ProductBottomActionBar
