@@ -1,5 +1,6 @@
-import defaultBrandAvatarImage from "@/assets/images/image1.png";
 import { cn } from "@/lib/utils";
+
+const defaultBrandAvatarImage = "/image1.webp";
 
 interface BrandAvatarProps {
   alt?: string;

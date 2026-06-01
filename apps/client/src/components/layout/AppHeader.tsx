@@ -35,13 +35,17 @@ export function AppHeader() {
     navigate(ROUTES.home);
   }
 
+  const headerLogoSrc = "/dichaprofile.webp";
+
   return (
     <header className="sticky top-0 z-20 flex h-[var(--header-height)] items-center justify-between border-b border-[var(--border-ink-6)] bg-[var(--surface-card-glass-strong)] px-[var(--page-x)] backdrop-blur-md">
       {isHome ? (
         <>
-          <div className="font-heading text-[1.55rem] font-semibold text-[var(--brand-primary)]">
-            DICHA
-          </div>
+          <img
+            alt="DICHA"
+            src={headerLogoSrc}
+            className="h-[3rem] w-auto"
+          />
           <div className="flex items-center gap-3 text-[var(--brand-primary)]">
             {shouldShowSearch ? (
               <Link
@@ -75,7 +79,13 @@ export function AppHeader() {
             <ChevronLeft className="size-5" />
           </button>
           <h1 className="pointer-events-none absolute left-1/2 max-w-[60%] -translate-x-1/2 truncate text-center font-heading text-base font-semibold text-[var(--brand-primary)]">
-            {handle?.title ?? "DICHA"}
+            {handle?.title ?? (
+              <img
+                alt="DICHA"
+                src={headerLogoSrc}
+                className="mx-auto h-[1rem] w-auto"
+              />
+            )}
           </h1>
           <div className="relative z-10 flex items-center gap-3 text-[var(--brand-primary)]">
             {shouldShowSearch ? (

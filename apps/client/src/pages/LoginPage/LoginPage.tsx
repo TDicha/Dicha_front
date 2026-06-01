@@ -17,8 +17,8 @@ export function LoginPage() {
   const isPending = useAuthStore((state) => state.isPending);
   const error = useAuthStore((state) => state.error);
   const clearError = useAuthStore((state) => state.clearError);
-  const [email, setEmail] = useState("wooseok@dicha.coffee");
-  const [password, setPassword] = useState("password123");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [rememberId, setRememberId] = useState(true);
 
   useEffect(() => clearError, [clearError]);

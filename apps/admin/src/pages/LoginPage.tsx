@@ -16,26 +16,34 @@ export function LoginPage() {
   const location = useLocation();
   const session = useAdminAuthStore((state) => state.session);
   const signIn = useAdminAuthStore((state) => state.signIn);
-  const [email, setEmail] = useState("admin@dicha.co.kr");
-  const [password, setPassword] = useState("admin1234");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [remember, setRemember] = useState(true);
   const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const from = (location.state as LoginLocationState | null)?.from?.pathname ?? ADMIN_ROUTES.dashboard;
 
   if (session) {
     return <Navigate replace to={ADMIN_ROUTES.dashboard} />;
   }
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const success = signIn({ email, password, remember });
+    setError("");
+    setIsSubmitting(true);
 
-    if (!success) {
-      setError("이메일과 비밀번호를 입력해 주세요.");
-      return;
+    try {
+      await signIn({ email, password, remember });
+      navigate(from, { replace: true });
+    } catch (signInError) {
+      setError(
+        signInError instanceof Error
+          ? signInError.message
+          : "관리자 로그인에 실패했습니다.",
+      );
+    } finally {
+      setIsSubmitting(false);
     }
-
-    navigate(from, { replace: true });
   }
 
   return (
@@ -47,19 +55,7 @@ export function LoginPage() {
         </div>
         <div className="brand-copy">
           <h1>운영 흐름을 한눈에 관리하는 DICHA 관리자 콘솔</h1>
-          <p>주문, 구독, 예약, 상품, 리뷰 데이터를 하나의 화면에서 빠르게 확인합니다.</p>
-        </div>
-        <div className="brand-preview-grid">
-          <div className="preview-card">
-            <span>오늘 매출</span>
-            <strong>1,240,000원</strong>
-            <small>전일 대비 15% 상승</small>
-          </div>
-          <div className="preview-card">
-            <span>처리 대기</span>
-            <strong>18건</strong>
-            <small>재고 확인 5건 포함</small>
-          </div>
+          <p>회원, 상품, 카테고리를 한곳에서 관리합니다.</p>
         </div>
       </section>
 
@@ -71,7 +67,7 @@ export function LoginPage() {
           </div>
           <div>
             <h2>관리자 로그인</h2>
-            <p>목업 계정으로 관리자 페이지 구조를 점검합니다.</p>
+            <p>관리자 계정으로 운영 콘솔에 접속합니다.</p>
           </div>
 
           <label className="field">
@@ -111,13 +107,13 @@ export function LoginPage() {
 
           {error ? <p className="form-error">{error}</p> : null}
 
-          <button className="primary-action" type="submit">
-            로그인
+          <button className="primary-action" disabled={isSubmitting} type="submit">
+            {isSubmitting ? "로그인 중..." : "로그인"}
           </button>
 
-          <div className="mock-account-note">
-            <strong>목업 계정</strong>
-            <span>백엔드 연결 전까지 화면 테스트용 데이터로 진입합니다.</span>
+          <div className="auth-account-note">
+            <strong>ADMIN 권한 필요</strong>
+            <span>일반 회원 계정은 관리자 콘솔에 접근할 수 없습니다.</span>
           </div>
         </form>
       </section>

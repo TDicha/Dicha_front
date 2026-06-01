@@ -1,70 +1,109 @@
-const metrics = [
-  { label: "신규 주문", value: "12건", change: "+3건" },
-  { label: "오늘 매출", value: "1,240,000원", change: "+15%" },
-  { label: "신규 가입", value: "5명", change: "+2명" },
-  { label: "신규 리뷰", value: "8건", change: "-1건", negative: true },
-];
+import { useEffect, useState } from "react";
 
-const salesBars = [42, 54, 48, 62, 74, 56, 88];
+import {
+  fetchCategories,
+  fetchMembers,
+  fetchProducts,
+} from "@/services/api/adminApi";
+
+interface DashboardCounts {
+  members: number;
+  products: number;
+  categories: number;
+}
 
 export function DashboardPage() {
+  const [counts, setCounts] = useState<DashboardCounts>({
+    members: 0,
+    products: 0,
+    categories: 0,
+  });
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  async function loadDashboard() {
+    setIsLoading(true);
+    setError("");
+
+    try {
+      const [members, products, categories] = await Promise.all([
+        fetchMembers(),
+        fetchProducts(),
+        fetchCategories(),
+      ]);
+
+      setCounts({
+        members: members.length,
+        products: products.length,
+        categories: categories.length,
+      });
+    } catch (loadError) {
+      setError(
+        loadError instanceof Error
+          ? loadError.message
+          : "대시보드 데이터를 불러오지 못했습니다.",
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    void loadDashboard();
+  }, []);
+
   return (
     <div className="page-stack">
       <section className="metric-grid">
-        {metrics.map((metric) => (
-          <article className="admin-card metric-card" key={metric.label}>
-            <span>{metric.label}</span>
-            <strong>{metric.value}</strong>
-            <small className={metric.negative ? "negative" : "positive"}>{metric.change}</small>
-          </article>
-        ))}
+        <article className="admin-card metric-card">
+          <span>회원</span>
+          <strong>{isLoading ? "-" : `${counts.members}명`}</strong>
+          <small>현재 회원 수</small>
+        </article>
+        <article className="admin-card metric-card">
+          <span>판매 상품</span>
+          <strong>{isLoading ? "-" : `${counts.products}개`}</strong>
+          <small>판매 중인 상품</small>
+        </article>
+        <article className="admin-card metric-card">
+          <span>카테고리</span>
+          <strong>{isLoading ? "-" : `${counts.categories}개`}</strong>
+          <small>등록된 분류</small>
+        </article>
+        <article className="admin-card metric-card">
+          <span>주문 관리</span>
+          <strong>미연결</strong>
+          <small>준비 중</small>
+        </article>
       </section>
 
-      <section className="admin-card chart-card">
-        <div className="section-heading">
-          <h2>최근 7일 매출 추이</h2>
-          <button type="button">7일</button>
-        </div>
-        <div className="bar-chart" aria-label="최근 7일 매출 추이">
-          {salesBars.map((height, index) => (
-            <div className="bar-column" key={index}>
-              <span style={{ height: `${height}%` }} />
-              <small>{`D-${6 - index}`}</small>
-            </div>
-          ))}
-        </div>
-      </section>
+      {error ? <p className="form-error">{error}</p> : null}
 
       <section className="dashboard-grid">
         <article className="admin-card">
           <div className="section-heading">
-            <h2>최근 주문</h2>
-            <button type="button">전체 보기</button>
+            <h2>사용 가능한 관리 기능</h2>
+            <button onClick={() => void loadDashboard()} type="button">
+              새로고침
+            </button>
           </div>
-          <div className="simple-table">
-            <div className="table-row table-head">
-              <span>주문번호</span>
-              <span>고객명</span>
-              <span>상태</span>
-            </div>
-            {["20260405001", "20260405002", "20260405003"].map((orderNo, index) => (
-              <div className="table-row" key={orderNo}>
-                <span>{orderNo}</span>
-                <span>{["홍길동", "김민수", "이지영"][index]}</span>
-                <span>{["배송준비", "결제완료", "배송중"][index]}</span>
-              </div>
-            ))}
+          <div className="task-list">
+            <p>관리자 로그인 / 세션 확인</p>
+            <p>회원 목록 조회 및 강제 탈퇴</p>
+            <p>상품 목록 / 등록 / 수정 / 삭제</p>
+            <p>카테고리 목록 / 등록 / 삭제</p>
           </div>
         </article>
 
         <article className="admin-card">
           <div className="section-heading">
-            <h2>알림 / 할 일</h2>
+            <h2>준비 중인 기능</h2>
           </div>
           <div className="task-list">
-            <p>에티오피아 예가체프 재고 5개 미만</p>
-            <p>답변 대기 문의 3건</p>
-            <p>바리스타반 14:00 예약 4명</p>
+            <p>관리자 주문 목록 / 주문 상태 변경</p>
+            <p>리뷰 관리</p>
+            <p>쿠폰 / 통계 / 설정</p>
+            <p>구독 / 예약 / QR / 결제 / 배송지</p>
           </div>
         </article>
       </section>

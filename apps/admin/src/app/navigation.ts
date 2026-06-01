@@ -52,15 +52,15 @@ export const adminPageTitles = new Map<string, string>([
 ]);
 
 export const placeholderPageDescriptions = new Map<string, string>([
-  [ADMIN_ROUTES.orders, "주문 목록, 배송 상태 변경, 주문 상세 모달이 들어갈 자리입니다."],
-  [ADMIN_ROUTES.products, "상품 검색, 카테고리 필터, 등록/수정/삭제 목업 CRUD가 들어갈 자리입니다."],
-  [ADMIN_ROUTES.subscriptions, "구독자 목록과 배송 주기 관리 화면이 들어갈 자리입니다."],
-  [ADMIN_ROUTES.reservations, "클래스 예약 현황과 예약 상태 변경 화면이 들어갈 자리입니다."],
+  [ADMIN_ROUTES.orders, "주문 관리 기능은 준비 중입니다."],
+  [ADMIN_ROUTES.products, "상품 목록, 카테고리 필터, 등록/수정/삭제 관리 화면입니다."],
+  [ADMIN_ROUTES.subscriptions, "구독 관리 기능은 준비 중입니다."],
+  [ADMIN_ROUTES.reservations, "예약 관리 기능은 준비 중입니다."],
   [ADMIN_ROUTES.members, "회원 검색, 등급, 상태 관리 화면이 들어갈 자리입니다."],
-  [ADMIN_ROUTES.reviews, "리뷰 답변, 노출/숨김 관리 화면이 들어갈 자리입니다."],
-  [ADMIN_ROUTES.coupons, "쿠폰 생성, 수정, 활성 상태 관리 화면이 들어갈 자리입니다."],
-  [ADMIN_ROUTES.statistics, "매출, 상품, 회원 통계 차트 화면이 들어갈 자리입니다."],
-  [ADMIN_ROUTES.settings, "기본 설정, 배송, 알림, 관리자 계정 관리 화면이 들어갈 자리입니다."],
+  [ADMIN_ROUTES.reviews, "리뷰 관리 기능은 준비 중입니다."],
+  [ADMIN_ROUTES.coupons, "쿠폰 관리 기능은 준비 중입니다."],
+  [ADMIN_ROUTES.statistics, "통계 기능은 준비 중입니다."],
+  [ADMIN_ROUTES.settings, "설정 기능은 준비 중입니다."],
 ]);
 
 export const placeholderIcon = MessageSquareText;

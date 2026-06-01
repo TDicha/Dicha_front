@@ -14,8 +14,8 @@ export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
   const session = useAdminAuthStore((state) => state.session);
   const signOut = useAdminAuthStore((state) => state.signOut);
 
-  function handleSignOut() {
-    signOut();
+  async function handleSignOut() {
+    await signOut();
     navigate(ADMIN_ROUTES.login);
   }
 
@@ -31,7 +31,7 @@ export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
           <div className="profile-avatar">{session?.name.slice(0, 1) ?? "관"}</div>
           <div>
             <strong>{session?.name ?? "관리자"}</strong>
-            <span>슈퍼관리자</span>
+            <span>{session?.role ?? "ADMIN"}</span>
           </div>
         </div>
 

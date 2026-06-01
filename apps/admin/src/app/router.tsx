@@ -4,7 +4,9 @@ import { ADMIN_ROUTES } from "@/app/navigation";
 import { LoginRedirect, ProtectedRoute } from "@/app/RouteGuards";
 import { AdminShell } from "@/layout/AdminShell";
 import { DashboardPage } from "@/pages/DashboardPage";
+import { MembersPage } from "@/pages/MembersPage";
 import { PlaceholderPage } from "@/pages/PlaceholderPage";
+import { ProductsPage } from "@/pages/ProductsPage";
 
 export const router = createBrowserRouter([
   {
@@ -31,7 +33,7 @@ export const router = createBrowserRouter([
           },
           {
             path: ADMIN_ROUTES.products,
-            element: <PlaceholderPage route={ADMIN_ROUTES.products} />,
+            element: <ProductsPage />,
           },
           {
             path: ADMIN_ROUTES.subscriptions,
@@ -43,7 +45,7 @@ export const router = createBrowserRouter([
           },
           {
             path: ADMIN_ROUTES.members,
-            element: <PlaceholderPage route={ADMIN_ROUTES.members} />,
+            element: <MembersPage />,
           },
           {
             path: ADMIN_ROUTES.reviews,

@@ -1,32 +1,39 @@
 import { create } from "zustand";
 
-const ADMIN_SESSION_KEY = "dicha-admin-session";
+import {
+  loginAdmin,
+  logoutAdmin,
+  restoreAdminSession,
+  type AdminSession,
+} from "@/services/api/adminApi";
+import {
+  getAccessToken,
+  hasRememberedAccessToken,
+} from "@/services/api/tokenStorage";
 
-export interface AdminSession {
-  name: string;
-  email: string;
-  role: "SUPER_ADMIN";
-}
+const ADMIN_SESSION_KEY = "dicha-admin-session";
 
 interface AdminAuthState {
   session: AdminSession | null;
-  signIn: (payload: { email: string; password: string; remember: boolean }) => boolean;
-  signOut: () => void;
-  hydrate: () => void;
+  isHydrating: boolean;
+  signIn: (payload: { email: string; password: string; remember: boolean }) => Promise<void>;
+  signOut: () => Promise<void>;
+  hydrate: () => Promise<void>;
 }
-
-const mockSession: AdminSession = {
-  name: "김관리",
-  email: "admin@dicha.co.kr",
-  role: "SUPER_ADMIN",
-};
 
 function getStoredSession() {
   if (typeof window === "undefined") {
     return null;
   }
 
-  const storedSession = window.localStorage.getItem(ADMIN_SESSION_KEY);
+  if (!getAccessToken()) {
+    clearStoredSession();
+    return null;
+  }
+
+  const storedSession =
+    window.localStorage.getItem(ADMIN_SESSION_KEY) ??
+    window.sessionStorage.getItem(ADMIN_SESSION_KEY);
 
   if (!storedSession) {
     return null;
@@ -36,31 +43,56 @@ function getStoredSession() {
     return JSON.parse(storedSession) as AdminSession;
   } catch {
     window.localStorage.removeItem(ADMIN_SESSION_KEY);
+    window.sessionStorage.removeItem(ADMIN_SESSION_KEY);
     return null;
   }
 }
 
+function setStoredSession(session: AdminSession, remember: boolean) {
+  if (remember) {
+    window.localStorage.setItem(ADMIN_SESSION_KEY, JSON.stringify(session));
+    window.sessionStorage.removeItem(ADMIN_SESSION_KEY);
+    return;
+  }
+
+  window.sessionStorage.setItem(ADMIN_SESSION_KEY, JSON.stringify(session));
+  window.localStorage.removeItem(ADMIN_SESSION_KEY);
+}
+
+function clearStoredSession() {
+  window.localStorage.removeItem(ADMIN_SESSION_KEY);
+  window.sessionStorage.removeItem(ADMIN_SESSION_KEY);
+}
+
 export const useAdminAuthStore = create<AdminAuthState>((set) => ({
   session: getStoredSession(),
-  signIn: ({ email, password, remember }) => {
+  isHydrating: false,
+  signIn: async ({ email, password, remember }) => {
     if (!email.trim() || !password.trim()) {
-      return false;
+      throw new Error("이메일과 비밀번호를 입력해 주세요.");
     }
 
-    if (remember) {
-      window.localStorage.setItem(ADMIN_SESSION_KEY, JSON.stringify(mockSession));
-    } else {
-      window.localStorage.removeItem(ADMIN_SESSION_KEY);
-    }
+    const session = await loginAdmin({ email, password, remember });
 
-    set({ session: mockSession });
-    return true;
+    setStoredSession(session, remember);
+
+    set({ session });
   },
-  signOut: () => {
-    window.localStorage.removeItem(ADMIN_SESSION_KEY);
+  signOut: async () => {
+    await logoutAdmin();
+    clearStoredSession();
     set({ session: null });
   },
-  hydrate: () => {
-    set({ session: getStoredSession() });
+  hydrate: async () => {
+    set({ isHydrating: true });
+    const session = await restoreAdminSession();
+
+    if (session) {
+      setStoredSession(session, hasRememberedAccessToken());
+    } else {
+      clearStoredSession();
+    }
+
+    set({ isHydrating: false, session });
   },
 }));

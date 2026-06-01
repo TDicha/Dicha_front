@@ -36,6 +36,7 @@ export function LoginEmailForm({
               className="w-full bg-transparent text-sm text-[var(--brand-primary)] placeholder:text-[var(--text-placeholder)]"
               onChange={(event) => onChangeEmail(event.target.value)}
               placeholder="이메일 주소 입력"
+              value={email}
             />
           </div>
         </label>
@@ -49,6 +50,7 @@ export function LoginEmailForm({
               onChange={(event) => onChangePassword(event.target.value)}
               placeholder="비밀번호 입력"
               type="password"
+              value={password}
             />
           </div>
         </label>

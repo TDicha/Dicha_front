@@ -1,5 +1,6 @@
-import dichaProfileImage from "@/assets/images/dichaprofile.png";
 import { cn } from "@/lib/utils";
+
+const dichaProfileImage = "/dichaprofile.webp";
 
 interface BrandWatermarkProps {
   className?: string;

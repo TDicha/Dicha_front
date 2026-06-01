@@ -110,34 +110,31 @@
   }
 
   .dicha-loading-window {
-    width: min(22.625rem, 82vw);
-    height: min(22.625rem, 82vw);
+    width: min(12.5rem, 72vw);
+    aspect-ratio: 1 / 1;
     overflow: hidden;
-  }
-
-  .dicha-loading-sprite {
-    display: block;
-    height: 100%;
-    width: 100px;
-    max-width: none;
-    animation: dicha-loading-frame 0.88s steps(12, end) infinite;
-    will-change: transform;
+    position: relative;
+    background-position: 0 0;
+    background-repeat: no-repeat;
+    background-size: 1200% 100%;
+    animation: dicha-loading-frame 0.88s steps(10, end);
+    will-change: background-position;
   }
 
   @keyframes dicha-loading-frame {
     from {
-      transform: translate3d(0, 0, 0);
+      background-position: 0 0;
     }
 
     to {
-      transform: translate3d(-100%, 0, 0);
+      background-position: 100% 0;
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .dicha-loading-sprite {
+    .dicha-loading-window {
       animation: none;
-      transform: translate3d(0, 0, 0);
+      background-position: 0 0;
     }
   }
 
