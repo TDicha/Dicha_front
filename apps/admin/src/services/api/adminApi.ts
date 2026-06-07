@@ -196,3 +196,46 @@ export async function deleteCategory(categoryId: number) {
     method: "DELETE",
   });
 }
+
+export type AdminOrderStatus =
+  | "PENDING"
+  | "PAID"
+  | "SHIPPING"
+  | "DELIVERED"
+  | "CANCELLED";
+
+export interface AdminOrderItem {
+  orderItemId?: number;
+  productId?: number;
+  productName: string;
+  optionName?: string | null;
+  unitPrice: number;
+  quantity: number;
+  subtotal?: number;
+}
+
+export interface AdminOrder {
+  orderNumber: string;
+  status: AdminOrderStatus;
+  totalPrice: number;
+  recipientName: string;
+  phoneNumber: string;
+  shippingAddress: string;
+  memberEmail?: string | null;
+  items: AdminOrderItem[];
+  createdAt?: string;
+}
+
+export function fetchOrders() {
+  return apiFetch<AdminOrder[]>(endpoints.admin.orders);
+}
+
+export function updateOrderStatus(
+  orderNumber: string,
+  status: AdminOrderStatus,
+) {
+  return apiFetch<AdminOrder>(endpoints.admin.orderStatus(orderNumber), {
+    body: JSON.stringify({ status }),
+    method: "PATCH",
+  });
+}

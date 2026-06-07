@@ -12,6 +12,7 @@ export const ROUTES = {
   myBlend: "/my-blend",
   cart: "/cart",
   purchase: "/purchase",
+  addressBook: "/addresses",
   guestOrders: "/guest-orders",
   login: "/login",
   signup: "/signup",

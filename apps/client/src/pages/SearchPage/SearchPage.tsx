@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+
 import { useAppStore } from "@/app/store";
 import { EmptyState } from "@/components/common/EmptyState";
 import { LoadingScreen } from "@/components/common/LoadingScreen";
@@ -8,17 +10,11 @@ import {
   SearchIntroCard,
   SearchResultGrid,
   useProducts,
+  useRecentKeywords,
 } from "@/features/products";
 
 const recommendedKeywords = [
-  "에티오피아",
-  "디카페인",
-  "드립백",
-  "선물세트",
-  "블렌드",
-  "콜롬비아",
 ];
-const recentKeywords = ["케냐", "브라질 세라도", "라이트 로스트"];
 
 export function SearchPage() {
   const query = useAppStore((state) => state.searchQuery);
@@ -30,6 +26,29 @@ export function SearchPage() {
     isError,
     isLoading,
   } = useProducts(isSearching ? { query: query.trim() } : undefined);
+  const { recentKeywords, addRecentKeyword } = useRecentKeywords();
+
+  // Front-only 임시 처리: 사용자가 입력을 멈춘 뒤 검색 결과가 있으면
+  // 해당 키워드를 최근 검색에 저장한다.
+  useEffect(() => {
+    if (!isSearching || isLoading || isError || filteredProducts.length === 0) {
+      return;
+    }
+
+    const trimmed = query.trim();
+    const timer = window.setTimeout(() => {
+      addRecentKeyword(trimmed);
+    }, 800);
+
+    return () => window.clearTimeout(timer);
+  }, [
+    query,
+    isSearching,
+    isLoading,
+    isError,
+    filteredProducts.length,
+    addRecentKeyword,
+  ]);
 
   return (
     <div className="page-content cafe-tile-bg space-y-0 px-0 pb-24 pt-0">

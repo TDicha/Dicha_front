@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { AppCard } from "@/components/common/AppCard";
 import { formatPrice } from "@/shared/utils/format";
 import type { Product } from "@/shared/types/models";
+import { productDetailPath } from "@/shared/utils/productRoutes";
 
 interface ProductTileCardProps {
   product: Product;
@@ -18,7 +19,7 @@ interface ProductTileCardProps {
 
 export function ProductTileCard({
   product,
-  href = `/products/${product.id}`,
+  href = productDetailPath(product),
   compact = false,
   appearance = "default",
   showOrigin = true,

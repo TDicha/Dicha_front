@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl -s http://localhost:8082/api/products)",
+      "Bash(curl -s -w '\\\\nHTTP %{http_code}\\\\n' -X POST http://localhost:8082/api/guest-orders -H 'Content-Type: application/json' -d '{\"recipientName\":\"테스트\",\"phoneNumber\":\"010-1234-5678\",\"shippingAddress\":\"서울시 테스트구 123\",\"password\":\"1234\",\"items\":[{\"productId\":1,\"quantity\":1}]}')",
+      "Bash(curl -s -o /dev/null -w \"HTTP %{http_code}\\\\n\" -X POST http://localhost:8082/api/guest-orders -H \"Content-Type: application/json\" -d '{\"recipientName\":\"t\",\"phoneNumber\":\"010\",\"shippingAddress\":\"a\",\"password\":\"1234\",\"items\":[{\"productId\":9999,\"quantity\":1}]}')",
+      "Bash(curl -s -o /dev/null -w \"HTTP %{http_code}\\\\n\" -X POST http://localhost:8082/api/guest-orders -H \"Content-Type: application/json\" -d '{\"recipientName\":\"t\",\"phoneNumber\":\"010\",\"shippingAddress\":\"a\",\"password\":\"1234\",\"items\":[{\"productId\":1,\"productOptionId\":9999,\"quantity\":1}]}')",
+      "Bash(curl -s -o /dev/null -w \"HTTP %{http_code}\\\\n\" -X POST http://localhost:8082/api/guest-orders -H \"Content-Type: application/json\" -d '{\"recipientName\":\"t\",\"phoneNumber\":\"010\",\"shippingAddress\":\"a\",\"password\":\"1234\",\"items\":[{\"productId\":\"ethiopia-yirgacheffe\",\"quantity\":1}]}')",
+      "Bash(curl -s -o /dev/null -w \"HTTP %{http_code}\\\\n\" -X POST http://localhost:8082/api/guest-orders -H \"Content-Type: application/json\" -d '{\"recipientName\":\"t\",\"phoneNumber\":\"010\",\"shippingAddress\":\"a\",\"password\":\"1234\",\"items\":[{\"productId\":1,\"productOptionId\":\"default\",\"quantity\":1}]}')"
+    ]
+  }
+}

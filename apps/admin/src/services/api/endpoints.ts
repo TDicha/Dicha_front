@@ -9,6 +9,10 @@ export const endpoints = {
     members: "/api/admin/members",
     member: (memberId: number | string) => `/api/admin/members/${memberId}`,
     board: (boardId: number | string) => `/api/admin/boards/${boardId}`,
+    orders: "/api/admin/orders",
+    order: (orderNumber: string) => `/api/admin/orders/${orderNumber}`,
+    orderStatus: (orderNumber: string) =>
+      `/api/admin/orders/${orderNumber}/status`,
   },
   categories: {
     list: "/api/categories",

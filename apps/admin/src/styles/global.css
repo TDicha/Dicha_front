@@ -542,6 +542,40 @@ button {
   grid-template-columns: minmax(220px, 1.4fr) 0.8fr 0.7fr 0.6fr 0.6fr 150px;
 }
 
+.admin-data-table.orders-table .table-row {
+  grid-template-columns: 1.1fr 1.2fr 0.8fr 1.1fr 1fr 70px;
+  align-items: center;
+}
+
+.admin-data-table.orders-table select {
+  width: 100%;
+  padding: 6px 8px;
+  border: 1px solid var(--admin-border);
+  border-radius: 6px;
+  background: #fff;
+  color: var(--admin-text);
+  font-size: 12px;
+}
+
+.order-detail {
+  padding: 14px 16px;
+  border-top: 1px dashed var(--admin-border);
+  background: #fbfbfb;
+  color: var(--admin-muted);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.order-detail strong {
+  margin-right: 6px;
+  color: var(--admin-text);
+}
+
+.order-detail ul {
+  margin: 8px 0 0;
+  padding-left: 18px;
+}
+
 .admin-data-table .table-row > span {
   min-width: 0;
 }

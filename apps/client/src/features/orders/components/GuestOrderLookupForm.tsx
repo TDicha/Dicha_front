@@ -1,5 +1,3 @@
-import { Search } from "lucide-react";
-
 import { PrimaryButton } from "@/components/common/PrimaryButton";
 
 interface GuestOrderLookupFormProps {
@@ -27,17 +25,7 @@ export function GuestOrderLookupForm({
 }: GuestOrderLookupFormProps) {
   return (
     <>
-      <div className="flex size-12 items-center justify-center rounded-full bg-[var(--surface-success-pale)] text-[var(--brand-primary-solid)]">
-        <Search className="size-5" />
-      </div>
-      <h1 className="mt-5 text-[1.7rem] font-bold tracking-[-0.03em] text-[var(--text-heading)]">
-        비회원 주문 조회
-      </h1>
-      <p className="mt-3 text-[0.98rem] leading-6 text-[var(--text-muted-subtle)]">
-        주문번호, 휴대폰 번호, 주문 비밀번호로 비회원 주문을 확인할 수 있습니다.
-      </p>
-
-      <div className="mt-6 space-y-3">
+      <div className="space-y-3">
         <label className="block">
           <span className="mb-2 block text-sm font-semibold text-[var(--text-form-label)]">주문번호</span>
           <input

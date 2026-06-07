@@ -2,9 +2,9 @@ import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 
 import { AppCard } from "@/components/common/AppCard";
-import { ROUTES } from "@/shared/constants/routes";
 import { formatPrice } from "@/shared/utils/format";
 import type { Product } from "@/shared/types/models";
+import { productDetailPath } from "@/shared/utils/productRoutes";
 
 interface HomeRoasterPickSectionProps {
   product?: Product;
@@ -21,7 +21,7 @@ export function HomeRoasterPickSection({
     <AppCard className="rounded-[0.45rem] p-0" padding="none" variant="wood">
       <Link
         className="grid grid-cols-[minmax(0,1fr)_7rem] gap-4 p-4"
-        to={`${ROUTES.products}/${product.id}`}
+        to={productDetailPath(product)}
       >
         <div className="min-w-0">
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--text-wood-muted)]">

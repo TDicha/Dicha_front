@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 
 import { useProducts } from "@/features/products";
 import { formatPrice } from "@/shared/utils/format";
+import { productDetailPath } from "@/shared/utils/productRoutes";
 
 export function CartRecommendedProducts() {
   const { data: products = [] } = useProducts();
@@ -24,7 +25,7 @@ export function CartRecommendedProducts() {
           <Link
             key={product.id}
             className="min-w-0 overflow-hidden bg-[var(--surface-cafe-tile)] pb-5"
-            to={`/products/${product.id}`}
+            to={productDetailPath(product)}
           >
             <div className="flex h-[clamp(9rem,42vw,11rem)] items-center justify-center">
               <img alt={product.name} className="size-[clamp(5rem,22vw,6rem)] object-cover" src={product.image} />

@@ -5,6 +5,7 @@ import { PrimaryButton } from "@/components/common/PrimaryButton";
 import { useProducts } from "@/features/products";
 import { ROUTES } from "@/shared/constants/routes";
 import { formatPrice } from "@/shared/utils/format";
+import { productDetailPath } from "@/shared/utils/productRoutes";
 
 export function OrderEmptyState() {
   const { data: products = [] } = useProducts();
@@ -36,7 +37,7 @@ export function OrderEmptyState() {
               <Link
                 key={product.id}
                 className="overflow-hidden rounded-[1.1rem] bg-[var(--surface-card-muted)] pb-3 shadow-[0_6px_16px_var(--shadow-neutral-alpha-4)]"
-                to={`/products/${product.id}`}
+                to={productDetailPath(product)}
               >
                 <div className="flex h-16 items-center justify-center">
                   <img

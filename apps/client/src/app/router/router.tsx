@@ -1,13 +1,13 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, Navigate } from "react-router-dom";
 
 import { RouteGuard } from "@/app/router/RouteGuard";
 import { AppShell } from "@/components/layout/AppShell";
 import { HomePage } from "@/pages/HomePage/HomePage";
 import { AccountSectionPage } from "@/pages/AccountSectionPage/AccountSectionPage";
+import { AddressBookPage } from "@/pages/AddressBookPage/AddressBookPage";
 import { CartPage } from "@/pages/CartPage/CartPage";
 import { BrewingStoryPage } from "@/pages/BrewingStoryPage/BrewingStoryPage";
 import { ClassReservationPage } from "@/pages/ClassReservationPage/ClassReservationPage";
-import { GuestOrderLookupPage } from "@/pages/GuestOrderLookupPage/GuestOrderLookupPage";
 import { LoginPage } from "@/pages/LoginPage/LoginPage";
 import { MyBlendPage } from "@/pages/MyBlendPage/MyBlendPage";
 import { MyPage } from "@/pages/MyPage/MyPage";
@@ -88,6 +88,11 @@ export const router = createBrowserRouter([
             handle: { title: "주문 조회" },
           },
           {
+            path: "addresses",
+            element: <AddressBookPage />,
+            handle: { title: "배송지 관리" },
+          },
+          {
             path: "my-blend",
             element: <MyBlendPage />,
             handle: { title: "나의 블렌드" },
@@ -106,8 +111,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "guest-orders",
-        element: <GuestOrderLookupPage />,
-        handle: { title: "비회원 주문 조회" },
+        element: <Navigate replace to={`${ROUTES.login}?tab=guest`} />,
       },
       {
         path: "search",

@@ -12,6 +12,7 @@ interface PurchaseCompleteViewProps {
   completedPricing: CartPricingSummary | null;
   fallbackTotal: number;
   paymentLabel?: string;
+  shippingLabel?: string;
   onGoOrders: () => void;
 }
 
@@ -20,6 +21,7 @@ export function PurchaseCompleteView({
   completedPricing,
   fallbackTotal,
   paymentLabel,
+  shippingLabel,
   onGoOrders,
 }: PurchaseCompleteViewProps) {
   return (
@@ -59,7 +61,7 @@ export function PurchaseCompleteView({
         </div>
         <div className="pt-4 text-[1rem] text-[var(--text-cafe-ink)]">
           <p>결제 수단: {paymentLabel}</p>
-          <p className="mt-2">배송지: 서울 성동구 연무장길 00, DICHA Studio 302호</p>
+          <p className="mt-2">배송지: {shippingLabel ?? "-"}</p>
         </div>
       </section>
 

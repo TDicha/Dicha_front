@@ -1,5 +1,6 @@
 import { mockProducts } from "@/mock/products";
 import type { Product, ProductCategory } from "@/shared/types/models";
+import { matchesProductRouteKey } from "@/shared/utils/productRoutes";
 
 import type { ProductListParams, ProductRepository } from "../types";
 
@@ -46,6 +47,9 @@ export const mockProductAdapter: ProductRepository = {
     );
   },
   async getById(productId: string) {
-    return mockProducts.find((product) => product.id === productId) ?? null;
+    return (
+      mockProducts.find((product) => matchesProductRouteKey(product, productId)) ??
+      null
+    );
   },
 };

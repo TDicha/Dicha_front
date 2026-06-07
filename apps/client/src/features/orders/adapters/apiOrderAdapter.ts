@@ -38,16 +38,24 @@ interface ApiOrder {
 }
 
 function toBackendItem(item: CheckoutItem) {
+  const numericProductId = Number(item.productId);
+  const numericOptionId = Number(item.optionId);
+
+  // 옵션 id 가 실제 숫자(백엔드 ProductOption id)일 때만 전송한다.
+  // 무게/로스팅/분쇄도 같은 프론트 전용 UI 옵션 키는 백엔드에 존재하지 않아
+  // 그대로 보내면 500 이 발생하므로 생략한다.
+  const productOptionId =
+    item.optionId &&
+    item.optionId !== "default" &&
+    !Number.isNaN(numericOptionId)
+      ? numericOptionId
+      : undefined;
+
   return {
-    productId: Number.isNaN(Number(item.productId))
+    productId: Number.isNaN(numericProductId)
       ? item.productId
-      : Number(item.productId),
-    productOptionId:
-      item.optionId && item.optionId !== "default"
-        ? Number.isNaN(Number(item.optionId))
-          ? item.optionId
-          : Number(item.optionId)
-        : undefined,
+      : numericProductId,
+    productOptionId,
     quantity: item.quantity,
   };
 }

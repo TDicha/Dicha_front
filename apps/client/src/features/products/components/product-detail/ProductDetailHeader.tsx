@@ -13,7 +13,7 @@ export function ProductDetailHeader({
   onBack,
 }: ProductDetailHeaderProps) {
   return (
-    <header className="cafe-tile-bg sticky top-0 z-30 flex h-[var(--header-height)] items-center justify-between px-[var(--page-x)]">
+    <header className=" sticky top-0 z-30 flex h-[var(--header-height)] items-center justify-between px-[var(--page-x)]">
       <button
         aria-label="뒤로가기"
         className="flex size-9 items-center justify-center bg-[var(--surface-menu-board)] text-[var(--text-cafe-ink)]"

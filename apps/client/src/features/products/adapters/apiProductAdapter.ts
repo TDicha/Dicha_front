@@ -8,6 +8,10 @@ import type {
   ProductOption,
   ProductType,
 } from "@/shared/types/models";
+import {
+  isNumericProductRouteKey,
+  matchesProductRouteKey,
+} from "@/shared/utils/productRoutes";
 
 import type { ProductListParams, ProductRepository } from "../types";
 
@@ -47,8 +51,8 @@ export interface ApiProduct {
   originLabel?: string;
   roastLabel?: string;
   roastLevel?: string;
-  rating?: number;
-  reviewCount?: number;
+  rating?: number | null;
+  reviewCount?: number | null;
   notes?: string[];
   flavorNotes?: string[];
   options?: ApiProductOption[];
@@ -134,6 +138,10 @@ function toProductOption(option: ApiProductOption): ProductOption {
   };
 }
 
+function toOptionalNumber(value?: number | null) {
+  return typeof value === "number" && Number.isFinite(value) ? value : undefined;
+}
+
 export function toProduct(product: ApiProduct): Product {
   const category = getCategoryValue(product);
   const notes = product.notes ?? product.flavorNotes ?? [];
@@ -156,8 +164,8 @@ export function toProduct(product: ApiProduct): Product {
     originLabel: product.originLabel ?? product.origin ?? undefined,
     roastLabel: product.roastLabel ?? toRoastLabel(product.roastLevel),
     roastLevel: normalizeRoastLevel(product.roastLevel),
-    rating: product.rating,
-    reviewCount: product.reviewCount,
+    rating: toOptionalNumber(product.rating),
+    reviewCount: toOptionalNumber(product.reviewCount),
     notes,
     options: (product.options ?? []).map(toProductOption),
   };
@@ -196,6 +204,14 @@ export const apiProductAdapter: ProductRepository = {
     return data.map(toProduct);
   },
   async getById(productId: string) {
+    if (!isNumericProductRouteKey(productId)) {
+      const products = await this.list();
+      return (
+        products.find((product) => matchesProductRouteKey(product, productId)) ??
+        null
+      );
+    }
+
     const { data } = await apiClient.get<ApiProduct>(
       endpoints.products.detail(productId),
     );

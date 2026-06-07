@@ -5,6 +5,7 @@ import { LoginRedirect, ProtectedRoute } from "@/app/RouteGuards";
 import { AdminShell } from "@/layout/AdminShell";
 import { DashboardPage } from "@/pages/DashboardPage";
 import { MembersPage } from "@/pages/MembersPage";
+import { OrdersPage } from "@/pages/OrdersPage";
 import { PlaceholderPage } from "@/pages/PlaceholderPage";
 import { ProductsPage } from "@/pages/ProductsPage";
 
@@ -29,7 +30,7 @@ export const router = createBrowserRouter([
           },
           {
             path: ADMIN_ROUTES.orders,
-            element: <PlaceholderPage route={ADMIN_ROUTES.orders} />,
+            element: <OrdersPage />,
           },
           {
             path: ADMIN_ROUTES.products,

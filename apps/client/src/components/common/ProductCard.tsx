@@ -3,12 +3,13 @@ import { Link } from "react-router-dom";
 import { Badge } from "@/components/common/Badge";
 import { formatPrice } from "@/shared/utils/format";
 import type { Product } from "@/shared/types/models";
+import { productDetailPath } from "@/shared/utils/productRoutes";
 
 export function ProductCard({ product }: { product: Product }) {
   return (
     <Link
       className="glass-card block overflow-hidden"
-      to={`/products/${product.id}`}
+      to={productDetailPath(product)}
     >
       <img
         alt={product.name}
