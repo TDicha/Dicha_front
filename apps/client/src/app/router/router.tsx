@@ -3,24 +3,18 @@ import { createBrowserRouter, Navigate } from "react-router-dom";
 import { RouteGuard } from "@/app/router/RouteGuard";
 import { AppShell } from "@/components/layout/AppShell";
 import { HomePage } from "@/pages/HomePage/HomePage";
-import { AccountSectionPage } from "@/pages/AccountSectionPage/AccountSectionPage";
 import { AddressBookPage } from "@/pages/AddressBookPage/AddressBookPage";
 import { CartPage } from "@/pages/CartPage/CartPage";
 import { BrewingStoryPage } from "@/pages/BrewingStoryPage/BrewingStoryPage";
-import { ClassReservationPage } from "@/pages/ClassReservationPage/ClassReservationPage";
 import { LoginPage } from "@/pages/LoginPage/LoginPage";
-import { MyBlendPage } from "@/pages/MyBlendPage/MyBlendPage";
 import { MyPage } from "@/pages/MyPage/MyPage";
 import { NotFoundPage } from "@/pages/NotFoundPage/NotFoundPage";
 import { OrderListPage } from "@/pages/OrderListPage/OrderListPage";
 import { ProductDetailPage } from "@/pages/ProductDetailPage/ProductDetailPage";
 import { ProductListPage } from "@/pages/ProductListPage/ProductListPage";
 import { PurchasePage } from "@/pages/PurchasePage/PurchasePage";
-import { QrPage } from "@/pages/QrPage/QrPage";
-import { ReservationPage } from "@/pages/ReservationPage/ReservationPage";
 import { SearchPage } from "@/pages/SearchPage/SearchPage";
 import { SignupPage } from "@/pages/SignupPage/SignupPage";
-import { SubscriptionPage } from "@/pages/SubscriptionPage/SubscriptionPage";
 import { TasteTestPage } from "@/pages/TasteTestPage/TasteTestPage";
 import { ROUTES } from "@/shared/constants/routes";
 
@@ -45,21 +39,6 @@ export const router = createBrowserRouter([
         handle: { title: "상품 상세", chrome: false },
       },
       {
-        path: "subscription",
-        element: <SubscriptionPage />,
-        handle: { title: "구독" },
-      },
-      {
-        path: "reservation",
-        element: <ReservationPage />,
-        handle: { title: "예약" },
-      },
-      {
-        path: "reservation/class",
-        element: <ClassReservationPage />,
-        handle: { title: "클래스 예약" },
-      },
-      {
         path: "brewing-story",
         element: <BrewingStoryPage />,
         handle: { title: "브루잉 스토리" },
@@ -78,11 +57,6 @@ export const router = createBrowserRouter([
             handle: { title: "마이페이지" },
           },
           {
-            path: "mypage/manage/:sectionId",
-            element: <AccountSectionPage />,
-            handle: { title: "계정 관리" },
-          },
-          {
             path: "orders",
             element: <OrderListPage />,
             handle: { title: "주문 조회" },
@@ -91,11 +65,6 @@ export const router = createBrowserRouter([
             path: "addresses",
             element: <AddressBookPage />,
             handle: { title: "배송지 관리" },
-          },
-          {
-            path: "my-blend",
-            element: <MyBlendPage />,
-            handle: { title: "나의 블렌드" },
           },
         ],
       },
@@ -117,11 +86,6 @@ export const router = createBrowserRouter([
         path: "search",
         element: <SearchPage />,
         handle: { title: "검색" },
-      },
-      {
-        path: "qr",
-        element: <QrPage />,
-        handle: { title: "QR / O2O" },
       },
       {
         path: "login",

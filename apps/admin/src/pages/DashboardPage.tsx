@@ -70,11 +70,6 @@ export function DashboardPage() {
           <strong>{isLoading ? "-" : `${counts.categories}개`}</strong>
           <small>등록된 분류</small>
         </article>
-        <article className="admin-card metric-card">
-          <span>주문 관리</span>
-          <strong>미연결</strong>
-          <small>준비 중</small>
-        </article>
       </section>
 
       {error ? <p className="form-error">{error}</p> : null}
@@ -95,17 +90,6 @@ export function DashboardPage() {
           </div>
         </article>
 
-        <article className="admin-card">
-          <div className="section-heading">
-            <h2>준비 중인 기능</h2>
-          </div>
-          <div className="task-list">
-            <p>관리자 주문 목록 / 주문 상태 변경</p>
-            <p>리뷰 관리</p>
-            <p>쿠폰 / 통계 / 설정</p>
-            <p>구독 / 예약 / QR / 결제 / 배송지</p>
-          </div>
-        </article>
       </section>
     </div>
   );

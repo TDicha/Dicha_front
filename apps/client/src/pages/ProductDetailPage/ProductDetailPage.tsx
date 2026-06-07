@@ -28,7 +28,6 @@ import {
   useProductOptions,
 } from "@/features/products/hooks/useProducts";
 import { ROUTES } from "@/shared/constants/routes";
-import { env } from "@/shared/lib/env";
 import { formatPrice } from "@/shared/utils/format";
 
 const ROAST_OPTIONS = ["라이트", "미디엄", "다크"] as const;
@@ -69,12 +68,10 @@ export function ProductDetailPage() {
   const enablesRoastCustomization = product?.productType === "beans";
   const weightOptions = useMemo(() => {
     if (product && product.productType !== "beans") {
-      return !env.enableMock && productOptions.length > 0
-        ? productOptions
-        : product.options;
+      return productOptions.length > 0 ? productOptions : product.options;
     }
 
-    return !env.enableMock && productOptions.length > 0
+    return productOptions.length > 0
       ? productOptions
       : TEMPORARY_WEIGHT_OPTIONS;
   }, [product, productOptions]);
@@ -117,7 +114,7 @@ export function ProductDetailPage() {
       : selectedRoastLabel && selectedGrind && selectedWeight
         ? `${selectedRoastLabel} · ${selectedGrind} · ${selectedWeight.name}`
         : "옵션을 선택해주세요";
-  const shouldUseCartApi = authStatus === "authenticated" && !env.enableMock;
+  const shouldUseCartApi = authStatus === "authenticated";
 
   function ensureOptionSelected() {
     if (

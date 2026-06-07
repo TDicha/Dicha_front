@@ -329,7 +329,6 @@
   --text-list-muted: var(--palette-777169);
   --text-empty-muted: var(--palette-777777);
   --text-form-label: var(--palette-514b43);
-  --text-subscription-muted: var(--palette-677168);
   --text-product-muted: var(--palette-6c6c6c);
   --text-chip-muted: var(--palette-6f6a61);
   --text-action-muted: var(--palette-67625c);
@@ -371,7 +370,6 @@
   --border-list: var(--palette-ebe6dd);
   --border-input-warm: var(--palette-d9d2c8);
   --border-input-muted: var(--palette-d9d3c8);
-  --border-input-qr: var(--palette-ddd5c9);
   --border-timeline: var(--palette-d9d4ca);
   --border-ink-6: var(--rgba-17-24-39-006);
   --border-ink-8: var(--rgba-17-24-39-008);
@@ -417,8 +415,6 @@
   --gradient-card-blue-end: var(--palette-52699a);
   --gradient-card-red-start: var(--palette-8b2b1f);
   --gradient-card-red-end: var(--palette-b24535);
-  --gradient-qr-start: var(--palette-183824);
-  --gradient-qr-end: var(--palette-2c5a40);
   --gradient-review-start: var(--palette-ebe8df);
   --gradient-review-end: var(--palette-ddd7ca);
   --gradient-product-tile-start: var(--palette-efebe2);

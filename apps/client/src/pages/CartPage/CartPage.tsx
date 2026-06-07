@@ -16,7 +16,6 @@ import {
   useUpdateCartItemQuantity,
 } from "@/features/cart";
 import { ROUTES } from "@/shared/constants/routes";
-import { env } from "@/shared/lib/env";
 
 export function CartPage() {
   const navigate = useNavigate();
@@ -34,7 +33,7 @@ export function CartPage() {
   const createCheckoutFromCart = useCheckoutStore(
     (state) => state.createFromCart,
   );
-  const shouldUseCartApi = authStatus === "authenticated" && !env.enableMock;
+  const shouldUseCartApi = authStatus === "authenticated";
   const cartQuery = useCartItems(shouldUseCartApi);
   const updateCartItemQuantityMutation = useUpdateCartItemQuantity();
   const removeCartItemMutation = useRemoveCartItem();

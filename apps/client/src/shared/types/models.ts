@@ -35,18 +35,6 @@ export interface Product {
   options: ProductOption[];
 }
 
-export interface SubscriptionPlan {
-  id: string;
-  name: string;
-  price: number;
-  beansPerMonth: string;
-  perks: string[];
-  highlight?: string;
-  statusLabel?: string;
-  nextDeliveryLabel?: string;
-  billingDayLabel?: string;
-}
-
 export interface Order {
   id: string;
   productName: string;
@@ -68,30 +56,4 @@ export interface UserProfile {
   email: string;
   tier: string;
   favoriteFlavor: string;
-}
-
-export interface RoastPreference {
-  roastLevel: string;
-  acidity: string;
-  body: string;
-  notes: string[];
-}
-
-export type QrResultTarget = "product-detail" | "my-blend";
-
-export interface QrResultDraft {
-  code: string;
-  target: QrResultTarget;
-  targetId?: string;
-}
-
-export interface MyBlendRecipe {
-  id: string;
-  name: string;
-  description: string;
-  roastLevel: string;
-  ratioLabel: string;
-  notes: string[];
-  recommendedFor: string;
-  lastBrewedAt: string;
 }

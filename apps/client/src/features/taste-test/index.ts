@@ -2,8 +2,9 @@ export { TasteQuestionView } from "@/features/taste-test/components/TasteQuestio
 export { TasteResultView } from "@/features/taste-test/components/TasteResultView";
 export { TasteTestIntroView } from "@/features/taste-test/components/TasteTestIntroView";
 export {
-  tasteProfiles,
+  flavorNoteLabels,
   tasteQuestions,
 } from "@/features/taste-test/tasteTestConfig";
 export type { TasteTestAnswerKey } from "@/features/taste-test/tasteTestConfig";
 export { useSubmitTasteTest } from "@/features/taste-test/hooks/useTasteTest";
+export type { TasteProfile, TasteTestResult } from "@/features/taste-test/tasteTestApi";

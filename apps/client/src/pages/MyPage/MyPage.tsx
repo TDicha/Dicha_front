@@ -4,7 +4,6 @@ import { useAuthStore } from "@/app/store";
 import { AppCard } from "@/components/common/AppCard";
 import { ProfileCard } from "@/components/common/ProfileCard";
 import {
-  MyAccountMenuCard,
   MyQuickLinksCard,
   MyStatsSection,
 } from "@/features/my-page";
@@ -29,7 +28,6 @@ export function MyPage() {
         <div className="divide-y divide-[var(--border-tile-grout)]">
           <MyStatsSection />
           <MyQuickLinksCard />
-          <MyAccountMenuCard />
         </div>
       </AppCard>
         <button

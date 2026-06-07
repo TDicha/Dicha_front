@@ -471,8 +471,7 @@ button {
   gap: 16px;
 }
 
-.section-heading h2,
-.placeholder-card h2 {
+.section-heading h2 {
   margin: 0;
   font-size: 16px;
 }
@@ -733,21 +732,6 @@ button {
   margin: 0;
   border-left: 4px solid var(--admin-accent);
   padding: 10px 0 10px 14px;
-  color: var(--admin-muted);
-}
-
-.placeholder-card {
-  display: flex;
-  min-height: 240px;
-  align-items: center;
-  justify-content: center;
-  gap: 18px;
-  color: var(--admin-primary);
-  text-align: left;
-}
-
-.placeholder-card p {
-  margin: 8px 0 0;
   color: var(--admin-muted);
 }
 

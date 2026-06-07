@@ -1,4 +1,3 @@
-import { mockUser } from "@/mock/user";
 import { endpoints } from "@/services/api/endpoints";
 import { apiClient } from "@/services/api/client";
 import axios from "axios";
@@ -37,10 +36,6 @@ function toUserProfile(member: MemberResponse): UserProfile {
 }
 
 export async function fetchSession() {
-  if (env.enableMock) {
-    return Promise.resolve(mockUser);
-  }
-
   if (!getAccessToken()) {
     return null;
   }
@@ -55,10 +50,6 @@ export async function fetchSession() {
 }
 
 export async function restoreSession() {
-  if (env.enableMock) {
-    return null;
-  }
-
   clearAccessToken();
 
   try {
@@ -72,10 +63,6 @@ export async function restoreSession() {
 }
 
 export async function login(payload: { email: string; password: string }) {
-  if (env.enableMock) {
-    return Promise.resolve({ user: mockUser, ...payload });
-  }
-
   const { data } = await publicAuthClient.post<LoginResponse>(endpoints.auth.login, payload, {
     headers: {
       "Content-Type": "application/json",
@@ -98,16 +85,6 @@ export async function signup(payload: {
   email: string;
   password: string;
 }) {
-  if (env.enableMock) {
-    return Promise.resolve({
-      user: {
-        ...mockUser,
-        name: payload.name || mockUser.name,
-        email: payload.email || mockUser.email,
-      },
-    });
-  }
-
   await publicAuthClient.post(endpoints.auth.signup, payload, {
     headers: {
       "Content-Type": "application/json",
@@ -121,10 +98,6 @@ export async function signup(payload: {
 }
 
 export async function logout() {
-  if (env.enableMock) {
-    return Promise.resolve(true);
-  }
-
   try {
     await apiClient.post(endpoints.auth.logout);
     return true;

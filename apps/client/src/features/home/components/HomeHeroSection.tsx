@@ -2,7 +2,7 @@ import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 
 import { BrandWatermark } from "@/components/common/BrandWatermark";
-import { homeHeroSlides } from "@/mock/home";
+import { homeHeroSlides } from "@/features/home/homeConfig";
 
 interface HomeHeroSectionProps {
   heroSlide: (typeof homeHeroSlides)[number];
