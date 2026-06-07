@@ -1,7 +1,6 @@
 import { RouterProvider } from "react-router-dom";
 import { useEffect } from "react";
 
-import { PwaProvider } from "@/app/providers/PwaProvider";
 import { QueryProvider } from "@/app/providers/QueryProvider";
 import { router } from "@/app/router/router";
 import { useAuthStore } from "@/app/store";
@@ -26,8 +25,7 @@ export function AppProviders() {
 
   return (
     <QueryProvider>
-      <PwaProvider>
-        {/* {isBootLoading ? (
+      {/* {isBootLoading ? (
             <LoadingScreen
               className="min-h-[var(--app-safe-min-height)]"
               message="디차를 준비하는 중"
@@ -35,8 +33,7 @@ export function AppProviders() {
           ) : (
             <RouterProvider router={router} />
           )} */}
-        <RouterProvider router={router} />
-      </PwaProvider>
+      <RouterProvider router={router} />
     </QueryProvider>
   );
 }

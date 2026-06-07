@@ -4,7 +4,7 @@
 [프로젝트 배경]
 - 프로젝트명: Dicha Coffee
 - 성격: O2O 커스텀 로스팅 커피 플랫폼
-- 목표: 모바일 퍼스트 PWA 웹앱
+- 목표: 모바일 퍼스트 웹앱
 - 핵심 방향: 웹이지만 앱처럼 사용할 수 있어야 함
 - 추후 기능: 상품 구매, 커스텀 로스팅, 구독, 예약, 취향 테스트, 마이페이지, QR/O2O, 푸시 알림, 실제 인증/보안
 - 백엔드: Spring Boot 연동 예정
@@ -22,7 +22,7 @@
 - Zustand
 - Axios
 - clsx
-- vite-plugin-pwa
+- SEO/metadata
 - ESLint
 - Prettier
 
@@ -30,7 +30,7 @@
 단, 전역 UI/로컬 앱 상태는 Zustand 중심으로 구성해라.
 
 [왜 이렇게 하는지]
-- 모바일 퍼스트 PWA 구조가 핵심
+- 모바일 퍼스트 웹앱 구조가 핵심
 - Tailwind로 빠르게 레이아웃을 잡고, shadcn/ui로 공통 컴포넌트를 재사용 가능하게 해야 함
 - 상태는 Redux처럼 무겁지 않게 가되, 장바구니/로그인/UI 상태를 쉽게 관리해야 함
 - 나중에 Spring Boot 실제 API와 붙을 수 있어야 함
@@ -133,7 +133,6 @@ Zustand store를 아래처럼 나눠라.
 - authStore: 로그인/사용자 상태
 - cartStore: 장바구니
 - preferenceStore: 취향 테스트 / 커스텀 로스팅 선택값
-- installPromptStore: PWA 설치 유도 상태
 
 [디자인 토큰]
 CSS 변수로 아래 색상을 등록해라.
@@ -224,22 +223,16 @@ CSS 변수로 아래 색상을 등록해라.
 초기 세팅 단계에서는 실제 푸시 서버 연동까지 하지 않는다.
 하지만 중간 단계 기능으로 들어갈 수 있도록 아래를 준비해라.
 - features/notifications 생성
-- service worker 확장 가능 구조 확보
 - 알림 설정/권한 유도 UI 자리
-- PWA 설치 유도 배너 또는 훅 자리
 - 추후 Push Subscription API를 붙일 수 있는 hooks 위치 확보
 
-[PWA 요구사항]
-vite-plugin-pwa 기준으로 다음을 설정해라.
-- manifest
-- standalone display
-- theme_color / background_color
-- 앱 아이콘 placeholder
-- service worker 등록
-- 앱 셸 precache
-- 오프라인 fallback 페이지
-- 새 버전 업데이트 감지 구조
-- 인증 필요한 API는 함부로 캐시하지 않도록 주의
+[웹 metadata 요구사항]
+일반 웹앱 기준으로 다음을 설정해라.
+- title / description
+- 현재 로고 기반 favicon
+- Open Graph metadata
+- Twitter card metadata
+- 배포 도메인 확정 후 canonical URL
 
 [구현 순서]
 작업은 반드시 아래 순서로 진행해라.
@@ -248,7 +241,7 @@ vite-plugin-pwa 기준으로 다음을 설정해라.
 3. 폴더 구조 생성
 4. 라우터 및 앱 셸 구성
 5. 디자인 토큰 및 공통 UI 구성
-6. PWA 설정
+6. 웹 metadata 설정
 7. Zustand store 구성
 8. mock 데이터 및 API 레이어 구성
 9. 주요 페이지 스켈레톤 구현
@@ -265,7 +258,7 @@ README에는 반드시 아래를 포함해라.
 - 설치 및 실행 방법
 - 환경변수 설명
 - 폴더 구조
-- PWA 설명
+- 웹앱/metadata 설명
 - 인증/보안 설계 방향
 - QR/O2O 확장 방향
 - 푸시 알림 확장 방향

@@ -1,4 +1,4 @@
-import { ArrowRight, CheckCircle2, RotateCcw, Sparkles } from "lucide-react";
+import { RotateCcw, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
 
 import { AppCard } from "@/components/common/AppCard";

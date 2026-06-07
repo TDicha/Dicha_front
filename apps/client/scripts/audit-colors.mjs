@@ -88,14 +88,7 @@ for (const file of files) {
     text,
     directHexPattern,
     "direct hex color outside theme.css",
-  ).filter((problem) => {
-    if (toRelative(file) !== "vite.config.ts") {
-      return true;
-    }
-
-    const line = text.split("\n")[problem.line - 1] ?? "";
-    return !/PWA_(?:THEME|BACKGROUND)_COLOR/.test(line);
-  });
+  );
 
   problems.push(
     ...directHexMatches,

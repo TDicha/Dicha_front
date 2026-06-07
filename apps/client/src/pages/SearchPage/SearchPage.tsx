@@ -13,8 +13,7 @@ import {
   useRecentKeywords,
 } from "@/features/products";
 
-const recommendedKeywords = [
-];
+const recommendedKeywords: string[] = [];
 
 export function SearchPage() {
   const query = useAppStore((state) => state.searchQuery);
