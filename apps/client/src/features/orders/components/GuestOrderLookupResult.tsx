@@ -2,11 +2,18 @@ import type { Order } from "@/features/orders/types";
 import { formatPrice } from "@/shared/utils/format";
 
 interface GuestOrderLookupResultProps {
+  isCanceling?: boolean;
   isSuccess: boolean;
+  onCancel?: () => void;
   order?: Order | null;
 }
 
-export function GuestOrderLookupResult({ isSuccess, order }: GuestOrderLookupResultProps) {
+export function GuestOrderLookupResult({
+  isCanceling = false,
+  isSuccess,
+  onCancel,
+  order,
+}: GuestOrderLookupResultProps) {
   if (!isSuccess) {
     return null;
   }
@@ -27,6 +34,16 @@ export function GuestOrderLookupResult({ isSuccess, order }: GuestOrderLookupRes
       <p className="mt-1 text-[1.25rem] font-bold text-[var(--text-price-danger)]">
         ₩{formatPrice(order.totalAmount)}
       </p>
+      {order.status === "order_created" || order.status === "payment_completed" ? (
+        <button
+          className="mt-4 h-11 w-full rounded-[0.85rem] bg-[var(--surface-danger-soft)] text-sm font-semibold text-[var(--state-danger)]"
+          disabled={isCanceling}
+          onClick={onCancel}
+          type="button"
+        >
+          {isCanceling ? "취소 중" : "비회원 주문 취소"}
+        </button>
+      ) : null}
     </div>
   );
 }

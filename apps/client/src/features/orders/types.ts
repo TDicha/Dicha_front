@@ -72,8 +72,15 @@ export interface GuestOrderLookupPayload {
   orderPassword: string;
 }
 
+export interface GuestOrderCancelPayload {
+  orderNo: string;
+  orderPassword: string;
+}
+
 export interface OrderRepository {
   list: () => Promise<Order[]>;
   createOrder: (payload: CreateOrderPayload) => Promise<Order>;
   lookupGuestOrder: (payload: GuestOrderLookupPayload) => Promise<Order | null>;
+  cancelOrder: (orderNo: string) => Promise<Order>;
+  cancelGuestOrder: (payload: GuestOrderCancelPayload) => Promise<Order>;
 }

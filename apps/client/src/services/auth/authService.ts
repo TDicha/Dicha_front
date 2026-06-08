@@ -17,6 +17,16 @@ interface MemberResponse {
   id: number;
   email: string;
   name: string;
+  grade?: string | null;
+  totalSpent?: number | string | null;
+  tasteAcidity?: number | string | null;
+  tasteBody?: number | string | null;
+  tasteSweetness?: number | string | null;
+  tastePrimaryFlavorNote?: string | null;
+}
+
+interface FindEmailResponse {
+  maskedEmail?: string;
 }
 
 const publicAuthClient = axios.create({
@@ -25,13 +35,68 @@ const publicAuthClient = axios.create({
   timeout: 10000,
 });
 
+const flavorNoteLabels: Record<string, string> = {
+  FRUITY: "과일",
+  FLORAL: "꽃",
+  NUTTY: "견과류",
+  CHOCOLATY: "초콜릿",
+  SPICY: "향신료",
+  CARAMEL: "카라멜",
+  CITRUS: "시트러스",
+  BERRY: "베리",
+  ROASTY: "로스티",
+};
+
+function toTasteScore(value: number | string | null | undefined) {
+  if (value === null || value === undefined) {
+    return undefined;
+  }
+
+  const score = Number(value);
+  if (Number.isNaN(score)) {
+    return undefined;
+  }
+
+  return Math.max(1, Math.min(5, Math.round(score)));
+}
+
+function toNumber(value: number | string | null | undefined) {
+  if (value === null || value === undefined) {
+    return undefined;
+  }
+
+  const parsed = Number(value);
+  return Number.isNaN(parsed) ? undefined : parsed;
+}
+
+function toFlavorNote(note: string | null | undefined) {
+  return note?.toUpperCase();
+}
+
+function toTier(grade: string | null | undefined) {
+  const normalized = grade?.toUpperCase();
+  if (normalized === "SILVER") return "Silver";
+  if (normalized === "GOLD") return "Gold";
+  if (normalized === "BLACK") return "Black";
+  return "Member";
+}
+
 function toUserProfile(member: MemberResponse): UserProfile {
+  const primaryFlavorNote = toFlavorNote(member.tastePrimaryFlavorNote);
+
   return {
     id: String(member.id),
     name: member.name,
     email: member.email,
-    tier: "Member",
-    favoriteFlavor: "아직 선택되지 않음",
+    tier: toTier(member.grade),
+    favoriteFlavor: primaryFlavorNote
+      ? flavorNoteLabels[primaryFlavorNote] ?? primaryFlavorNote
+      : "아직 선택되지 않음",
+    totalSpent: toNumber(member.totalSpent),
+    tasteAcidity: toTasteScore(member.tasteAcidity),
+    tasteBody: toTasteScore(member.tasteBody),
+    tasteSweetness: toTasteScore(member.tasteSweetness),
+    tastePrimaryFlavorNote: primaryFlavorNote,
   };
 }
 
@@ -84,6 +149,7 @@ export async function signup(payload: {
   name: string;
   email: string;
   password: string;
+  phoneNumber: string;
 }) {
   await publicAuthClient.post(endpoints.auth.signup, payload, {
     headers: {
@@ -95,6 +161,48 @@ export async function signup(payload: {
     email: payload.email,
     password: payload.password,
   });
+}
+
+export async function findEmail(payload: { name: string; phoneNumber: string }) {
+  const { data } = await publicAuthClient.post<FindEmailResponse>(
+    endpoints.auth.findEmail,
+    payload,
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    },
+  );
+
+  return data.maskedEmail ?? "";
+}
+
+export async function findPassword(payload: { email: string; name: string }) {
+  const { data } = await publicAuthClient.post<string>(
+    endpoints.auth.findPassword,
+    payload,
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    },
+  );
+
+  return typeof data === "string"
+    ? data
+    : "이메일로 임시 비밀번호가 발송되었습니다.";
+}
+
+export async function updateProfile(payload: {
+  name?: string;
+  password?: string;
+}) {
+  const { data } = await apiClient.put<MemberResponse>(
+    endpoints.auth.session,
+    payload,
+  );
+
+  return toUserProfile(data);
 }
 
 export async function logout() {

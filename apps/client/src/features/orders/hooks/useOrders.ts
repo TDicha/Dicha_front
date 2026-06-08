@@ -1,7 +1,11 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { orderRepository } from "@/features/orders/repositories/orderRepository";
-import type { CreateOrderPayload, GuestOrderLookupPayload } from "@/features/orders/types";
+import type {
+  CreateOrderPayload,
+  GuestOrderCancelPayload,
+  GuestOrderLookupPayload,
+} from "@/features/orders/types";
 
 export const orderQueryKeys = {
   all: ["orders"] as const,
@@ -30,5 +34,23 @@ export function useLookupGuestOrder() {
   return useMutation({
     mutationFn: (payload: GuestOrderLookupPayload) =>
       orderRepository.lookupGuestOrder(payload),
+  });
+}
+
+export function useCancelOrder() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (orderNo: string) => orderRepository.cancelOrder(orderNo),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: orderQueryKeys.all });
+    },
+  });
+}
+
+export function useCancelGuestOrder() {
+  return useMutation({
+    mutationFn: (payload: GuestOrderCancelPayload) =>
+      orderRepository.cancelGuestOrder(payload),
   });
 }

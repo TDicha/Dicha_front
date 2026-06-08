@@ -1,9 +1,11 @@
 import { create } from "zustand";
 
-import { tasteQuestions, type TasteTestAnswerKey } from "@/features/taste-test/tasteTestConfig";
+import {
+  getTasteQuestions,
+  type TasteTestAnswerKey,
+  type TasteTestAnswers,
+} from "@/features/taste-test/tasteTestConfig";
 import type { TasteTestResult } from "@/features/taste-test/tasteTestApi";
-
-type TasteTestAnswers = Partial<Record<TasteTestAnswerKey, string>>;
 
 interface PreferenceState {
   step: "intro" | "question" | "result";
@@ -33,12 +35,15 @@ export const usePreferenceStore = create<PreferenceState>((set) => ({
     }),
   answerQuestion: (key, value) =>
     set((state) => {
-      const nextAnswers = {
-        ...state.answers,
-        [key]: value,
-      };
+      const nextAnswers =
+        key === "level"
+          ? { level: value }
+          : {
+              ...state.answers,
+              [key]: value,
+            };
 
-      const lastQuestionIndex = tasteQuestions.length - 1;
+      const lastQuestionIndex = getTasteQuestions(nextAnswers).length - 1;
       const nextQuestionIndex =
         state.currentQuestionIndex < lastQuestionIndex
           ? state.currentQuestionIndex + 1

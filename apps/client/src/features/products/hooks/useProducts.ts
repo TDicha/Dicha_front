@@ -40,9 +40,6 @@ export function useProductOptions(productId?: string) {
   return useQuery({
     enabled: Boolean(productId),
     queryKey: productQueryKeys.options(productId ?? ""),
-    queryFn: async () => {
-      const product = await productRepository.getById(productId ?? "");
-      return product?.options ?? [];
-    },
+    queryFn: () => productRepository.listOptions(productId ?? ""),
   });
 }

@@ -3,7 +3,7 @@ import type { CartPricingSummary } from "@/features/cart/cartPricing";
 
 export type CheckoutMode = "cart" | "direct";
 export type OrdererType = "member" | "guest";
-export type PaymentMethod = "dicha-card" | "kakao-pay" | "credit-card";
+export type PaymentMethod = "account" | "kakao-pay" | "credit-card";
 
 export interface AddressSnapshot {
   recipientName: string;

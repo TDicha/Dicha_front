@@ -10,7 +10,10 @@ export const endpoints = {
   },
   products: {
     list: "/api/products",
+    search: "/api/products/search",
     detail: (productId: string) => `/api/products/${productId}`,
+    options: (productId: string) => `/api/products/${productId}/options`,
+    reviews: (productId: string) => `/api/products/${productId}/reviews`,
   },
   categories: {
     list: "/api/categories",
@@ -33,5 +36,15 @@ export const endpoints = {
     guestCreate: "/api/guest-orders",
     guestLookup: "/api/guest-orders/lookup",
     guestCancel: "/api/guest-orders/cancel",
+  },
+  addresses: {
+    list: "/api/addresses",
+    create: "/api/addresses",
+    update: (addressId: string) => `/api/addresses/${addressId}`,
+    remove: (addressId: string) => `/api/addresses/${addressId}`,
+    setDefault: (addressId: string) => `/api/addresses/${addressId}/default`,
+  },
+  subscriptions: {
+    list: "/api/subscriptions",
   },
 } as const;

@@ -51,13 +51,17 @@ function formatOrderDate(date: string) {
 
 interface OrderCardProps {
   order: Order;
+  isCanceling?: boolean;
+  onCancel?: (order: Order) => void;
 }
 
-export function OrderCard({ order }: OrderCardProps) {
+export function OrderCard({ isCanceling = false, onCancel, order }: OrderCardProps) {
   const firstItem = order.items[0];
   const productName = firstItem?.productName ?? "DICHA Coffee";
   const meta = orderMeta[order.status];
   const detailLabel = firstItem ? `${firstItem.optionName} · ${firstItem.quantity}개` : "주문 상품";
+  const canCancel =
+    onCancel && ["order_created", "payment_completed"].includes(order.status);
 
   return (
     <article className="overflow-hidden rounded-[var(--radius-card)] bg-[var(--surface-base)] shadow-[0_8px_24px_var(--shadow-neutral-alpha-6)]">
@@ -110,12 +114,23 @@ export function OrderCard({ order }: OrderCardProps) {
         </div>
 
         <div className="mt-3 grid grid-cols-2 gap-2">
-          <Link
-            className="flex h-12 items-center justify-center rounded-[var(--radius-control)] border border-[var(--brand-secondary)] bg-[var(--surface-base)] text-sm font-semibold text-[var(--brand-secondary)]"
-            to={ROUTES.products}
-          >
-            재주문
-          </Link>
+          {canCancel ? (
+            <button
+              className="flex h-12 items-center justify-center rounded-[var(--radius-control)] border border-[var(--brand-secondary)] bg-[var(--surface-base)] text-sm font-semibold text-[var(--brand-secondary)]"
+              disabled={isCanceling}
+              onClick={() => onCancel?.(order)}
+              type="button"
+            >
+              {isCanceling ? "취소 중" : "주문 취소"}
+            </button>
+          ) : (
+            <Link
+              className="flex h-12 items-center justify-center rounded-[var(--radius-control)] border border-[var(--brand-secondary)] bg-[var(--surface-base)] text-sm font-semibold text-[var(--brand-secondary)]"
+              to={ROUTES.products}
+            >
+              재주문
+            </Link>
+          )}
           <button
             className={[
               "h-12 rounded-[var(--radius-control)] text-sm font-semibold",

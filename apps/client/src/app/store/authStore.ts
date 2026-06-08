@@ -13,7 +13,12 @@ interface AuthState {
   login: (user: UserProfile) => void;
   logout: () => void;
   signIn: (payload: { email: string; password: string }) => Promise<boolean>;
-  signUp: (payload: { name: string; email: string; password: string }) => Promise<boolean>;
+  signUp: (payload: {
+    name: string;
+    email: string;
+    password: string;
+    phoneNumber: string;
+  }) => Promise<boolean>;
   signOut: () => Promise<void>;
   hydrateSession: () => Promise<void>;
   clearError: () => void;

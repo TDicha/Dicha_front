@@ -47,6 +47,19 @@ export function AddressPickerModal({
     setView("form");
   }
 
+  async function handleSubmit(draft: Parameters<typeof addAddress>[0]) {
+    if (editing) {
+      await updateAddress(editing.id, draft);
+      setView("list");
+      return;
+    }
+
+    const created = await addAddress(draft);
+    // 새로 추가한 배송지를 바로 선택해 주문에 사용한다.
+    onSelect(created);
+    onClose();
+  }
+
   // 저장된 배송지가 없으면 곧바로 입력 폼을 보여준다.
   const showForm = view === "form" || addresses.length === 0;
 
@@ -87,18 +100,7 @@ export function AddressPickerModal({
             onCancel={
               addresses.length === 0 ? undefined : () => setView("list")
             }
-            onSubmit={(draft) => {
-              if (editing) {
-                updateAddress(editing.id, draft);
-              } else {
-                const id = addAddress(draft);
-                // 새로 추가한 배송지를 바로 선택해 주문에 사용한다.
-                onSelect({ ...draft, id, isDefault: addresses.length === 0 });
-                onClose();
-                return;
-              }
-              setView("list");
-            }}
+            onSubmit={(draft) => void handleSubmit(draft)}
             submitLabel={editing ? "수정 완료" : "저장하고 선택"}
           />
         ) : (
@@ -106,12 +108,12 @@ export function AddressPickerModal({
             <SavedAddressList
               addresses={addresses}
               onEdit={openEditForm}
-              onRemove={(address) => removeAddress(address.id)}
+              onRemove={(address) => void removeAddress(address.id)}
               onSelect={(address) => {
                 onSelect(address);
                 onClose();
               }}
-              onSetDefault={(address) => setDefaultAddress(address.id)}
+              onSetDefault={(address) => void setDefaultAddress(address.id)}
               selectedId={selectedId}
             />
             <PrimaryButton

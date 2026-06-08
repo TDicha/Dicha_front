@@ -1,5 +1,5 @@
 import { toProduct, type ApiProduct } from "@/features/products/adapters/apiProductAdapter";
-import { tasteQuestions } from "@/features/taste-test/tasteTestConfig";
+import { getTasteQuestions } from "@/features/taste-test/tasteTestConfig";
 import { apiClient } from "@/services/api/client";
 import { endpoints } from "@/services/api/endpoints";
 import type { Product } from "@/shared/types/models";
@@ -59,7 +59,7 @@ function toProfile(profile: ApiTasteProfile = {}): TasteProfile {
  * 질문 옵션 값(value)이 이미 백엔드가 기대하는 값이라 1:1로 매핑된다.
  */
 function toApiAnswers(answers: TasteAnswers): ApiTasteAnswer[] {
-  return tasteQuestions
+  return getTasteQuestions(answers)
     .map((question) => ({
       questionId: question.questionId,
       answerValue: answers[question.key] ?? "",

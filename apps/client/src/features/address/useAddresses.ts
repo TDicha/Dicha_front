@@ -1,39 +1,43 @@
 import { useCallback, useEffect, useState } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
+import { useAuthStore } from "@/app/store/authStore";
+import {
+  createAddress,
+  deleteAddress,
+  fetchAddresses,
+  setDefaultAddress as setDefaultAddressApi,
+  updateAddress as updateAddressApi,
+} from "@/features/address/addressApi";
 import type { AddressDraft, SavedAddress } from "@/features/address/types";
 
 const ADDRESSES_KEY = "dicha.addresses";
+
+const addressQueryKeys = {
+  all: ["addresses"] as const,
+  list: () => [...addressQueryKeys.all, "list"] as const,
+};
 
 function createId() {
   return `addr_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
 }
 
-function readAddresses(): SavedAddress[] {
+function readLocalAddresses(): SavedAddress[] {
   if (typeof window === "undefined") {
     return [];
   }
 
   try {
     const raw = window.localStorage.getItem(ADDRESSES_KEY);
-    if (!raw) {
-      return [];
-    }
-
+    if (!raw) return [];
     const parsed = JSON.parse(raw);
-    if (!Array.isArray(parsed)) {
-      return [];
-    }
-
-    return parsed.filter(
-      (item): item is SavedAddress =>
-        typeof item === "object" && item !== null && "id" in item,
-    );
+    return Array.isArray(parsed) ? parsed : [];
   } catch {
     return [];
   }
 }
 
-function writeAddresses(addresses: SavedAddress[]) {
+function writeLocalAddresses(addresses: SavedAddress[]) {
   if (typeof window === "undefined") {
     return;
   }
@@ -41,11 +45,10 @@ function writeAddresses(addresses: SavedAddress[]) {
   try {
     window.localStorage.setItem(ADDRESSES_KEY, JSON.stringify(addresses));
   } catch {
-    // Storage may be unavailable in private or restricted browser contexts.
+    // Storage may be unavailable in private browser contexts.
   }
 }
 
-/** 기본 배송지가 항상 맨 앞에 오도록 정렬한다. */
 function sortByDefault(addresses: SavedAddress[]) {
   return [...addresses].sort(
     (a, b) => Number(b.isDefault) - Number(a.isDefault),
@@ -53,46 +56,88 @@ function sortByDefault(addresses: SavedAddress[]) {
 }
 
 export function useAddresses() {
-  const [addresses, setAddresses] = useState<SavedAddress[]>(readAddresses);
+  const isAuthenticated = useAuthStore((state) => state.status === "authenticated");
+  const queryClient = useQueryClient();
+  const [localAddresses, setLocalAddresses] =
+    useState<SavedAddress[]>(readLocalAddresses);
 
   useEffect(() => {
-    writeAddresses(addresses);
-  }, [addresses]);
+    if (!isAuthenticated) {
+      writeLocalAddresses(localAddresses);
+    }
+  }, [isAuthenticated, localAddresses]);
 
-  const addAddress = useCallback((draft: AddressDraft) => {
+  const { data: apiAddresses = [], isError, isLoading } = useQuery({
+    enabled: isAuthenticated,
+    queryKey: addressQueryKeys.list(),
+    queryFn: fetchAddresses,
+  });
+
+  const invalidate = () =>
+    queryClient.invalidateQueries({ queryKey: addressQueryKeys.all });
+
+  const createMutation = useMutation({
+    mutationFn: createAddress,
+    onSuccess: () => void invalidate(),
+  });
+  const updateMutation = useMutation({
+    mutationFn: ({ id, draft }: { id: string; draft: AddressDraft }) =>
+      updateAddressApi(id, draft),
+    onSuccess: () => void invalidate(),
+  });
+  const removeMutation = useMutation({
+    mutationFn: deleteAddress,
+    onSuccess: () => void invalidate(),
+  });
+  const defaultMutation = useMutation({
+    mutationFn: setDefaultAddressApi,
+    onSuccess: () => void invalidate(),
+  });
+
+  const addLocalAddress = useCallback(async (draft: AddressDraft) => {
     const created: SavedAddress = {
       ...draft,
       id: createId(),
       isDefault: false,
     };
 
-    setAddresses((previous) => {
-      // 첫 배송지는 자동으로 기본 배송지로 지정한다.
-      const next = previous.length === 0
-        ? [{ ...created, isDefault: true }]
-        : [...previous, created];
+    setLocalAddresses((previous) => {
+      const next =
+        previous.length === 0
+          ? [{ ...created, isDefault: true }]
+          : [...previous, created];
       return sortByDefault(next);
     });
 
-    return created.id;
-  }, []);
+    return localAddresses.length === 0
+      ? { ...created, isDefault: true }
+      : created;
+  }, [localAddresses.length]);
 
-  const updateAddress = useCallback((id: string, draft: AddressDraft) => {
-    setAddresses((previous) =>
-      sortByDefault(
-        previous.map((item) =>
-          item.id === id ? { ...item, ...draft } : item,
+  const updateLocalAddress = useCallback(
+    async (id: string, draft: AddressDraft) => {
+      let updated: SavedAddress | null = null;
+
+      setLocalAddresses((previous) =>
+        sortByDefault(
+          previous.map((item) => {
+            if (item.id !== id) return item;
+            updated = { ...item, ...draft };
+            return updated;
+          }),
         ),
-      ),
-    );
-  }, []);
+      );
 
-  const removeAddress = useCallback((id: string) => {
-    setAddresses((previous) => {
+      return updated;
+    },
+    [],
+  );
+
+  const removeLocalAddress = useCallback(async (id: string) => {
+    setLocalAddresses((previous) => {
       const filtered = previous.filter((item) => item.id !== id);
       const removedDefault = previous.find((item) => item.id === id)?.isDefault;
 
-      // 기본 배송지를 지웠다면 남은 첫 배송지를 기본으로 승격한다.
       if (removedDefault && filtered.length > 0) {
         filtered[0] = { ...filtered[0], isDefault: true };
       }
@@ -101,23 +146,47 @@ export function useAddresses() {
     });
   }, []);
 
-  const setDefaultAddress = useCallback((id: string) => {
-    setAddresses((previous) =>
+  const setLocalDefaultAddress = useCallback(async (id: string) => {
+    let updated: SavedAddress | null = null;
+
+    setLocalAddresses((previous) =>
       sortByDefault(
-        previous.map((item) => ({ ...item, isDefault: item.id === id })),
+        previous.map((item) => {
+          const next = { ...item, isDefault: item.id === id };
+          if (next.isDefault) updated = next;
+          return next;
+        }),
       ),
     );
+
+    return updated;
   }, []);
 
+  const addresses = isAuthenticated ? apiAddresses : localAddresses;
   const defaultAddress =
     addresses.find((item) => item.isDefault) ?? addresses[0] ?? null;
 
   return {
     addresses,
     defaultAddress,
-    addAddress,
-    updateAddress,
-    removeAddress,
-    setDefaultAddress,
+    isError: isAuthenticated ? isError : false,
+    isLoading: isAuthenticated ? isLoading : false,
+    isPending:
+      createMutation.isPending ||
+      updateMutation.isPending ||
+      removeMutation.isPending ||
+      defaultMutation.isPending,
+    addAddress: (draft: AddressDraft) =>
+      isAuthenticated ? createMutation.mutateAsync(draft) : addLocalAddress(draft),
+    updateAddress: (id: string, draft: AddressDraft) =>
+      isAuthenticated
+        ? updateMutation.mutateAsync({ id, draft })
+        : updateLocalAddress(id, draft),
+    removeAddress: (id: string) =>
+      isAuthenticated ? removeMutation.mutateAsync(id) : removeLocalAddress(id),
+    setDefaultAddress: (id: string) =>
+      isAuthenticated
+        ? defaultMutation.mutateAsync(id)
+        : setLocalDefaultAddress(id),
   };
 }

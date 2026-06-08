@@ -5,6 +5,7 @@ import { resolveApiMediaUrl } from "@/services/api/media";
 import type {
   CheckoutItem,
   CreateOrderPayload,
+  GuestOrderCancelPayload,
   GuestOrderLookupPayload,
   Order,
   OrderItem,
@@ -173,6 +174,24 @@ export const apiOrderAdapter: OrderRepository = {
       orderNumber: payload.orderNo,
       password: payload.orderPassword,
     });
+
+    return toOrder(data);
+  },
+  async cancelOrder(orderNo: string) {
+    const { data } = await apiClient.patch<ApiOrder>(
+      endpoints.orders.cancel(orderNo),
+    );
+
+    return toOrder(data);
+  },
+  async cancelGuestOrder(payload: GuestOrderCancelPayload) {
+    const { data } = await apiClient.post<ApiOrder>(
+      endpoints.orders.guestCancel,
+      {
+        orderNumber: payload.orderNo,
+        password: payload.orderPassword,
+      },
+    );
 
     return toOrder(data);
   },

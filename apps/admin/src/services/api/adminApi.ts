@@ -19,6 +19,10 @@ export interface AdminMember {
   name: string;
 }
 
+interface PageResponse<T> {
+  content: T[];
+}
+
 export interface AdminCategory {
   id: number;
   name: string;
@@ -31,6 +35,53 @@ export interface AdminProductOption {
   name: string;
   description?: string | null;
   extraPrice: number;
+}
+
+export interface AdminDashboardSummary {
+  newOrderCount: number;
+  todaySales: number;
+  newMemberCount: number;
+  newReviewCount: number;
+}
+
+export interface AdminSalesChartData {
+  labels: string[];
+  sales: number[];
+}
+
+export interface AdminRecentOrder {
+  orderNumber: string;
+  orderDate?: string;
+  status: string;
+  totalPrice: number;
+  customerName: string;
+}
+
+export interface AdminBestProduct {
+  productId: number;
+  productName: string;
+  totalSalesCount: number;
+}
+
+export interface AdminRecentReview {
+  productName: string;
+  authorName: string;
+  rating: number;
+  content: string;
+  createdAt?: string;
+}
+
+export interface AdminNotification {
+  type: string;
+  message: string;
+  targetId?: number;
+}
+
+export interface AdminDashboardLists {
+  recentOrders: AdminRecentOrder[];
+  bestProducts: AdminBestProduct[];
+  recentReviews: AdminRecentReview[];
+  notifications: AdminNotification[];
 }
 
 export interface AdminProduct {
@@ -98,6 +149,10 @@ function toAdminSession(member: MemberResponse): AdminSession {
   };
 }
 
+function unwrapPageContent<T>(response: T[] | PageResponse<T>) {
+  return Array.isArray(response) ? response : response.content;
+}
+
 export async function loginAdmin(payload: {
   email: string;
   password: string;
@@ -149,7 +204,9 @@ export async function logoutAdmin() {
 }
 
 export function fetchMembers() {
-  return apiFetch<AdminMember[]>(endpoints.admin.members);
+  return apiFetch<AdminMember[] | PageResponse<AdminMember>>(
+    endpoints.admin.members,
+  ).then(unwrapPageContent);
 }
 
 export async function deleteMember(memberId: number) {
@@ -162,6 +219,18 @@ export function fetchCategories() {
 
 export function fetchProducts() {
   return apiFetch<AdminProduct[]>(endpoints.products.list, { auth: false });
+}
+
+export function fetchDashboardSummary() {
+  return apiFetch<AdminDashboardSummary>(endpoints.admin.dashboardSummary);
+}
+
+export function fetchDashboardSalesChart() {
+  return apiFetch<AdminSalesChartData>(endpoints.admin.dashboardSalesChart);
+}
+
+export function fetchDashboardLists() {
+  return apiFetch<AdminDashboardLists>(endpoints.admin.dashboardRecentLists);
 }
 
 export function createProduct(payload: AdminProductPayload) {
@@ -180,6 +249,46 @@ export function updateProduct(productId: number, payload: AdminProductPayload) {
 
 export async function deleteProduct(productId: number) {
   await apiFetch<void>(endpoints.products.remove(productId), {
+    method: "DELETE",
+  });
+}
+
+export function uploadProductImage(productId: number, file: File) {
+  const body = new FormData();
+  body.append("file", file);
+
+  return apiFetch<AdminProduct>(endpoints.products.image(productId), {
+    body,
+    method: "POST",
+  });
+}
+
+export function createProductOption(
+  productId: number,
+  payload: AdminProductOption,
+) {
+  return apiFetch<AdminProductOption>(endpoints.products.options(productId), {
+    body: JSON.stringify(payload),
+    method: "POST",
+  });
+}
+
+export function updateProductOption(
+  productId: number,
+  optionId: number,
+  payload: AdminProductOption,
+) {
+  return apiFetch<AdminProductOption>(
+    endpoints.products.option(productId, optionId),
+    {
+      body: JSON.stringify(payload),
+      method: "PUT",
+    },
+  );
+}
+
+export async function deleteProductOption(productId: number, optionId: number) {
+  await apiFetch<void>(endpoints.products.option(productId, optionId), {
     method: "DELETE",
   });
 }
@@ -233,9 +342,10 @@ export function fetchOrders() {
 export function updateOrderStatus(
   orderNumber: string,
   status: AdminOrderStatus,
+  reason?: string,
 ) {
   return apiFetch<AdminOrder>(endpoints.admin.orderStatus(orderNumber), {
-    body: JSON.stringify({ status }),
+    body: JSON.stringify({ status, reason }),
     method: "PATCH",
   });
 }

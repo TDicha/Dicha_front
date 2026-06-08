@@ -1,10 +1,5 @@
 import type { AddressSnapshot } from "@/features/checkout/types";
 
-/**
- * 프론트(localStorage)에 저장되는 배송지 한 건.
- * 백엔드에는 배송지 저장 기능이 없으므로 조회/등록/수정/삭제는 프론트에서 처리하고,
- * 주문 시점에만 AddressSnapshot 으로 변환해 백엔드로 전송한다.
- */
 export interface SavedAddress {
   id: string;
   /** 배송지 별칭 (예: 집, 회사) */

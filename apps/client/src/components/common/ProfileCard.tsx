@@ -10,9 +10,14 @@ export function ProfileCard({ user }: { user: UserProfile }) {
       variant="chalkboard"
     >
       <div className="px-5 py-5">
-        <p className="text-xs uppercase tracking-[0.3em] text-[var(--text-chalk-muted)]">
-          {user.tier}
-        </p>
+        <div className="flex items-start justify-between gap-4">
+          <p className="text-xs uppercase tracking-[0.3em] text-[var(--text-chalk-muted)]">
+            {user.tier}
+          </p>
+          <p className="max-w-[8rem] text-right text-[0.68rem] font-medium leading-5 text-[var(--text-chalk-muted)]">
+            향으로 기억되는 한 잔
+          </p>
+        </div>
         <h2 className="mt-2 font-heading text-2xl font-semibold text-[var(--text-chalk)]">
           {user.name}
         </h2>

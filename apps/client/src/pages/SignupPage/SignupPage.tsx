@@ -31,6 +31,7 @@ export function SignupPage() {
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
   const [name, setName] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
 
   useEffect(() => clearError, [clearError]);
 
@@ -64,7 +65,12 @@ export function SignupPage() {
   );
 
   async function handleSubmitDetails() {
-    const isSuccess = await signUp({ name, email, password });
+    const isSuccess = await signUp({
+      name,
+      email,
+      password,
+      phoneNumber,
+    });
 
     if (isSuccess) {
       setStep("complete");
@@ -116,10 +122,12 @@ export function SignupPage() {
           error={error}
           isPending={isPending}
           name={name}
+          phoneNumber={phoneNumber}
           onChangeEmail={setEmail}
           onChangeName={setName}
           onChangePassword={setPassword}
           onChangePasswordConfirm={setPasswordConfirm}
+          onChangePhoneNumber={setPhoneNumber}
           onSubmit={handleSubmitDetails}
           password={password}
           passwordChecks={passwordChecks}

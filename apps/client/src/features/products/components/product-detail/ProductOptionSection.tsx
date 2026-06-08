@@ -2,19 +2,23 @@ import { ProductDetailActionRow } from "@/features/products/components/product-d
 
 interface ProductOptionSectionProps {
   enablesRoastCustomization: boolean;
+  tasteRecommendationDescription: string;
   selectedGrindLabel: string;
   selectedRoastLabel: string;
   selectedWeightLabel: string;
   onApplyRecommendation: () => void;
+  onApplyTasteRecommendation: () => void;
   onOpenOptions: () => void;
 }
 
 export function ProductOptionSection({
   enablesRoastCustomization,
+  tasteRecommendationDescription,
   selectedGrindLabel,
   selectedRoastLabel,
   selectedWeightLabel,
   onApplyRecommendation,
+  onApplyTasteRecommendation,
   onOpenOptions,
 }: ProductOptionSectionProps) {
   return (
@@ -32,18 +36,37 @@ export function ProductOptionSection({
       </p>
 
       {enablesRoastCustomization ? (
-        <button
-          className="mt-4 flex w-full items-center justify-between bg-[var(--surface-chalkboard)] px-4 py-3 text-left"
-          onClick={onApplyRecommendation}
-          type="button"
-        >
-          <span className="text-[0.92rem] font-bold text-[var(--text-chalk)]">
-            매장 추천 커스텀 적용
-          </span>
-          <span className="text-[0.74rem] font-medium text-[var(--text-chalk-muted)]">
-            바로 적용 →
-          </span>
-        </button>
+        <div className="mt-4 grid gap-2">
+          <button
+            className="flex w-full items-center justify-between bg-[var(--surface-chalkboard)] px-4 py-3 text-left"
+            onClick={onApplyRecommendation}
+            type="button"
+          >
+            <span className="text-[0.92rem] font-bold text-[var(--text-chalk)]">
+              매장 추천 커스텀 적용
+            </span>
+            <span className="text-[0.74rem] font-medium text-[var(--text-chalk-muted)]">
+              바로 적용 →
+            </span>
+          </button>
+          <button
+            className="flex w-full items-center justify-between bg-[var(--surface-menu-board)] px-4 py-3 text-left text-[var(--text-cafe-ink)]"
+            onClick={onApplyTasteRecommendation}
+            type="button"
+          >
+            <span>
+              <span className="block text-[0.92rem] font-bold">
+                내 취향 자동 옵션 적용
+              </span>
+              <span className="mt-1 block text-[0.72rem] font-medium text-[var(--text-muted)]">
+                {tasteRecommendationDescription}
+              </span>
+            </span>
+            <span className="shrink-0 text-[0.74rem] font-semibold text-[var(--brand-primary)]">
+              적용 →
+            </span>
+          </button>
+        </div>
       ) : null}
 
       <div className="mt-4 bg-[var(--surface-menu-board)] px-3">

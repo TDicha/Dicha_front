@@ -3,8 +3,13 @@ export { TasteResultView } from "@/features/taste-test/components/TasteResultVie
 export { TasteTestIntroView } from "@/features/taste-test/components/TasteTestIntroView";
 export {
   flavorNoteLabels,
+  getTasteQuestions,
+  maxTasteQuestionCount,
   tasteQuestions,
 } from "@/features/taste-test/tasteTestConfig";
-export type { TasteTestAnswerKey } from "@/features/taste-test/tasteTestConfig";
+export type {
+  TasteQuestion,
+  TasteTestAnswerKey,
+} from "@/features/taste-test/tasteTestConfig";
 export { useSubmitTasteTest } from "@/features/taste-test/hooks/useTasteTest";
 export type { TasteProfile, TasteTestResult } from "@/features/taste-test/tasteTestApi";

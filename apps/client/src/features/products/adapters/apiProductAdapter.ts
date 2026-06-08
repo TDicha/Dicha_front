@@ -191,12 +191,20 @@ export const apiProductAdapter: ProductRepository = {
     return data.map(toProductCategory);
   },
   async list(params?: ProductListParams) {
+    const shouldUseSearch =
+      Boolean(params?.query) ||
+      Boolean(params?.roastLevel) ||
+      typeof params?.minPrice === "number" ||
+      typeof params?.maxPrice === "number";
     const { data } = await apiClient.get<ApiProduct[]>(
-      endpoints.products.list,
+      shouldUseSearch ? endpoints.products.search : endpoints.products.list,
       {
         params: {
           categoryId: params?.categoryId,
           keyword: params?.query,
+          roastLevel: params?.roastLevel,
+          minPrice: params?.minPrice,
+          maxPrice: params?.maxPrice,
         },
       },
     );
@@ -217,5 +225,12 @@ export const apiProductAdapter: ProductRepository = {
     );
 
     return toProduct(data);
+  },
+  async listOptions(productId: string) {
+    const { data } = await apiClient.get<ApiProductOption[]>(
+      endpoints.products.options(productId),
+    );
+
+    return data.map(toProductOption);
   },
 };

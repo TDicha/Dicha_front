@@ -6,6 +6,10 @@ interface CartPricingSectionProps {
 }
 
 export function CartPricingSection({ pricing }: CartPricingSectionProps) {
+  const couponDiscountLabel = pricing.couponDiscount
+    ? `-₩${formatPrice(pricing.couponDiscount)}`
+    : "₩0";
+
   return (
     <section className="bg-[var(--surface-menu-board)] px-[var(--page-x)] py-6">
       <p className="text-[0.62rem] font-semibold uppercase tracking-[0.3em] text-[var(--text-muted)]">
@@ -19,7 +23,9 @@ export function CartPricingSection({ pricing }: CartPricingSectionProps) {
         </div>
         <div className="flex items-center justify-between">
           <span className="text-[var(--text-muted-subtle)]">쿠폰 할인</span>
-          <span className="font-bold text-[var(--text-cafe-ink)]">-₩{formatPrice(pricing.couponDiscount)}</span>
+          <span className="font-bold text-[var(--text-cafe-ink)]">
+            {couponDiscountLabel}
+          </span>
         </div>
         <div className="flex items-center justify-between">
           <span className="text-[var(--text-muted-subtle)]">배송비</span>

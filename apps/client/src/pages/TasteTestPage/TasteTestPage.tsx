@@ -1,6 +1,6 @@
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 
-import { usePreferenceStore } from "@/app/store";
+import { useAuthStore, usePreferenceStore } from "@/app/store";
 import { EmptyState } from "@/components/common/EmptyState";
 import { LoadingScreen } from "@/components/common/LoadingScreen";
 import { PrimaryButton } from "@/components/common/PrimaryButton";
@@ -8,9 +8,11 @@ import {
   TasteQuestionView,
   TasteResultView,
   TasteTestIntroView,
-  tasteQuestions,
+  getTasteQuestions,
+  maxTasteQuestionCount,
   useSubmitTasteTest,
 } from "@/features/taste-test";
+import { fetchSession } from "@/services/auth/authService";
 
 export function TasteTestPage() {
   const step = usePreferenceStore((state) => state.step);
@@ -27,12 +29,30 @@ export function TasteTestPage() {
   const completeTest = usePreferenceStore((state) => state.completeTest);
   const setResult = usePreferenceStore((state) => state.setResult);
   const resetTest = usePreferenceStore((state) => state.resetTest);
+  const authStatus = useAuthStore((state) => state.status);
+  const setUser = useAuthStore((state) => state.login);
 
   const { mutate, reset, isPending, isError } = useSubmitTasteTest();
 
+  const tasteQuestions = getTasteQuestions(answers);
   const hasAllAnswers = tasteQuestions.every(
     (question) => answers[question.key],
   );
+
+  const refreshAuthenticatedUser = useCallback(async () => {
+    if (authStatus !== "authenticated") {
+      return;
+    }
+
+    try {
+      const refreshedUser = await fetchSession();
+      if (refreshedUser) {
+        setUser(refreshedUser);
+      }
+    } catch {
+      // 취향 결과 화면은 이미 표시 가능하므로 세션 갱신 실패는 조용히 넘긴다.
+    }
+  }, [authStatus, setUser]);
 
   // 결과 단계 진입 시 한 번만 백엔드에 제출한다. (재방문/재렌더로 result 가 비어 있으면 재요청)
   useEffect(() => {
@@ -41,9 +61,22 @@ export function TasteTestPage() {
     }
 
     mutate(answers, {
-      onSuccess: (data) => setResult(data),
+      onSuccess: (data) => {
+        setResult(data);
+        void refreshAuthenticatedUser();
+      },
     });
-  }, [step, result, isPending, isError, hasAllAnswers, answers, mutate, setResult]);
+  }, [
+    step,
+    result,
+    isPending,
+    isError,
+    hasAllAnswers,
+    answers,
+    mutate,
+    setResult,
+    refreshAuthenticatedUser,
+  ]);
 
   const currentQuestion = tasteQuestions[currentQuestionIndex];
   const selectedValue = currentQuestion
@@ -57,7 +90,13 @@ export function TasteTestPage() {
 
     answerQuestion(currentQuestion.key, value);
 
-    if (currentQuestionIndex === tasteQuestions.length - 1) {
+    const nextAnswers =
+      currentQuestion.key === "level"
+        ? { level: value }
+        : { ...answers, [currentQuestion.key]: value };
+    const nextQuestions = getTasteQuestions(nextAnswers);
+
+    if (currentQuestionIndex === nextQuestions.length - 1) {
       completeTest();
     }
   }
@@ -70,7 +109,10 @@ export function TasteTestPage() {
   function handleRetry() {
     reset();
     mutate(answers, {
-      onSuccess: (data) => setResult(data),
+      onSuccess: (data) => {
+        setResult(data);
+        void refreshAuthenticatedUser();
+      },
     });
   }
 
@@ -78,7 +120,7 @@ export function TasteTestPage() {
     return (
       <TasteTestIntroView
         onStart={startTest}
-        questionCount={tasteQuestions.length}
+        questionCount={maxTasteQuestionCount}
       />
     );
   }
@@ -91,7 +133,7 @@ export function TasteTestPage() {
         currentQuestionIndex={currentQuestionIndex}
         onBack={currentQuestionIndex === 0 ? resetTest : goToPreviousQuestion}
         onSelect={handleSelect}
-        questionCount={tasteQuestions.length}
+        questionCount={maxTasteQuestionCount}
         selectedValue={selectedValue}
       />
     );

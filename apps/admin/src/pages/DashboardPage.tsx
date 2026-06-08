@@ -1,23 +1,18 @@
 import { useEffect, useState } from "react";
 
 import {
-  fetchCategories,
-  fetchMembers,
-  fetchProducts,
+  fetchDashboardLists,
+  fetchDashboardSalesChart,
+  fetchDashboardSummary,
+  type AdminDashboardLists,
+  type AdminDashboardSummary,
+  type AdminSalesChartData,
 } from "@/services/api/adminApi";
 
-interface DashboardCounts {
-  members: number;
-  products: number;
-  categories: number;
-}
-
 export function DashboardPage() {
-  const [counts, setCounts] = useState<DashboardCounts>({
-    members: 0,
-    products: 0,
-    categories: 0,
-  });
+  const [summary, setSummary] = useState<AdminDashboardSummary | null>(null);
+  const [salesChart, setSalesChart] = useState<AdminSalesChartData | null>(null);
+  const [lists, setLists] = useState<AdminDashboardLists | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -26,17 +21,15 @@ export function DashboardPage() {
     setError("");
 
     try {
-      const [members, products, categories] = await Promise.all([
-        fetchMembers(),
-        fetchProducts(),
-        fetchCategories(),
+      const [summaryData, chartData, listsData] = await Promise.all([
+        fetchDashboardSummary(),
+        fetchDashboardSalesChart(),
+        fetchDashboardLists(),
       ]);
 
-      setCounts({
-        members: members.length,
-        products: products.length,
-        categories: categories.length,
-      });
+      setSummary(summaryData);
+      setSalesChart(chartData);
+      setLists(listsData);
     } catch (loadError) {
       setError(
         loadError instanceof Error
@@ -56,19 +49,28 @@ export function DashboardPage() {
     <div className="page-stack">
       <section className="metric-grid">
         <article className="admin-card metric-card">
-          <span>회원</span>
-          <strong>{isLoading ? "-" : `${counts.members}명`}</strong>
-          <small>현재 회원 수</small>
+          <span>신규 주문</span>
+          <strong>{isLoading ? "-" : `${summary?.newOrderCount ?? 0}건`}</strong>
+          <small>오늘 접수</small>
         </article>
         <article className="admin-card metric-card">
-          <span>판매 상품</span>
-          <strong>{isLoading ? "-" : `${counts.products}개`}</strong>
-          <small>판매 중인 상품</small>
+          <span>오늘 매출</span>
+          <strong>
+            {isLoading
+              ? "-"
+              : `₩${new Intl.NumberFormat("ko-KR").format(summary?.todaySales ?? 0)}`}
+          </strong>
+          <small>결제 완료 기준</small>
         </article>
         <article className="admin-card metric-card">
-          <span>카테고리</span>
-          <strong>{isLoading ? "-" : `${counts.categories}개`}</strong>
-          <small>등록된 분류</small>
+          <span>신규 회원</span>
+          <strong>{isLoading ? "-" : `${summary?.newMemberCount ?? 0}명`}</strong>
+          <small>오늘 가입</small>
+        </article>
+        <article className="admin-card metric-card">
+          <span>신규 리뷰</span>
+          <strong>{isLoading ? "-" : `${summary?.newReviewCount ?? 0}개`}</strong>
+          <small>오늘 작성</small>
         </article>
       </section>
 
@@ -77,19 +79,37 @@ export function DashboardPage() {
       <section className="dashboard-grid">
         <article className="admin-card">
           <div className="section-heading">
-            <h2>사용 가능한 관리 기능</h2>
+            <h2>최근 주문</h2>
             <button onClick={() => void loadDashboard()} type="button">
               새로고침
             </button>
           </div>
           <div className="task-list">
-            <p>관리자 로그인 / 세션 확인</p>
-            <p>회원 목록 조회 및 강제 탈퇴</p>
-            <p>상품 목록 / 등록 / 수정 / 삭제</p>
-            <p>카테고리 목록 / 등록 / 삭제</p>
+            {(lists?.recentOrders ?? []).slice(0, 5).map((order) => (
+              <p key={order.orderNumber}>
+                {order.orderNumber} · {order.customerName} ·{" "}
+                ₩{new Intl.NumberFormat("ko-KR").format(order.totalPrice)}
+              </p>
+            ))}
+            {!lists?.recentOrders?.length ? <p>최근 주문이 없습니다.</p> : null}
           </div>
         </article>
-
+        <article className="admin-card">
+          <div className="section-heading">
+            <h2>매출 차트 데이터</h2>
+          </div>
+          <div className="task-list">
+            {(salesChart?.labels ?? []).map((label, index) => (
+              <p key={label}>
+                {label} · ₩
+                {new Intl.NumberFormat("ko-KR").format(
+                  salesChart?.sales[index] ?? 0,
+                )}
+              </p>
+            ))}
+            {!salesChart?.labels?.length ? <p>매출 데이터가 없습니다.</p> : null}
+          </div>
+        </article>
       </section>
     </div>
   );

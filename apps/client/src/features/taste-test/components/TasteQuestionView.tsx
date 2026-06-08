@@ -5,9 +5,7 @@ import { AppCard } from "@/components/common/AppCard";
 import { PrimaryButton } from "@/components/common/PrimaryButton";
 import { ROUTES } from "@/shared/constants/routes";
 
-import type { tasteQuestions } from "@/features/taste-test/tasteTestConfig";
-
-type TasteQuestion = (typeof tasteQuestions)[number];
+import type { TasteQuestion } from "@/features/taste-test/tasteTestConfig";
 
 interface TasteQuestionViewProps {
   currentQuestion: TasteQuestion;

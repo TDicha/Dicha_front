@@ -3,8 +3,12 @@ import { useNavigate } from "react-router-dom";
 
 import { useAuthStore, useCartStore, useCheckoutStore } from "@/app/store";
 import { AuthField } from "@/components/common/AuthField";
+import { LoadingScreen } from "@/components/common/LoadingScreen";
 import { AddressPickerModal, toAddressSnapshot, useAddresses } from "@/features/address";
-import { calculateCartPricing } from "@/features/cart/cartPricing";
+import {
+  calculateCartPricing,
+  type CartPricingSummary,
+} from "@/features/cart/cartPricing";
 import {
   PurchaseBottomActionBar,
   PurchaseCompleteView,
@@ -22,19 +26,19 @@ import { ROUTES } from "@/shared/constants/routes";
 
 const paymentOptions = [
   {
-    id: "dicha-card" as const,
-    label: "디샤페이",
-    description: "디샤 간편결제 (UI 데모)",
+    id: "account" as const,
+    label: "무통장입금",
+    description: "무통장입금",
   },
   {
     id: "kakao-pay" as const,
     label: "카카오페이",
-    description: "카카오 간편결제 (UI 데모)",
+    description: "카카오 간편결제",
   },
   {
     id: "credit-card" as const,
     label: "신용/체크카드",
-    description: "카드 결제 (UI 데모)",
+    description: "카드 결제",
   },
 ] satisfies ReadonlyArray<{
   id: PaymentMethod;
@@ -78,7 +82,8 @@ export function PurchasePage() {
   const clearDraft = useCheckoutStore((state) => state.clearDraft);
 
   const user = useAuthStore((state) => state.user);
-  const isAuthenticated = useAuthStore((state) => state.status === "authenticated");
+  const authStatus = useAuthStore((state) => state.status);
+  const isAuthenticated = authStatus === "authenticated";
 
   const { defaultAddress } = useAddresses();
   const clearPurchasedItems = useCartStore((state) => state.clearPurchasedItems);
@@ -87,12 +92,14 @@ export function PurchasePage() {
   const items = useMemo(() => draft?.items ?? [], [draft]);
 
   const [selectedPayment, setSelectedPayment] = useState<PaymentMethod>(
-    draft?.paymentMethod ?? "dicha-card",
+    draft?.paymentMethod ?? "account",
   );
   const [pickerOpen, setPickerOpen] = useState(false);
   const [guestPassword, setGuestPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [completedOrder, setCompletedOrder] = useState<Order | null>(null);
+  const [completedPricing, setCompletedPricing] =
+    useState<CartPricingSummary | null>(null);
 
   const selectedAddress = draft?.addressSnapshot ?? null;
 
@@ -131,12 +138,18 @@ export function PurchasePage() {
     return (
       <PurchaseCompleteView
         completedOrder={completedOrder}
-        completedPricing={{ subtotal, couponDiscount, shippingFee, total }}
-        fallbackTotal={total}
+        completedPricing={completedPricing}
+        fallbackTotal={completedOrder.totalAmount}
         onGoOrders={handleGoOrders}
         paymentLabel={paymentLabel}
         shippingLabel={buildShippingLabel(completedOrder.addressSnapshot)}
       />
+    );
+  }
+
+  if (authStatus === "checking") {
+    return (
+      <LoadingScreen className="min-h-full" message="로그인 상태 확인 중" />
     );
   }
 
@@ -188,6 +201,7 @@ export function PurchasePage() {
 
     try {
       const order = await createOrderMutation.mutateAsync(payload);
+      setCompletedPricing(pricing);
       // 주문에 사용한 장바구니 항목 정리 후 draft 초기화.
       clearPurchasedItems(items.map((item) => item.cartItemId));
       clearDraft();

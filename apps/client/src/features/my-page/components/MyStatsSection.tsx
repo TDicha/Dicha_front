@@ -1,10 +1,22 @@
-const stats = [
-  { label: "주문 횟수", value: "12" },
-  { label: "저장 블렌드", value: "4" },
-  { label: "멤버십", value: "Gold" },
-] as const;
+interface MyStatsSectionProps {
+  currentOrderCount: number;
+  subscriptionStatus: string;
+  cancelClaimCount: number;
+  isLoading?: boolean;
+}
 
-export function MyStatsSection() {
+export function MyStatsSection({
+  currentOrderCount,
+  subscriptionStatus,
+  cancelClaimCount,
+  isLoading = false,
+}: MyStatsSectionProps) {
+  const stats = [
+    { label: "현재주문", value: isLoading ? "-" : String(currentOrderCount) },
+    { label: "구독", value: isLoading ? "-" : subscriptionStatus },
+    { label: "취소·클레임", value: isLoading ? "-" : String(cancelClaimCount) },
+  ] as const;
+
   return (
     <section className="px-5 py-5">
       <p className="text-[0.62rem] font-semibold uppercase tracking-[0.3em] text-[var(--text-muted)]">

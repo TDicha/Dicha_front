@@ -9,10 +9,12 @@ interface SignupDetailsStepProps {
   password: string;
   passwordChecks: PasswordChecks;
   passwordConfirm: string;
+  phoneNumber: string;
   onChangeEmail: (value: string) => void;
   onChangeName: (value: string) => void;
   onChangePassword: (value: string) => void;
   onChangePasswordConfirm: (value: string) => void;
+  onChangePhoneNumber: (value: string) => void;
   onSubmit: () => void;
 }
 
@@ -24,19 +26,24 @@ export function SignupDetailsStep({
   password,
   passwordChecks,
   passwordConfirm,
+  phoneNumber,
   onChangeEmail,
   onChangeName,
   onChangePassword,
   onChangePasswordConfirm,
+  onChangePhoneNumber,
   onSubmit,
 }: SignupDetailsStepProps) {
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const phonePattern = /^01[016789]-?\d{3,4}-?\d{4}$/;
   const isEmailValid = emailPattern.test(email.trim());
   const isNameValid = name.trim().length > 0;
+  const isPhoneValid = phonePattern.test(phoneNumber.trim());
   const canSubmit =
     !isPending &&
     isEmailValid &&
     isNameValid &&
+    isPhoneValid &&
     passwordChecks.hasLength &&
     passwordChecks.hasEnoughTypes &&
     password === passwordConfirm;
@@ -121,6 +128,25 @@ export function SignupDetailsStep({
           </div>
           {name && !isNameValid ? (
             <p className="mt-2 text-xs text-[var(--state-danger)]">이름을 입력해 주세요</p>
+          ) : null}
+        </div>
+
+        <div>
+          <p className="mb-2 text-xs font-medium text-[var(--text-muted-compact)]">연락처 *</p>
+          <div className="flex h-11 items-center rounded-[0.85rem] border border-[var(--border-muted)] bg-[var(--surface-input)] px-4">
+            <input
+              autoComplete="tel"
+              className="w-full bg-transparent text-sm text-[var(--brand-primary)] placeholder:text-[var(--text-muted-light)]"
+              inputMode="tel"
+              onChange={(event) => onChangePhoneNumber(event.target.value)}
+              placeholder="010-1234-5678"
+              value={phoneNumber}
+            />
+          </div>
+          {phoneNumber && !isPhoneValid ? (
+            <p className="mt-2 text-xs text-[var(--state-danger)]">
+              연락처 형식을 확인해 주세요
+            </p>
           ) : null}
         </div>
       </div>

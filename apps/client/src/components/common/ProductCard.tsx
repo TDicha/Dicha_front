@@ -8,12 +8,12 @@ import { productDetailPath } from "@/shared/utils/productRoutes";
 export function ProductCard({ product }: { product: Product }) {
   return (
     <Link
-      className="glass-card block overflow-hidden"
+      className="glass-card motion-clickable motion-card-hover motion-image-parent block overflow-hidden"
       to={productDetailPath(product)}
     >
       <img
         alt={product.name}
-        className="h-44 w-full object-cover"
+        className="motion-image h-44 w-full object-cover"
         src={product.image}
       />
       <div className="space-y-3 px-4 py-4">

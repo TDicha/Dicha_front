@@ -2,14 +2,19 @@ import { useEffect, useMemo, useState } from "react";
 
 import {
   createCategory,
+  createProductOption,
   createProduct,
   deleteCategory,
   deleteProduct,
+  deleteProductOption,
   fetchCategories,
   fetchProducts,
+  updateProductOption,
   updateProduct,
+  uploadProductImage,
   type AdminCategory,
   type AdminProduct,
+  type AdminProductOption,
   type AdminProductPayload,
 } from "@/services/api/adminApi";
 
@@ -39,6 +44,12 @@ interface CategoryFormState {
   displayOrder: string;
 }
 
+interface OptionFormState {
+  name: string;
+  description: string;
+  extraPrice: string;
+}
+
 const emptyProductForm: ProductFormState = {
   name: "",
   subtitle: "",
@@ -61,6 +72,12 @@ const emptyCategoryForm: CategoryFormState = {
   name: "",
   slug: "",
   displayOrder: "",
+};
+
+const emptyOptionForm: OptionFormState = {
+  name: "",
+  description: "",
+  extraPrice: "0",
 };
 
 function formatPrice(price: number) {
@@ -172,9 +189,13 @@ export function ProductsPage() {
   const [categoryForm, setCategoryForm] =
     useState<CategoryFormState>(emptyCategoryForm);
   const [editingProductId, setEditingProductId] = useState<number | null>(null);
+  const [editingOptionId, setEditingOptionId] = useState<number | null>(null);
+  const [optionForm, setOptionForm] = useState<OptionFormState>(emptyOptionForm);
   const [isLoading, setIsLoading] = useState(true);
   const [isSavingProduct, setIsSavingProduct] = useState(false);
+  const [isSavingOption, setIsSavingOption] = useState(false);
   const [isSavingCategory, setIsSavingCategory] = useState(false);
+  const [uploadingProductId, setUploadingProductId] = useState<number | null>(null);
   const [deletingProductId, setDeletingProductId] = useState<number | null>(null);
   const [deletingCategoryId, setDeletingCategoryId] = useState<number | null>(null);
   const [error, setError] = useState("");
@@ -183,6 +204,18 @@ export function ProductsPage() {
     () => new Map(categories.map((category) => [category.id, category])),
     [categories],
   );
+  const editingProduct = useMemo(
+    () => products.find((product) => product.id === editingProductId) ?? null,
+    [editingProductId, products],
+  );
+
+  function toOptionPayload(form: OptionFormState): AdminProductOption {
+    return {
+      name: form.name.trim(),
+      description: form.description.trim() || undefined,
+      extraPrice: Number(form.extraPrice || 0),
+    };
+  }
 
   async function loadProducts() {
     setIsLoading(true);
@@ -238,6 +271,8 @@ export function ProductsPage() {
 
       setProductForm(emptyProductForm);
       setEditingProductId(null);
+      setEditingOptionId(null);
+      setOptionForm(emptyOptionForm);
       await loadProducts();
     } catch (saveError) {
       setError(
@@ -247,6 +282,85 @@ export function ProductsPage() {
       );
     } finally {
       setIsSavingProduct(false);
+    }
+  }
+
+  async function handleUploadImage(product: AdminProduct, file?: File) {
+    if (!file) {
+      return;
+    }
+
+    setUploadingProductId(product.id);
+    setError("");
+
+    try {
+      await uploadProductImage(product.id, file);
+      await loadProducts();
+    } catch (uploadError) {
+      setError(
+        uploadError instanceof Error
+          ? uploadError.message
+          : "상품 이미지 업로드에 실패했습니다.",
+      );
+    } finally {
+      setUploadingProductId(null);
+    }
+  }
+
+  async function handleSaveOption() {
+    if (!editingProductId || !optionForm.name.trim()) {
+      setError("옵션을 관리할 상품과 옵션명은 필수입니다.");
+      return;
+    }
+
+    setIsSavingOption(true);
+    setError("");
+
+    try {
+      const payload = toOptionPayload(optionForm);
+
+      if (editingOptionId) {
+        await updateProductOption(editingProductId, editingOptionId, payload);
+      } else {
+        await createProductOption(editingProductId, payload);
+      }
+
+      setEditingOptionId(null);
+      setOptionForm(emptyOptionForm);
+      await loadProducts();
+    } catch (saveError) {
+      setError(
+        saveError instanceof Error
+          ? saveError.message
+          : "옵션 저장에 실패했습니다.",
+      );
+    } finally {
+      setIsSavingOption(false);
+    }
+  }
+
+  async function handleDeleteOption(option: AdminProductOption) {
+    if (!editingProductId || !option.id) {
+      return;
+    }
+
+    const shouldDelete = window.confirm(`${option.name} 옵션을 삭제할까요?`);
+
+    if (!shouldDelete) {
+      return;
+    }
+
+    setError("");
+
+    try {
+      await deleteProductOption(editingProductId, option.id);
+      await loadProducts();
+    } catch (deleteError) {
+      setError(
+        deleteError instanceof Error
+          ? deleteError.message
+          : "옵션 삭제에 실패했습니다.",
+      );
     }
   }
 
@@ -364,7 +478,9 @@ export function ProductsPage() {
             <button
               onClick={() => {
                 setEditingProductId(null);
+                setEditingOptionId(null);
                 setProductForm(emptyProductForm);
+                setOptionForm(emptyOptionForm);
               }}
               type="button"
             >
@@ -597,6 +713,102 @@ export function ProductsPage() {
             {isSavingProduct ? "저장 중" : editingProductId ? "상품 수정" : "상품 등록"}
           </button>
         </div>
+
+        {editingProduct ? (
+          <div className="admin-card mt-4">
+            <div className="section-heading">
+              <div>
+                <h3>옵션 개별 관리</h3>
+                <p className="section-description">
+                  {editingProduct.name} 옵션만 따로 추가·수정·삭제합니다.
+                </p>
+              </div>
+            </div>
+            <div className="category-chip-list">
+              {(editingProduct.options ?? []).map((option) => (
+                <span className="category-chip" key={option.id ?? option.name}>
+                  {option.name}
+                  <small>+{option.extraPrice ?? 0}원</small>
+                  <button
+                    onClick={() => {
+                      setEditingOptionId(option.id ?? null);
+                      setOptionForm({
+                        name: option.name,
+                        description: option.description ?? "",
+                        extraPrice: String(option.extraPrice ?? 0),
+                      });
+                    }}
+                    type="button"
+                  >
+                    수정
+                  </button>
+                  {option.id ? (
+                    <button
+                      onClick={() => void handleDeleteOption(option)}
+                      type="button"
+                    >
+                      삭제
+                    </button>
+                  ) : null}
+                </span>
+              ))}
+            </div>
+            <div className="admin-form-grid category-form-grid">
+              <label className="field">
+                <span>옵션명 *</span>
+                <input
+                  onChange={(event) =>
+                    setOptionForm((current) => ({
+                      ...current,
+                      name: event.target.value,
+                    }))
+                  }
+                  placeholder="200g"
+                  value={optionForm.name}
+                />
+              </label>
+              <label className="field">
+                <span>추가금</span>
+                <input
+                  inputMode="numeric"
+                  onChange={(event) =>
+                    setOptionForm((current) => ({
+                      ...current,
+                      extraPrice: event.target.value,
+                    }))
+                  }
+                  placeholder="0"
+                  value={optionForm.extraPrice}
+                />
+              </label>
+              <label className="field">
+                <span>설명</span>
+                <input
+                  onChange={(event) =>
+                    setOptionForm((current) => ({
+                      ...current,
+                      description: event.target.value,
+                    }))
+                  }
+                  placeholder="기본 용량"
+                  value={optionForm.description}
+                />
+              </label>
+              <button
+                className="primary-action compact align-end"
+                disabled={isSavingOption}
+                onClick={() => void handleSaveOption()}
+                type="button"
+              >
+                {isSavingOption
+                  ? "저장 중"
+                  : editingOptionId
+                    ? "옵션 수정"
+                    : "옵션 추가"}
+              </button>
+            </div>
+          </div>
+        ) : null}
       </section>
 
       <section className="admin-card">
@@ -719,11 +931,25 @@ export function ProductsPage() {
                 </span>
                 <span>{product.onSale === false ? "판매 중지" : "판매 중"}</span>
                 <span className="row-actions">
+                  <label className="secondary-action">
+                    {uploadingProductId === product.id ? "업로드 중" : "이미지"}
+                    <input
+                      accept="image/*"
+                      className="sr-only"
+                      disabled={uploadingProductId === product.id}
+                      onChange={(event) =>
+                        void handleUploadImage(product, event.target.files?.[0])
+                      }
+                      type="file"
+                    />
+                  </label>
                   <button
                     className="secondary-action"
                     onClick={() => {
                       setEditingProductId(product.id);
+                      setEditingOptionId(null);
                       setProductForm(toProductForm(product));
+                      setOptionForm(emptyOptionForm);
                     }}
                     type="button"
                   >

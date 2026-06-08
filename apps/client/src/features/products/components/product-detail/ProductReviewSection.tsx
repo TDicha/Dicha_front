@@ -1,13 +1,5 @@
 import { BrandAvatar } from "@/components/common/BrandAvatar";
-
-interface ProductReview {
-  id: string;
-  author: string;
-  content: string;
-  date: string;
-  optionLabel: string;
-  rating: number;
-}
+import type { ProductReview } from "@/features/products/reviewsApi";
 
 function getRatingText(rating: number) {
   return `${"★".repeat(rating)}${"☆".repeat(Math.max(0, 5 - rating))}`;

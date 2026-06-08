@@ -27,7 +27,7 @@ export function BottomTabBar() {
             key={to}
             className={({ isActive }: { isActive: boolean }) =>
               [
-                "relative flex min-h-14 min-w-0 flex-1 flex-col items-center justify-center gap-1 px-1.5 text-[11px] font-medium transition-[color,transform] duration-200 max-[360px]:text-[10px]",
+                "motion-clickable relative flex min-h-14 min-w-0 flex-1 flex-col items-center justify-center gap-1 px-1.5 text-[11px] font-medium transition-[color,transform] duration-200 max-[360px]:text-[10px]",
                 isActive
                   ? "-translate-y-1 font-semibold text-[var(--text-cafe-ink)]"
                   : "text-[var(--text-muted)]",
@@ -36,7 +36,7 @@ export function BottomTabBar() {
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
             to={to}
           >
-            <Icon className="size-[1.1rem]" strokeWidth={2.1} />
+            <Icon className="size-[1.1rem] transition-transform duration-200" strokeWidth={2.1} />
             <span className="whitespace-nowrap">{label}</span>
           </NavLink>
         ))}

@@ -56,4 +56,9 @@ export interface UserProfile {
   email: string;
   tier: string;
   favoriteFlavor: string;
+  totalSpent?: number;
+  tasteAcidity?: number;
+  tasteBody?: number;
+  tasteSweetness?: number;
+  tastePrimaryFlavorNote?: string;
 }

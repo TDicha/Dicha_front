@@ -63,11 +63,29 @@ export function OrdersPage() {
       return;
     }
 
+    let cancelReason: string | undefined;
+
+    if (status === "CANCELLED") {
+      const reason = window.prompt(
+        `${order.orderNumber} 주문을 취소하는 이유를 입력해 주세요.`,
+      );
+
+      if (!reason?.trim()) {
+        return;
+      }
+
+      cancelReason = reason.trim();
+    }
+
     setUpdatingOrder(order.orderNumber);
     setError("");
 
     try {
-      const updated = await updateOrderStatus(order.orderNumber, status);
+      const updated = await updateOrderStatus(
+        order.orderNumber,
+        status,
+        cancelReason,
+      );
       setOrders((current) =>
         current.map((item) =>
           item.orderNumber === order.orderNumber
@@ -128,7 +146,9 @@ export function OrdersPage() {
                   <span>{order.orderNumber}</span>
                   <span>
                     {order.recipientName}
-                    {order.memberEmail ? ` (${order.memberEmail})` : " (비회원)"}
+                    {order.memberEmail
+                      ? ` (${order.memberEmail})`
+                      : " (회원 여부 미표시)"}
                   </span>
                   <span>₩{formatPrice(order.totalPrice)}</span>
                   <span>{formatDate(order.createdAt)}</span>

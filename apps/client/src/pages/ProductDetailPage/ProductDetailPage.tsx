@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 
 import {
   useAppStore,
@@ -27,6 +27,7 @@ import {
   useProduct,
   useProductOptions,
 } from "@/features/products/hooks/useProducts";
+import { useProductReviews } from "@/features/products/hooks/useProductReviews";
 import { ROUTES } from "@/shared/constants/routes";
 import { formatPrice } from "@/shared/utils/format";
 
@@ -45,13 +46,56 @@ function getDefaultRoast(roastLevel: "Light" | "Medium" | "Dark") {
   return "미디엄";
 }
 
+function hasTasteProfile(user: ReturnType<typeof useAuthStore.getState>["user"]) {
+  return (
+    user?.tasteAcidity !== undefined &&
+    user.tasteBody !== undefined &&
+    user.tasteSweetness !== undefined &&
+    Boolean(user.tastePrimaryFlavorNote)
+  );
+}
+
+function getTasteRoast(user: NonNullable<ReturnType<typeof useAuthStore.getState>["user"]>) {
+  if ((user.tasteAcidity ?? 3) >= 4 && (user.tasteBody ?? 3) <= 3) {
+    return "라이트";
+  }
+  if ((user.tasteBody ?? 3) >= 4 || (user.tasteAcidity ?? 3) <= 2) {
+    return "다크";
+  }
+  return "미디엄";
+}
+
+function getTasteGrind(user: NonNullable<ReturnType<typeof useAuthStore.getState>["user"]>) {
+  const flavor = user.tastePrimaryFlavorNote;
+  if (
+    (user.tasteAcidity ?? 3) >= 4 ||
+    flavor === "FRUITY" ||
+    flavor === "FLORAL" ||
+    flavor === "CITRUS" ||
+    flavor === "BERRY"
+  ) {
+    return "핸드드립 분쇄";
+  }
+  if (
+    (user.tasteBody ?? 3) >= 4 ||
+    flavor === "CHOCOLATY" ||
+    flavor === "ROASTY" ||
+    flavor === "SPICY"
+  ) {
+    return "에스프레소 분쇄";
+  }
+  return "홀빈";
+}
+
 export function ProductDetailPage() {
   const { productId } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const { isBottomSheetOpen, openBottomSheet, closeBottomSheet } =
     useAppStore();
   const addItem = useCartStore((state) => state.addItem);
   const authStatus = useAuthStore((state) => state.status);
+  const user = useAuthStore((state) => state.user);
   const createDirectCheckout = useCheckoutStore((state) => state.createDirect);
   const addCartItemMutation = useAddCartItem();
   const itemCount = useCartStore((state) =>
@@ -64,6 +108,7 @@ export function ProductDetailPage() {
   } = useProduct(productId);
   const { data: productOptions = [], isLoading: isProductOptionsLoading } =
     useProductOptions(productId);
+  const { data: productReviews = [] } = useProductReviews(productId);
 
   const enablesRoastCustomization = product?.productType === "beans";
   const weightOptions = useMemo(() => {
@@ -101,9 +146,9 @@ export function ProductDetailPage() {
   )
     ? activeWeightId
     : undefined;
-  const reviewTotal =
-    product ? (product.reviewCount ?? 0) : 0;
-  const reviewMoreCount = reviewTotal;
+  const visibleReviews = productReviews.slice(0, 2);
+  const reviewTotal = product ? (product.reviewCount ?? productReviews.length) : 0;
+  const reviewMoreCount = Math.max(reviewTotal - visibleReviews.length, 0);
   const unitPrice = product
     ? product.price + (selectedWeight?.extraPrice ?? 0)
     : 0;
@@ -115,6 +160,15 @@ export function ProductDetailPage() {
         ? `${selectedRoastLabel} · ${selectedGrind} · ${selectedWeight.name}`
         : "옵션을 선택해주세요";
   const shouldUseCartApi = authStatus === "authenticated";
+  const userHasTasteProfile = hasTasteProfile(user);
+  const tasteRecommendationDescription =
+    authStatus === "checking"
+      ? "로그인 상태를 확인하고 있어요"
+      : authStatus !== "authenticated"
+      ? "로그인하면 저장된 취향으로 옵션을 맞춰드려요"
+      : userHasTasteProfile
+        ? "저장된 산미, 바디감, 단맛 기준으로 자동 선택"
+        : "취향 테스트를 먼저 완료하면 사용할 수 있어요";
 
   function ensureOptionSelected() {
     if (
@@ -199,6 +253,34 @@ export function ProductDetailPage() {
     setSelectedWeightId(weightOptions[0].id);
   }
 
+  function handleApplyTasteRecommendation() {
+    if (authStatus === "checking") {
+      return;
+    }
+
+    if (authStatus !== "authenticated") {
+      navigate(ROUTES.login, {
+        state: {
+          from: `${location.pathname}${location.search}`,
+        },
+      });
+      return;
+    }
+
+    if (!user || !userHasTasteProfile) {
+      navigate(ROUTES.tasteTest);
+      return;
+    }
+
+    if (!product || weightOptions.length === 0) {
+      return;
+    }
+
+    setSelectedRoast(getTasteRoast(user));
+    setSelectedGrind(getTasteGrind(user));
+    setSelectedWeightId(weightOptions[0].id);
+  }
+
   if (isProductLoading) {
     return (
       <LoadingScreen
@@ -242,6 +324,7 @@ export function ProductDetailPage() {
       <ProductOptionSection
         enablesRoastCustomization={enablesRoastCustomization}
         onApplyRecommendation={handleApplyRecommendation}
+        onApplyTasteRecommendation={handleApplyTasteRecommendation}
         onOpenOptions={openBottomSheet}
         selectedGrindLabel={selectedGrind}
         selectedRoastLabel={selectedRoastLabel || getDefaultRoast(product.roastLevel)}
@@ -250,6 +333,7 @@ export function ProductDetailPage() {
             ? `${selectedWeight.name} - ₩${formatPrice(unitPrice)}`
             : "선택해주세요"
         }
+        tasteRecommendationDescription={tasteRecommendationDescription}
       />
       <ProductFlavorNotesSection
         description={product.description}
@@ -259,7 +343,7 @@ export function ProductDetailPage() {
         rating={product.rating}
         onViewMore={() => setImplementationFeature("리뷰 더 보기")}
         reviewMoreCount={reviewMoreCount}
-        reviews={[]}
+        reviews={visibleReviews}
         reviewTotal={reviewTotal}
       />
       <ProductBottomActionBar

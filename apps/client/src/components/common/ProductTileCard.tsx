@@ -32,7 +32,9 @@ export function ProductTileCard({
 
   return (
     <Link
-      className={["min-w-0", className].filter(Boolean).join(" ")}
+      className={["motion-clickable motion-image-parent block min-w-0", className]
+        .filter(Boolean)
+        .join(" ")}
       to={href}
     >
       <AppCard
@@ -53,7 +55,7 @@ export function ProductTileCard({
         >
           <img
             alt={product.name}
-            className="absolute inset-0 h-full w-full object-cover"
+            className="motion-image absolute inset-0 h-full w-full object-cover"
             src={product.image}
           />
           <div className="absolute inset-x-0 bottom-0 h-16 bg-[linear-gradient(180deg,var(--overlay-black-0)_0%,var(--overlay-scrim)_100%)]" />

@@ -1,7 +1,7 @@
 import { ChevronLeft, Search, ShoppingCart } from "lucide-react";
 import { Link, useLocation, useMatches, useNavigate } from "react-router-dom";
 
-import { useCartStore } from "@/app/store";
+import { useCartStore, usePreferenceStore } from "@/app/store";
 import { ROUTES } from "@/shared/constants/routes";
 
 interface RouteHandle {
@@ -15,6 +15,8 @@ export function AppHeader() {
   const navigate = useNavigate();
   const current = matches.at(-1);
   const handle = current?.handle as RouteHandle | undefined;
+  const tasteStep = usePreferenceStore((state) => state.step);
+  const tasteResult = usePreferenceStore((state) => state.result);
   const itemCount = useCartStore((state) =>
     state.items.reduce((count, item) => count + item.quantity, 0),
   );
@@ -25,6 +27,14 @@ export function AppHeader() {
 
   const isHome = location.pathname === "/";
   const shouldShowSearch = isHome || location.pathname === ROUTES.products;
+  const headerTitle =
+    location.pathname === ROUTES.tasteTest
+      ? tasteStep === "result"
+        ? tasteResult
+          ? "취향 테스트 결과"
+          : "취향 분석 중"
+        : "취향 테스트"
+      : handle?.title;
 
   function handleBack() {
     if (window.history.length > 1) {
@@ -79,7 +89,7 @@ export function AppHeader() {
             <ChevronLeft className="size-5" />
           </button>
           <h1 className="pointer-events-none absolute left-1/2 max-w-[60%] -translate-x-1/2 truncate text-center font-heading text-base font-semibold text-[var(--brand-primary)]">
-            {handle?.title ?? (
+            {headerTitle ?? (
               <img
                 alt="DICHA"
                 src={headerLogoSrc}

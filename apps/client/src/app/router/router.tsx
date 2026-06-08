@@ -46,7 +46,7 @@ export const router = createBrowserRouter([
       {
         path: "taste-test",
         element: <TasteTestPage />,
-        handle: { title: "취향 테스트 결과" },
+        handle: { title: "취향 테스트" },
       },
       {
         element: <RouteGuard />,

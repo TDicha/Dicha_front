@@ -11,9 +11,9 @@ export interface CartPricingSummary {
 }
 
 const cartPricingPolicy = {
-  couponDiscountAmount: 5000,
+  couponDiscountAmount: 0,
   freeShippingThreshold: 30000,
-  standardShippingFee: 3000,
+  standardShippingFee: 0,
 };
 
 export function calculateCartPricing(

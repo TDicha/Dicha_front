@@ -5,6 +5,7 @@ import {
   OrderCard,
   OrderEmptyState,
   OrderFilterTabs,
+  useCancelOrder,
   useOrders,
   type Order,
 } from "@/features/orders";
@@ -13,7 +14,6 @@ const filterOptions = [
   { key: "all", label: "전체" },
   { key: "active", label: "진행중" },
   { key: "done", label: "완료" },
-  { key: "empty", label: "빈 상태" },
 ] as const;
 
 function isActiveOrder(order: Order) {
@@ -24,6 +24,17 @@ export function OrderListPage() {
   const [filter, setFilter] =
     useState<(typeof filterOptions)[number]["key"]>("all");
   const { data: orders = [], isError, isLoading } = useOrders();
+  const cancelOrder = useCancelOrder();
+
+  function handleCancelOrder(order: Order) {
+    const shouldCancel = window.confirm(`${order.orderNo} 주문을 취소할까요?`);
+
+    if (!shouldCancel) {
+      return;
+    }
+
+    cancelOrder.mutate(order.orderNo);
+  }
 
   const filteredOrders = useMemo(() => {
     if (filter === "all") {
@@ -65,7 +76,15 @@ export function OrderListPage() {
       ) : filteredOrders.length ? (
         <section className="mt-2 space-y-4">
           {filteredOrders.map((order) => (
-            <OrderCard key={order.id} order={order} />
+            <OrderCard
+              key={order.id}
+              isCanceling={
+                cancelOrder.isPending &&
+                cancelOrder.variables === order.orderNo
+              }
+              onCancel={handleCancelOrder}
+              order={order}
+            />
           ))}
         </section>
       ) : (

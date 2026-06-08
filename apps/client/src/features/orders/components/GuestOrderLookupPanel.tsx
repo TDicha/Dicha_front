@@ -2,7 +2,10 @@ import { useState } from "react";
 
 import { GuestOrderLookupForm } from "@/features/orders/components/GuestOrderLookupForm";
 import { GuestOrderLookupResult } from "@/features/orders/components/GuestOrderLookupResult";
-import { useLookupGuestOrder } from "@/features/orders/hooks/useOrders";
+import {
+  useCancelGuestOrder,
+  useLookupGuestOrder,
+} from "@/features/orders/hooks/useOrders";
 
 interface GuestOrderLookupPanelProps {
   initialOrderNo?: string;
@@ -14,6 +17,7 @@ export function GuestOrderLookupPanel({
   initialPhone = "",
 }: GuestOrderLookupPanelProps) {
   const lookupGuestOrder = useLookupGuestOrder();
+  const cancelGuestOrder = useCancelGuestOrder();
   const [orderNo, setOrderNo] = useState(initialOrderNo);
   const [phone, setPhone] = useState(initialPhone);
   const [orderPassword, setOrderPassword] = useState("");
@@ -26,10 +30,23 @@ export function GuestOrderLookupPanel({
     });
   }
 
+  async function handleCancel() {
+    const shouldCancel = window.confirm(`${orderNo} 주문을 취소할까요?`);
+
+    if (!shouldCancel) {
+      return;
+    }
+
+    await cancelGuestOrder.mutateAsync({
+      orderNo: orderNo.trim(),
+      orderPassword,
+    });
+  }
+
   const canLookup = Boolean(
     orderNo.trim() && phone.trim() && orderPassword.trim(),
   );
-  const order = lookupGuestOrder.data;
+  const order = cancelGuestOrder.data ?? lookupGuestOrder.data;
 
   return (
     <div>
@@ -45,7 +62,9 @@ export function GuestOrderLookupPanel({
         phone={phone}
       />
       <GuestOrderLookupResult
+        isCanceling={cancelGuestOrder.isPending}
         isSuccess={lookupGuestOrder.isSuccess}
+        onCancel={handleCancel}
         order={order}
       />
     </div>
