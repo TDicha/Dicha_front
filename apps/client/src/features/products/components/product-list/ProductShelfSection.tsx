@@ -1,5 +1,9 @@
 import { AppCard } from "@/components/common/AppCard";
 import { ProductTileCard } from "@/components/common/ProductTileCard";
+import {
+  toAnalyticsItem,
+  trackAnalyticsEvent,
+} from "@/services/analytics";
 import type { Product } from "@/shared/types/models";
 
 interface ProductShelfSectionProps {
@@ -8,6 +12,7 @@ interface ProductShelfSectionProps {
   description: string;
   products: Product[];
   tone: "chalkboard" | "wood";
+  itemListName?: string;
 }
 
 export function ProductShelfSection({
@@ -16,6 +21,7 @@ export function ProductShelfSection({
   description,
   products,
   tone,
+  itemListName = title,
 }: ProductShelfSectionProps) {
   if (!products.length) {
     return null;
@@ -79,6 +85,12 @@ export function ProductShelfSection({
               appearance={isChalkboard ? "chalkboard" : "default"}
               className="w-[var(--mobile-card-width)] shrink-0 snap-start"
               compact
+              onSelect={() =>
+                trackAnalyticsEvent("select_item", {
+                  item_list_name: itemListName,
+                  items: [toAnalyticsItem(product)],
+                })
+              }
               product={product}
               showAddButton={false}
             />

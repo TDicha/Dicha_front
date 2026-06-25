@@ -5,10 +5,17 @@ import { formatPrice } from "@/shared/utils/format";
 import type { Product } from "@/shared/types/models";
 import { productDetailPath } from "@/shared/utils/productRoutes";
 
-export function ProductCard({ product }: { product: Product }) {
+export function ProductCard({
+  product,
+  onSelect,
+}: {
+  product: Product;
+  onSelect?: () => void;
+}) {
   return (
     <Link
       className="glass-card motion-clickable motion-card-hover motion-image-parent block overflow-hidden"
+      onClick={onSelect}
       to={productDetailPath(product)}
     >
       <img

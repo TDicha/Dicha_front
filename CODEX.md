@@ -1,1127 +1,246 @@
-# ☕ Dicha Project — 백엔드 API 서버
-
-Spring Boot + React 기반의 웹 애플리케이션 프로젝트의 백엔드 API 서버입니다.  
-프론트엔드(React SPA)와 백엔드(Spring Boot REST API)를 완전히 분리한 구조로 설계되었습니다.
-
----
-
-## 🚀 개발 진행 상황 (Backend)
-
-> 담당 파트: 회원, 로그인, 게시판, 관리자, 마이페이지, 상품, 주문 등
-
-- ✅ **1단계: 인증 시스템 완성**
-    - [x] 비밀번호 암호화 (`Bcrypt`)
-    - [x] 로그인/회원가입 API 구현
-    - [x] JWT 발급 및 인증 필터 구현
-    - [x] API 경로별 접근 제어 설정
-
-- ✅ **2단계: 마이페이지 기능 구현**
-    - [x] 내 정보 조회 API (`GET /api/members/me`)
-    - [x] 내 정보 수정 API (`PUT /api/members/me`)
-    - [x] 내가 쓴 게시글 목록 조회 API (`GET /api/members/me/boards`)
-
-- ✅ **3단계: 게시판 기능 고도화**
-    - [x] 게시글 작성자 정보 자동 연동 (JWT 기반)
-    - [x] 게시글 수정/삭제 권한 검증
-    - [x] 응답 데이터 DTO 분리 (`BoardResponseDto`)
-
-- ✅ **4단계: 관리자 페이지 기능 구현**
-    - [x] `Role` 기반 권한 관리 시스템 도입 (`USER`, `ADMIN`)
-    - [x] 관리자용 회원/게시글 관리 API 구현 (`AdminController`)
-    - [x] 관리자 API 접근 제어 설정 (`/api/admin/**`)
-
-- ✅ **5단계: 상품 기능 구현**
-    - [x] 카테고리 엔티티 및 CRUD API
-    - [x] 상품 엔티티 및 CRUD API
-    - [x] 상품 옵션, 검색, 필터 기능 구현
-
-- ✅ **6단계: 커피 취향 테스트 기능 구현**
-    - [x] 취향 테스트 API (`POST /api/taste-test`)
-    - [x] 사용자 답변 기반 취향 분석 및 원두 추천 알고리즘 (유클리드 거리)
-    - [x] 로그인 회원 취향 프로필 자동 저장
-
-- ✅ **7단계: 장바구니 기능 구현**
-    - [x] `CartItem` 엔티티 설계 및 CRUD API 구현
-    - [x] 상품 중복 추가 시 수량 합산 로직 구현
-    - [x] 아이템별 소유권 검증 로직 구현
-
-- ✅ **8단계: 공통 인프라 및 편의 기능 구현**
-    - [x] **인증 시스템 고도화**: Access Token(30분) + Refresh Token(7일, HttpOnly 쿠키) 이원화 및 Redis 연동.
-    - [x] **안전한 로그아웃**: Redis의 Refresh Token 삭제 및 Access Token 블랙리스트 처리.
-    - [x] **토큰 재발급 API**: `POST /api/members/refresh` 구현.
-    - [x] **아이디/비밀번호 찾기**: 이메일 마스킹, 임시 비밀번호 발급 및 비동기 이메일 전송(`@Async`).
-    - [x] **공용 이미지 업로드 API**: `POST /api/upload` 구현 및 `FileStorageService` 인터페이스화.
-
----
-
-## 📌 목차
-
-1. [프로젝트 개요](#1-프로젝트-개요)
-2. [기술 스택](#2-기술-스택)
-3. [시스템 아키텍처](#3-시스템-아키텍처)
-4. [디렉터리 구조](#4-디렉터리-구조)
-5. [초기 세팅 가이드](#5-초기-세팅-가이드)
-6. [API 설계 방향](#6-api-설계-방향)
-7. [DB 설계 개요](#7-db-설계-개요)
-
----
-
-## 1. 프로젝트 개요
-
-| 항목 | 내용 |
-|------|------|
-| 프로젝트명 | Dicha Project |
-| 주제 | 로스팅 원두 커피 전문 쇼핑몰 |
-| 아키텍처 | SPA + REST API (프론트엔드 / 백엔드 완전 분리) |
-| 개발 환경 | Localhost (초기 개발 및 테스트) |
-| 배포 환경 | Vercel (프론트엔드), AWS EC2 (백엔드), AWS RDS (DB) |
-
----
-
-## 2. 기술 스택
-
-### 프론트엔드
-| 기술 | 버전 | 용도 |
-|------|------|------|
-| React | 18.x | SPA 프레임워크 |
-| Vercel | - | 배포 및 호스팅 |
-
-### 백엔드
-| 기술 | 버전 | 용도 |
-|------|------|------|
-| Java | 17+ | 기반 언어 |
-| Spring Boot | 3.2.x | REST API 서버 |
-| Spring Data JPA | - | ORM / DB 연동 |
-| Spring Security | - | 인증 / 인가 |
-| Spring Boot Mail | - | 이메일 전송 |
-| Lombok | - | 보일러플레이트 코드 제거 |
-| JWT | 0.11.5 | 인증 토큰 |
-
-### 데이터베이스 및 캐시
-| 기술 | 버전 | 용도 |
-|------|------|------|
-| MySQL | 8.x | 관계형 DB |
-| Redis | - | Refresh Token 저장, 캐싱 |
-| AWS RDS | - | 운영 DB 호스팅 |
-
----
-
-## 3. 시스템 아키텍처
-
-```text
-[사용자 브라우저]
-      │
-      ▼
-[React SPA - Vercel]
-      │  HTTP 요청 (REST API)
-      ▼
-[Spring Boot API 서버 - AWS EC2] ─── (Refresh Token 관리) ─── [Redis]
-      │  JPA / SQL
-      ▼
-[MySQL - AWS RDS]
-```
-
----
-
-## 4. 디렉터리 구조
-
-상세 설명은 `code_explanation.md` 파일 참조.
-
----
-
-## 5. 초기 세팅 가이드 및 테스트
-
-데이터베이스 설정 및 API 테스트 방법은 `database_setup.md`와 `api-test.http` 파일을 참조하세요.
-
----
-
-## 6. API 설계 방향
-
-모든 API는 `/api/` 접두사를 사용하며 RESTful 원칙을 따릅니다.  
-**인증 방식**은 보안 강화를 위해 **Access Token(Body) + Refresh Token(HttpOnly Cookie)**을 사용합니다. (상세 내용은 `api_guide.md` 참조)
-
-### 현재 구현된 API 목록
-
-#### 회원 (`/api/members`)
-| Method | URL | 권한 | 설명 |
-|--------|-----|------|------|
-| POST | `/signup` | 공개 | 회원가입 |
-| POST | `/login` | 공개 | 로그인 (Access/Refresh Token 발급) |
-| POST | `/logout` | 로그인 | 로그아웃 (토큰 비활성화) |
-| POST | `/refresh` | 공개 | Access Token 재발급 |
-| POST | `/find-email` | 공개 | 아이디(이메일) 찾기 |
-| POST | `/find-password` | 공개 | 임시 비밀번호 발급 |
-| GET | `/me` | 로그인 | 내 정보 조회 |
-| PUT | `/me` | 로그인 | 내 정보 수정 |
-| GET | `/me/boards` | 로그인 | 내가 쓴 게시글 목록 |
-
-#### 공용 (`/api`)
-| Method | URL | 권한 | 설명 |
-|--------|-----|------|------|
-| POST | `/upload` | 로그인 | 공용 이미지 업로드 |
-| POST | `/taste-test` | 공개 | 커피 취향 테스트 및 추천 |
-
-#### 게시판 (`/api/boards`)
-| Method | URL | 권한 | 설명 |
-|--------|-----|------|------|
-| GET | `/` | 로그인 | 전체 게시글 목록 |
-| GET | `/{id}` | 로그인 | 게시글 상세 조회 |
-| POST | `/` | 로그인 | 게시글 작성 |
-| PUT | `/{id}` | 작성자 | 게시글 수정 |
-| DELETE | `/{id}` | 작성자 | 게시글 삭제 |
-
-#### 카테고리 (`/api/categories`)
-| Method | URL | 권한 | 설명 |
-|--------|-----|------|------|
-| GET | `/` | 공개 | 카테고리 목록 |
-| POST | `/` | ADMIN | 카테고리 추가 |
-| DELETE | `/{id}` | ADMIN | 카테고리 삭제 |
-
-#### 상품 (`/api/products`)
-| Method | URL | 권한 | 설명 |
-|--------|-----|------|------|
-| GET | `/` | 공개 | 판매 중 상품 전체 목록 |
-| GET | `?categoryId={id}` | 공개 | 카테고리별 상품 목록 |
-| GET | `?keyword={검색어}` | 공개 | 상품명 검색 |
-| GET | `/{id}` | 공개 | 상품 상세 조회 |
-| POST | `/` | ADMIN | 상품 추가 |
-| PUT | `/{id}` | ADMIN | 상품 수정 |
-| DELETE | `/{id}` | ADMIN | 상품 삭제 |
-
-#### 장바구니 (`/api/cart`)
-| Method | URL | 권한 | 설명 |
-|--------|-----|------|------|
-| GET | `/` | 로그인 | 내 장바구니 조회 |
-| POST | `/items` | 로그인 | 상품 추가 (중복 시 수량 합산) |
-| PUT | `/items/{id}` | 로그인 | 수량 변경 |
-| DELETE | `/items/{id}` | 로그인 | 아이템 삭제 |
-| DELETE | `/` | 로그인 | 장바구니 전체 비우기 |
-
----
-
-## 7. DB 설계 개요
-
-MySQL(`dicha_db`)에서 관리하는 주요 테이블과 Redis의 역할입니다.
-
-| 저장소 | 관리 데이터 |
-|----------|--------------|
-| `member` | 회원 정보 (이메일, 비밀번호 암호화, 이름, Role) |
-| `board`  | 커뮤니티 게시글 (제목, 내용, 작성자 FK) |
-| `category` | 상품 카테고리 (name, slug, displayOrder) |
-| `product` | 상품 정보 (이름, 가격, 이미지, 원산지, 로스팅 레벨, 판매 상태 등) |
-| `product_option` | 상품 옵션 (이름, 추가 가격, 상품 FK) |
-| `product_flavor_note` | 상품 향미 노트 목록 (`@ElementCollection`) |
-| `product_badge` | 상품 뱃지 목록 — BEST / NEW / PICK (`@ElementCollection`) |
-| `cart_item` | 장바구니 아이템 (회원 FK, 상품 FK, 옵션 FK, 수량) |
-| **Redis** | **Refresh Token 저장**, **Access Token 블랙리스트** 관리 |
-
----
-
-## 📝 개발 시 주의사항
-
-- `spring.jpa.hibernate.ddl-auto` 설정
-  - 개발 초기: `create` → 테이블 자동 생성
-  - 이후 개발: `update` → 기존 데이터 유지하며 변경 반영
-  - 운영 환경: `validate` 또는 `none` → 절대 `create` 사용 금지
-- 비밀번호, JWT 비밀키, Redis/Email 접속 정보 등은 `application.properties`에 직접 작성하지 말고 환경 변수로 관리하는 것을 권장합니다.
-- CORS `allowedOrigins`는 배포 시 반드시 운영 URL로 교체해야 합니다.
-
-# Dicha 백엔드 API 연동 가이드
-
-프론트엔드 개발자가 백엔드 API를 빠르게 연결할 수 있도록 작성한 문서입니다.
-
----
-
-## 기본 정보
-
-| 항목 | 내용 |
-|------|------|
-| Base URL | `http://localhost:8082` |
-| 데이터 형식 | JSON (`Content-Type: application/json`) |
-| 인증 방식 | JWT Bearer Token (Access Token + Refresh Token) |
-
----
-
-## ADMIN 계정 테스트 방법
-
-카테고리·상품 추가/수정/삭제는 ADMIN 권한이 필요합니다. 현재 회원가입 API는 무조건 `USER` 권한으로 생성되므로, ADMIN 테스트는 **DB에서 직접 권한을 변경**해야 합니다.
-
-```sql
-UPDATE member SET role = 'ADMIN' WHERE email = 'admin@example.com';
-```
-
-이후 해당 이메일로 로그인하면 ADMIN 토큰이 발급됩니다.
-
----
-
-## ⭐️ 인증 방식 (Access + Refresh Token)
-
-우리 프로젝트는 보안 강화를 위해 Access Token과 Refresh Token을 함께 사용하는 표준 인증 방식을 따릅니다.
-
-- **Access Token**:
-    - **유효기간**: 30분
-    - **용도**: 실제 데이터 API를 호출할 때 사용.
-    - **전달 방식**: `Authorization: Bearer {accessToken}` HTTP 헤더에 담아 전송.
-    - **저장 위치**: 프론트엔드 메모리 (State 등)
-- **Refresh Token**:
-    - **유효기간**: 7일
-    - **용도**: Access Token이 만료되었을 때, 새로운 Access Token을 발급받기 위해 사용.
-    - **전달 방식**: 백엔드에서 `HttpOnly`, `Secure`, `SameSite=None` 쿠키로 자동 발급 및 관리. 프론트에서 직접 제어할 필요 없음.
-
-### 인증 플로우
-
-1.  **로그인**: 로그인 성공 시, 응답 Body로 `accessToken`을, 응답 헤더의 `Set-Cookie`로 `refreshToken`을 받습니다.
-2.  **API 요청**: `accessToken`을 헤더에 담아 API를 호출합니다.
-3.  **Access Token 만료 (401 에러)**: API 요청이 `401 Unauthorized` 에러를 반환하면, `/api/members/refresh` API를 호출합니다.
-4.  **토큰 재발급**: `/refresh` API는 쿠키의 `refreshToken`을 검증하여 새로운 `accessToken`을 발급해줍니다.
-5.  **재시도**: 새로 발급받은 `accessToken`으로 이전에 실패했던 API 요청을 다시 시도합니다.
-6.  **Refresh Token 만료**: `/refresh` API 호출이 실패하면, 사용자는 다시 로그인해야 합니다.
-
-### axios 인터셉터 설정 (강력 권장)
-
-아래 설정은 토큰 관리 및 재발급 로직을 자동화하여 개발 편의성을 크게 높여줍니다.
-
-```typescript
-// src/services/api/client.ts
-import axios from 'axios';
-
-const apiClient = axios.create({
-  baseURL: 'http://localhost:8082',
-  withCredentials: true, // 쿠키를 주고받기 위해 필수!
-});
-
-// 요청 인터셉터: 모든 요청에 Access Token 자동 첨부
-apiClient.interceptors.request.use((config) => {
-  const token = localStorage.getItem('accessToken'); // 또는 state에서 가져오기
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
-});
-
-// 응답 인터셉터: 401 에러 발생 시 토큰 재발급 및 재요청 처리
-apiClient.interceptors.response.use(
-  (response) => response,
-  async (error) => {
-    const originalRequest = error.config;
-
-    // 401 에러이고, 재시도한 요청이 아닐 경우
-    if (error.response?.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true; // 재시도 플래그 설정
-
-      try {
-        // 토큰 재발급 API 호출
-        const res = await apiClient.post('/api/members/refresh');
-        const newAccessToken = res.data.accessToken;
-
-        // 새 토큰 저장
-        localStorage.setItem('accessToken', newAccessToken);
-
-        // 원래 요청의 헤더에 새 토큰 설정
-        originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
-
-        // 원래 요청 다시 보내기
-        return apiClient(originalRequest);
-      } catch (refreshError) {
-        // Refresh Token도 만료된 경우 (재발급 실패)
-        localStorage.removeItem('accessToken');
-        window.location.href = '/login'; // 로그인 페이지로 리디렉션
-        return Promise.reject(refreshError);
-      }
-    }
-    return Promise.reject(error);
-  }
-);
-
-export default apiClient;
-```
-
----
-
-## 회원 API
-
-### 로그인
-
-```
-POST /api/members/login
-```
-인증 불필요
-
-**Request**
-```json
-{
-  "email": "user@example.com",
-  "password": "password123"
-}
-```
-
-**Response** `200 OK`
-- **Body**:
-```json
-{
-  "accessToken": "eyJhbGci..."
-}
-```
-- **Headers**:
-```
-Set-Cookie: refreshToken=eyJhbGci...; Path=/; Max-Age=604800; HttpOnly; Secure; SameSite=None
-```
-
-```typescript
-const loginRes = await apiClient.post('/api/members/login', { email, password });
-localStorage.setItem('accessToken', loginRes.data.accessToken);
-// refreshToken은 브라우저가 쿠키로 자동 관리
-```
-
----
-
-### 로그아웃
-
-```
-POST /api/members/logout
-```
-인증 필요
-
-**Response** `200 OK`
-- **Headers**:
-```
-Set-Cookie: refreshToken=; Path=/; Max-Age=0
-```
-> 서버의 Redis에서 Refresh Token을 삭제하고, 클라이언트의 쿠키를 만료시킵니다.
-
-```typescript
-await apiClient.post('/api/members/logout');
-localStorage.removeItem('accessToken');
-```
-
----
-
-### Access Token 재발급
-
-```
-POST /api/members/refresh
-```
-인증 불필요 (쿠키에 담긴 Refresh Token으로 인증)
-
-**Response** `200 OK`
-```json
-{
-  "accessToken": "eyJhbGci... (새로운 토큰)"
-}
-```
-> 위 `axios` 인터셉터 사용 시 직접 호출할 일은 거의 없습니다.
-
----
-
-### 아이디(이메일) 찾기
-
-```
-POST /api/members/find-email
-```
-인증 불필요
-
-**Request**
-```json
-{
-  "name": "홍길동",
-  "phoneNumber": "010-1234-5678"
-}
-```
-
-**Response** `200 OK`
-```json
-{
-  "maskedEmail": "tes***@example.com"
-}
-```
-> - 이름과 전화번호가 일치하는 회원이 없으면 `404 Not Found` 에러가 발생합니다.
-> - 이메일의 `@` 앞 3자리를 제외하고 마스킹 처리됩니다.
-
----
-
-### 임시 비밀번호 발급
-
-```
-POST /api/members/find-password
-```
-인증 불필요
-
-**Request**
-```json
-{
-  "email": "test@example.com",
-  "name": "홍길동"
-}
-```
-
-**Response** `200 OK`
-```
-"이메일로 임시 비밀번호가 발송되었습니다."
-```
-> - 이메일과 이름이 일치하는 회원이 없으면 `404 Not Found` 에러가 발생합니다.
-> - 해당 이메일로 10자리의 임시 비밀번호가 발송되며, DB에도 암호화되어 업데이트됩니다.
-> - 메일 발송은 비동기로 처리되어 API 응답 속도에 영향을 주지 않습니다.
-
----
-
-### 회원가입
-
-```
-POST /api/members/signup
-```
-인증 불필요
-
-**Request**
-```json
-{
-  "email": "user@example.com",
-  "password": "password123",
-  "name": "홍길동"
-}
-```
-
-**Response** `201 Created`
-```json
-{
-  "id": 1,
-  "email": "user@example.com",
-  "name": "홍길동"
-}
-```
-
----
-
-### 내 정보 조회
-
-```
-GET /api/members/me
-```
-인증 필요
-
-**Response** `200 OK`
-```json
-{
-  "id": 1,
-  "email": "user@example.com",
-  "name": "홍길동"
-}
-```
-
----
-
-### 내 정보 수정
-
-```
-PUT /api/members/me
-```
-인증 필요
-
-**Request**
-```json
-{
-  "name": "새이름",
-  "password": "newpassword123"
-}
-```
-
-> 변경할 필드만 보내면 됩니다. 이름만 바꾸려면 `name`만, 비밀번호만 바꾸려면 `password`만 포함하세요.
-
-**Response** `200 OK`
-```json
-{
-  "id": 1,
-  "email": "user@example.com",
-  "name": "새이름"
-}
-```
-
----
-
-### 내 게시글 목록 조회
-
-```
-GET /api/members/me/boards
-```
-인증 필요
-
-**Response** `200 OK`
-```json
-[
-  {
-    "id": 1,
-    "title": "게시글 제목",
-    "content": "내용",
-    "authorName": "홍길동"
-  }
-]
-```
-
----
-
-## 🖼️ 공용 이미지 업로드 API
-
-게시판, 리뷰, 프로필 사진 등 모든 종류의 이미지 업로드에 공통으로 사용됩니다.
-
-```
-POST /api/upload
-```
-인증 필요
-
-**Request**
-- **Type**: `multipart/form-data`
-- **Fields**:
-    - `file`: 업로드할 이미지 파일
-    - `directory`: 저장할 하위 폴더명 (e.g., `reviews`, `profiles`, `products`)
-
-**Response** `200 OK`
-```json
-{
-  "imageUrl": "/uploads/reviews/a1b2c3d4_image.jpg"
-}
-```
-> 반환된 `imageUrl`은 `baseURL`과 조합하여 `<img>` 태그의 `src`로 바로 사용할 수 있습니다.
-
-**HTML Form 예시**
-```html
-<form action="/api/upload" method="post" enctype="multipart/form-data">
-  <input type="file" name="file" />
-  <input type="hidden" name="directory" value="profiles" />
-  <button type="submit">업로드</button>
-</form>
-```
-
-**Axios 예시**
-```typescript
-const uploadImage = async (file: File, directory: string) => {
-  const formData = new FormData();
-  formData.append('file', file);
-  formData.append('directory', directory);
-
-  const res = await apiClient.post('/api/upload', formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
-  });
-
-  return res.data.imageUrl; // "/uploads/profiles/uuid_image.jpg"
-};
-```
-
----
-
-## 커피 취향 테스트 API
-
-### 취향 테스트 실행 및 원두 추천
-
-```
-POST /api/taste-test
-```
-인증 불필요 (비회원도 사용 가능)
-
-**Request**
-```json
-{
-  "answers": [
-    { "questionId": "q1_acidity", "answerValue": "높은 산미" },
-    { "questionId": "q2_body", "answerValue": "묵직한 바디감" },
-    { "questionId": "q3_sweetness", "answerValue": "은은한 단맛" },
-    { "questionId": "q4_flavor", "answerValue": "FRUITY" }
-  ]
-}
-```
-
-**Request 필드 (`answers[]`)**
-
-| 필드 | 타입 | 설명 | 예시 값 |
-|---|---|---|---|
-| `questionId` | string | 질문 식별자 | `q1_acidity`, `q2_body`, `q3_sweetness`, `q4_flavor` |
-| `answerValue` | string | 사용자의 답변 | `높은 산미`, `적당한 산미`, `낮은 산미`, `FRUITY`, `FLORAL` 등 |
-
-> `q4_flavor`의 `answerValue`는 **Enum의 이름과 대소문자까지 정확히 일치**해야 합니다. (예: `FRUITY`, `NUTTY`)
-
-**Response** `200 OK`
-```json
-{
-  "userTasteProfile": {
-    "acidity": 5,
-    "body": 5,
-    "sweetness": 4,
-    "primaryFlavorNote": "FRUITY"
-  },
-  "recommendedProducts": [
-    {
-      "id": 1,
-      "name": "에티오피아 예가체프",
-      "subtitle": "플로럴한 향의 싱글 오리진",
-      "price": 18000,
-      "imageUrl": null,
-      "acidity": 5,
-      "body": 2,
-      "sweetness": 4,
-      "primaryFlavorNote": "FRUITY"
-    }
-  ]
-}
-```
-
-**Response 필드**
-
-| 필드 | 타입 | 설명 |
-|---|---|---|
-| `userTasteProfile` | object | 분석된 사용자의 취향 프로필 |
-| `userTasteProfile.acidity` | number | 산미 점수 (1~5) |
-| `userTasteProfile.body` | number | 바디감 점수 (1~5) |
-| `userTasteProfile.sweetness` | number | 단맛 점수 (1~5) |
-| `userTasteProfile.primaryFlavorNote` | string | 주요 향미 노트 Enum 이름 |
-| `recommendedProducts` | array | 추천 상품 목록 (최대 3개) |
-
-> ℹ️ **로그인 상태**에서 이 API를 호출하면, 분석된 `userTasteProfile`이 **회원 정보에 자동으로 저장**됩니다.
-
----
+# Dicha Frontend Codex Guide
+
+2026-06-25 기준 `Dicha_front` 저장소는 백엔드 API 서버가 아니라 Dicha Coffee의 프론트엔드 워크스페이스입니다. 고객용 모바일 퍼스트 웹앱과 관리자 콘솔을 같은 pnpm/turbo 모노레포에서 관리하며, Spring Boot REST API와 연동하는 구조입니다.
+
+## 기존 CODEX.md와 달라진 점
+
+- 문서의 기준 대상이 Spring Boot 백엔드 서버에서 프론트엔드 모노레포로 바뀌었습니다.
+- 실제 기술 스택은 React 19, Vite 8, TypeScript 6, React Router 7, TanStack Query 5, Zustand 5, Tailwind CSS v4입니다.
+- 저장소에는 `apps/client`, `apps/admin`, `packages/*`가 있으며 백엔드 Java/Spring 소스는 없습니다.
+- 인증은 백엔드의 Access Token + Refresh Cookie 정책을 전제로 하되, 프론트에서는 access token 저장소와 401 refresh retry 흐름을 구현합니다.
+- 고객 앱은 상품, 검색, 장바구니, 구매, 주문, 배송지, 취향 테스트, 마이페이지 화면을 갖춘 SPA입니다.
+- 관리자 앱은 대시보드, 회원, 상품/카테고리, 주문 상태 관리용 별도 SPA입니다.
+- 기존 문서에 길게 있던 백엔드 DB/API 상세 스펙은 이 저장소의 소스와 직접 일치하지 않으므로 제거하고, 프론트가 실제 호출하는 엔드포인트 중심으로 정리했습니다.
+
+## 워크스페이스 개요
+
+```txt
+apps/
+  client/                  # 고객용 모바일 퍼스트 웹앱
+    src/app/               # 라우터, 프로바이더, Zustand 스토어
+    src/components/        # 공통 UI, 앱 레이아웃
+    src/features/          # 도메인별 API, 훅, 컴포넌트
+    src/pages/             # 라우트 단위 페이지
+    src/services/          # API 클라이언트, 인증 서비스
+    src/shared/            # 공통 타입, 상수, 유틸, 환경값
+  admin/                   # 관리자 콘솔
+    src/app/               # 관리자 라우터, 인증 가드, 상태
+    src/layout/            # AdminShell, Sidebar
+    src/pages/             # Dashboard, Orders, Products, Members, Login
+    src/services/          # fetch 기반 관리자 API 래퍼
+packages/
+  types/                   # 현재 EntityId 타입만 제공
+  ui/                      # 공통 UI 패키지 자리, 아직 실 컴포넌트 없음
+  utils/                   # 공통 유틸 패키지 자리, 아직 실 유틸 없음
+docs/                      # 기획, 데이터 모델, 작업 기록 문서
+```
+
+루트 스크립트는 각 앱의 스크립트를 pnpm filter로 위임합니다.
+
+```bash
+pnpm install
+pnpm dev:client
+pnpm dev:admin
+pnpm build
+pnpm lint
+```
+
+개별 확인 명령:
+
+```bash
+pnpm build:client
+pnpm build:admin
+pnpm lint:client
+pnpm lint:admin
+pnpm audit:colors
+```
+
+## 기술 스택
+
+| 영역 | 사용 기술 |
+| --- | --- |
+| Package manager | pnpm workspace |
+| Build orchestration | Turbo |
+| App runtime | Vite + React + TypeScript |
+| Routing | React Router |
+| Server state | TanStack Query |
+| Client state | Zustand |
+| Client API | Axios |
+| Admin API | Fetch wrapper |
+| Styling | Tailwind CSS v4, CSS variables, shadcn 설정 |
+| UI helpers | lucide-react, Radix UI, Ant Design 일부 |
+| Quality | ESLint, Prettier, prettier-plugin-tailwindcss |
+
+`apps/client`는 Tailwind Vite 플러그인을 사용하고, `apps/admin`은 독립 CSS 기반 관리자 UI입니다. 두 앱 모두 `@` alias가 각 앱의 `src`를 가리킵니다.
+
+## 고객 앱 흐름
+
+고객 앱 진입점:
+
+- `apps/client/src/main.tsx`
+- `apps/client/src/App.tsx`
+- `apps/client/src/app/providers/AppProviders.tsx`
+- `apps/client/src/app/router/router.tsx`
+
+실행 흐름은 다음과 같습니다.
+
+1. `main.tsx`가 React root를 만들고 `<App />`을 렌더합니다.
+2. `App`은 `<AppProviders />`만 반환합니다.
+3. `AppProviders`는 앱 시작 시 `useAuthStore().hydrateSession()`을 실행하고, `QueryProvider`와 `RouterProvider`를 감쌉니다.
+4. `QueryProvider`는 기본 `staleTime: 30s`, `retry: 1`인 TanStack Query client를 제공합니다.
+5. 라우터는 `AppShell` 아래에 페이지를 배치합니다.
+
+주요 라우트:
+
+| Path | Page | 메모 |
+| --- | --- | --- |
+| `/` | HomePage | 홈, 추천/스토리 섹션 |
+| `/products` | ProductListPage | 상품 목록, 카테고리/검색/정렬 |
+| `/products/:productId` | ProductDetailPage | `chrome: false` |
+| `/brewing-story` | BrewingStoryPage | 브랜드/브루잉 콘텐츠 |
+| `/taste-test` | TasteTestPage | 취향 질문, 결과, 추천 상품 |
+| `/cart` | CartPage | 하단 탭 숨김, 고정 CTA |
+| `/purchase` | PurchasePage | 하단 탭 숨김, 구매 draft 기반 |
+| `/search` | SearchPage | 최근/추천 키워드와 결과 |
+| `/login` | LoginPage | `chrome: false` |
+| `/signup` | SignupPage | `chrome: false` |
+| `/mypage` | MyPage | 보호 라우트 |
+| `/orders` | OrderListPage | 보호 라우트 |
+| `/addresses` | AddressBookPage | 보호 라우트 |
+
+`AppShell`은 항상 `AppHeader`, `<Outlet />`, `BottomTabBar`를 렌더합니다. 실제 노출 여부는 각 컴포넌트가 라우트 handle의 `chrome: false`나 현재 path를 보고 결정합니다.
+
+## 고객 앱 주요 기능
+
+- 홈: 히어로, 빠른 링크, 베스트 상품, 로스터 추천, 리뷰, 스토리 카드
+- 상품: 카테고리 조회, 상품 목록/검색, 상세, 옵션 바텀시트, 장바구니 추가 다이얼로그
+- 검색: 최근 검색어, 추천 키워드, 검색 결과 그리드
+- 장바구니: 서버 장바구니 조회, 수량 변경, 선택/전체 선택, 삭제, 비우기, 가격 계산
+- 구매: 장바구니 구매와 바로구매 draft, 회원/비회원 주문자 정보, 배송지, 결제수단, 주문 완료
+- 주문: 회원 주문 목록, 비회원 주문 조회, 주문 취소/비회원 주문 취소 어댑터
+- 배송지: 로그인 사용자는 `/api/addresses`, 비로그인 사용자는 `localStorage` 폴백
+- 인증: 로그인, 회원가입, refresh 기반 세션 복원, 보호 라우트
+- 마이페이지: 사용자 프로필, 취향/구매 통계, 빠른 링크
+- 취향 테스트: 동적 질문 흐름, `/api/taste-test` 제출, 추천 상품 결과
 
-## 카테고리 API
+## 고객 앱 상태 관리
 
-### 카테고리 목록 조회
+| Store | 파일 | 역할 |
+| --- | --- | --- |
+| `authStore` | `apps/client/src/app/store/authStore.ts` | 로그인 상태, 세션 복원, 로그인/회원가입/로그아웃 |
+| `cartStore` | `apps/client/src/app/store/cartStore.ts` | 장바구니 UI 상태와 선택 상태 |
+| `checkoutStore` | `apps/client/src/app/store/checkoutStore.ts` | 구매 draft, 주문자 타입, 배송지, 결제수단 |
+| `preferenceStore` | `apps/client/src/app/store/preferenceStore.ts` | 취향 테스트 진행 상태와 결과 |
+| `appStore` | `apps/client/src/app/store/appStore.ts` | 검색어, 바텀시트 열림 상태 |
 
-```
-GET /api/categories
-```
-인증 불필요
-
-**Response** `200 OK`
-```json
-[
-  {
-    "id": 1,
-    "name": "원두",
-    "slug": "blend",
-    "displayOrder": 1
-  },
-  {
-    "id": 2,
-    "name": "드립백",
-    "slug": "drip-bag",
-    "displayOrder": 2
-  }
-]
-```
-
-| 필드 | 타입 | 설명 |
-|------|------|------|
-| `id` | number | 카테고리 ID (상품 추가 시 `categoryId`로 사용) |
-| `name` | string | 한글명 |
-| `slug` | string | 프론트 필터/라우팅용 영문 식별자 |
-| `displayOrder` | number | 노출 순서 (낮을수록 먼저) |
-
-```typescript
-const categoriesRes = await apiClient.get('/api/categories');
-const categories = categoriesRes.data; // [{ id, name, slug, displayOrder }, ...]
-```
-
----
-
-### 카테고리 추가 `ADMIN`
-
-```
-POST /api/categories
-Authorization: Bearer {token}
-```
-
-**Request**
-```json
-{
-  "name": "굿즈",
-  "slug": "goods",
-  "displayOrder": 3
-}
-```
-
-**Response** `201 Created`
-```json
-{
-  "id": 3,
-  "name": "굿즈",
-  "slug": "goods",
-  "displayOrder": 3
-}
-```
-
-> slug는 중복 불가. 이미 존재하는 slug로 요청 시 `500` 반환.
-
----
-
-### 카테고리 삭제 `ADMIN`
-
-```
-DELETE /api/categories/{id}
-Authorization: Bearer {token}
-```
-
-**Response** `204 No Content`
-
----
-
-## 상품 API
-
-### 상품 목록 조회
-
-```
-GET /api/products
-```
-인증 불필요 — 판매 중(`onSale: true`)인 상품만 반환
-
-**Response** `200 OK`
-```json
-[
-  {
-    "id": 1,
-    "name": "에티오피아 예가체프",
-    "subtitle": "플로럴한 향의 싱글 오리진",
-    "description": "상세 설명 텍스트",
-    "price": 18000,
-    "imageUrl": null,
-    "origin": "에티오피아",
-    "roastLevel": "LIGHT",
-    "categoryId": 1,
-    "categoryName": "원두",
-    "onSale": true,
-    "stockQuantity": 50,
-    "rating": 0.0,
-    "reviewCount": 0,
-    "flavorNotes": ["자스민", "복숭아", "레몬"],
-    "badges": ["NEW"],
-    "options": [
-      { "id": 1, "name": "200g", "description": null, "extraPrice": 0 },
-      { "id": 2, "name": "400g", "description": null, "extraPrice": 5000 }
-    ],
-    "acidity": 5,
-    "body": 2,
-    "sweetness": 4,
-    "primaryFlavorNote": "FRUITY"
-  }
-]
-```
-
-### 카테고리 필터
-
-```
-GET /api/products?categoryId=1
-```
-
-### 키워드 검색
-
-```
-GET /api/products?keyword=에티오피아
-```
-
-```typescript
-// 전체 목록
-const productsRes = await apiClient.get('/api/products');
-
-// 카테고리 필터
-const productsByCatRes = await apiClient.get('/api/products', { params: { categoryId: 1 } });
-
-// 검색
-const searchRes = await apiClient.get('/api/products', { params: { keyword: '에티오피아' } });
-```
-
----
-
-### 상품 상세 조회
-
-```
-GET /api/products/{id}
-```
-인증 불필요
-
-**Response** `200 OK` — 목록 조회와 동일한 구조, 단건 반환
-
-```typescript
-const productRes = await apiClient.get(`/api/products/${id}`);
-const product = productRes.data;
-```
-
----
-
-### 상품 추가 `ADMIN`
-
-```
-POST /api/products
-Authorization: Bearer {token}
-```
-
-**Request**
-```json
-{
-  "name": "에티오피아 예가체프",
-  "subtitle": "플로럴한 향의 싱글 오리진",
-  "description": "상세 설명",
-  "price": 18000,
-  "imageUrl": null,
-  "origin": "에티오피아",
-  "roastLevel": "LIGHT",
-  "categoryId": 1,
-  "onSale": true,
-  "stockQuantity": 50,
-  "flavorNotes": ["자스민", "복숭아", "레몬"],
-  "badges": ["NEW"],
-  "options": [
-    { "name": "200g", "description": null, "extraPrice": 0 },
-    { "name": "400g", "description": null, "extraPrice": 5000 }
-  ],
-  "acidity": 5,
-  "body": 2,
-  "sweetness": 4,
-  "primaryFlavorNote": "FRUITY"
-}
-```
-
-**Request 필드**
-
-| 필드 | 타입 | 필수 | 설명 |
-|------|------|:----:|------|
-| `name` | string | ✅ | 상품명 |
-| `price` | number | ✅ | 기본 가격 (원) |
-| `acidity` | number | ✅ | 산미 (1~5) |
-| `body` | number | ✅ | 바디감 (1~5) |
-| `sweetness` | number | ✅ | 단맛 (1~5) |
-| `primaryFlavorNote` | string | ✅ | 주요 향미 노트 Enum 이름 |
-| `options[].name` | string | ✅ | 옵션명 (예: 200g, 중분쇄) |
-| `subtitle` | string | | 카드 부제목 |
-| `description` | string | | 상세 설명 |
-| `imageUrl` | string | | 이미지 URL (현재 null, 업로드 미구현) |
-| `origin` | string | | 원산지 |
-| `roastLevel` | string | | `LIGHT` / `MEDIUM` / `DARK` |
-| `categoryId` | number | | 카테고리 ID |
-| `onSale` | boolean | | 판매 상태 (기본값 `true`) |
-| `stockQuantity` | number | | 재고 수량 (`null`이면 무제한) |
-| `flavorNotes` | string[] | | 향미 노트 |
-| `badges` | string[] | | `BEST` / `NEW` / `PICK` |
-| `options[].description` | string | | 옵션 설명 |
-| `options[].extraPrice` | number | | 추가 금액 (기본 `0`) |
-
-**Response** `201 Created` — 추가된 상품 전체 데이터 반환
-
----
-
-### 상품 수정 `ADMIN`
-
-```
-PUT /api/products/{id}
-Authorization: Bearer {token}
-```
-
-**Request** — 추가 요청과 동일한 구조
-
-**Response** `200 OK` — 수정된 상품 전체 데이터 반환
+서버에서 다시 가져와야 하는 상품/장바구니/주문/배송지 데이터는 TanStack Query 훅을 사용합니다. 즉시 UI 반응이 중요한 선택 상태와 구매 draft는 Zustand에 둡니다.
 
-> ⚠️ 상품 수정 시 `options` 배열은 **기존 옵션 전체 삭제 후 새로 교체**됩니다. 옵션 일부만 수정하려 해도 전체 옵션을 다시 보내야 합니다.
+## 고객 앱 API 흐름
 
----
-
-### 상품 삭제 `ADMIN`
-
-```
-DELETE /api/products/{id}
-Authorization: Bearer {token}
-```
-
-**Response** `204 No Content`
-
----
-
-## 에러 응답
-
-에러 발생 시 아래 형태의 JSON이 반환됩니다.
-
-```json
-{
-  "timestamp": "2026-05-12T00:00:00.000+00:00",
-  "status": 403,
-  "error": "Forbidden",
-  "path": "/api/products"
-}
-```
-
-| 상태코드 | 의미 | 주요 발생 상황 |
-|---------|------|-------------|
-| `400` | 잘못된 요청 | 필수 필드 누락 |
-| `401` | 토큰 만료 | 토큰이 만료된 경우 → 재로그인 필요 |
-| `403` | 권한 없음 | 토큰 없음, ADMIN 전용 API를 일반 유저가 호출 |
-| `404` | 데이터 없음 | 존재하지 않는 ID 조회 |
-| `500` | 서버 오류 | 중복 slug, 중복 카테고리명 등 |
-
----
-
-## 데이터 정의서 대비 현재 구현 차이
-
-프론트 연동 시 알아야 할 현재 구현과 원래 정의서의 차이점입니다.
-
-| 항목 | 정의서 | 현재 구현 | 연동 시 주의 |
-|------|--------|---------|------------|
-| 로그인 ID | 휴대폰 번호 | 이메일 | `email` 필드 사용 |
-| 이미지 저장 | BLOB | URL string | `image` 필드는 현재 `null`, 이미지 업로드 구현 후 URL 반환 예정 |
-| 로스팅 정도 | 옵션으로 분류 | 상품 고정 필드 | 응답의 `roastLevel` 필드로 표시, 추후 옵션 이전 검토 |
-| 향미 노트 | 코드(number) 관리 | 문자열 배열 | `notes: ["자스민", "복숭아"]` 형태로 사용 |
-
----
-
-## 장바구니 API
-
-> 모든 장바구니 API는 **JWT 인증 필요** (로그인한 회원만 사용 가능)
-
-### 장바구니 조회
-
-```
-GET /api/cart
-Authorization: Bearer {token}
-```
-
-**Response** `200 OK`
-```json
-[
-  {
-    "cartItemId": 1,
-    "productId": 1,
-    "productName": "에티오피아 예가체프",
-    "productImageUrl": null,
-    "productOptionId": 2,
-    "productOptionName": "400g",
-    "basePrice": 18000,
-    "extraPrice": 5000,
-    "unitPrice": 23000,
-    "quantity": 2,
-    "subtotal": 46000
-  }
-]
-```
-
-| 응답 필드 | 타입 | 설명 |
-|----------|------|------|
-| `cartItemId` | number | 장바구니 아이템 ID (수정/삭제 시 사용) |
-| `productId` | number | 상품 ID |
-| `productName` | string | 상품명 |
-| `productImageUrl` | string \| null | 상품 이미지 URL |
-| `productOptionId` | number \| null | 선택한 옵션 ID (옵션 없으면 `null`) |
-| `productOptionName` | string \| null | 선택한 옵션명 |
-| `basePrice` | number | 상품 기본 가격 |
-| `extraPrice` | number | 옵션 추가 금액 (옵션 없으면 `0`) |
-| `unitPrice` | number | 실제 단가 (`basePrice + extraPrice`) |
-| `quantity` | number | 수량 |
-| `subtotal` | number | 소계 (`unitPrice × quantity`) |
-
-```typescript
-const res = await apiClient.get('/api/cart');
-const cartItems = res.data;
-const totalPrice = cartItems.reduce((sum, item) => sum + item.subtotal, 0);
-```
-
----
-
-### 장바구니 상품 추가
-
-```
-POST /api/cart/items
-Authorization: Bearer {token}
-```
-
-**Request**
-```json
-{
-  "productId": 1,
-  "productOptionId": 2,
-  "quantity": 2
-}
-```
-
-| 필드 | 타입 | 필수 | 설명 |
-|------|------|:----:|------|
-| `productId` | number | ✅ | 추가할 상품 ID |
-| `productOptionId` | number | | 선택한 옵션 ID (옵션 없으면 생략 또는 `null`) |
-| `quantity` | number | ✅ | 추가 수량 (1 이상) |
-
-**Response** `201 Created` — 추가된 장바구니 아이템 반환
-
-> - 같은 상품 + 옵션 조합이 이미 장바구니에 있으면 **수량이 합산**됩니다.
-> - `onSale: false`인 판매 중지 상품은 추가 불가 (`400` 반환).
-> - 존재하지 않는 `productId` 또는 해당 상품에 속하지 않는 `productOptionId` 입력 시 에러 반환.
-
-```typescript
-await apiClient.post('/api/cart/items', {
-  productId: 1,
-  productOptionId: 2,
-  quantity: 1,
-});
-```
-
----
-
-### 장바구니 수량 변경
-
-```
-PUT /api/cart/items/{cartItemId}
-Authorization: Bearer {token}
-```
-
-**Request**
-```json
-{
-  "quantity": 5
-}
-```
-
-**Response** `200 OK` — 수정된 아이템 반환
-
-> `quantity`는 1 이상이어야 합니다. 0 이하 입력 시 `400` 반환.
-
-```typescript
-await apiClient.put(`/api/cart/items/${cartItemId}`, { quantity: 5 });
-```
-
----
-
-### 장바구니 아이템 삭제
-
-```
-DELETE /api/cart/items/{cartItemId}
-Authorization: Bearer {token}
-```
-
-**Response** `204 No Content`
-
-```typescript
-await apiClient.delete(`/api/cart/items/${cartItemId}`);
-```
-
----
-
-### 장바구니 전체 비우기
-
-```
-DELETE /api/cart
-Authorization: Bearer {token}
-```
-
-**Response** `204 No Content`
-
-```typescript
-await apiClient.delete('/api/cart');
-```
+기본 설정:
 
----
-
-## 미구현 API (연동 예정)
-
-| API | 엔드포인트 | 일정 |
-|-----|-----------|------|
-| 주문 | `/api/orders` | 1차 개발 |
-| 결제 | `/api/payments` | 1차 개발 |
-| 배송지 관리 | `/api/addresses` | 1차 개발 |
-| 이미지 업로드 | `/api/upload` | 1차 개발 |
-
-| 구독 | `/api/subscriptions` | 2차 개발 (5/30 이후) |
-=======
-| 구독 | `/api/subscriptions` | 2차 개발 |
-| 취향 테스트 | `/api/taste-test` | 2차 개발 |
-| 클래스 예약 | `/api/reservations` | 2차 개발 |
-| QR / O2O | `/api/qr` | 2차 개발 |
+- API base URL: `VITE_API_BASE_URL`, 기본값 `http://localhost:8082`
+- API client: `apps/client/src/services/api/client.ts`
+- 엔드포인트 상수: `apps/client/src/services/api/endpoints.ts`
+- 인증 서비스: `apps/client/src/services/auth/authService.ts`
+- access token storage: `apps/client/src/services/auth/tokenStorage.ts`
+
+Axios 인스턴스는 `withCredentials: true`, `timeout: 10000`, `X-Requested-With: XMLHttpRequest`를 기본값으로 사용합니다. 요청 인터셉터는 저장된 access token을 `Authorization: Bearer ...`로 붙이고, 응답 인터셉터는 401을 받으면 `/api/members/refresh`를 한 번 공유 promise로 호출한 뒤 원 요청을 재시도합니다. refresh 실패 시 access token을 지웁니다.
+
+도메인별 API 계층:
+
+| 도메인 | 파일 | 호출 계열 |
+| --- | --- | --- |
+| 인증 | `services/auth/authService.ts` | `/api/members/*` |
+| 상품 | `features/products/adapters/apiProductAdapter.ts` | `/api/products`, `/api/products/search`, `/api/categories` |
+| 상품 옵션/리뷰 | `features/products/hooks/*` | `/api/products/{id}/options`, `/reviews` |
+| 장바구니 | `features/cart/cartApi.ts` | `/api/cart`, `/api/cart/items` |
+| 주문 | `features/orders/adapters/apiOrderAdapter.ts` | `/api/orders`, `/api/guest-orders` |
+| 배송지 | `features/address/addressApi.ts` | `/api/addresses` |
+| 취향 테스트 | `features/taste-test/tasteTestApi.ts` | `/api/taste-test` |
+
+상품 어댑터는 백엔드 필드 변형을 프론트 모델로 정규화합니다. 예를 들어 `imageUrl`, `thumbnailUrl`, `image`를 모두 처리하고, `LIGHT/MEDIUM/DARK`를 `Light/Medium/Dark`와 한글 roast label로 변환합니다. 검색어, roastLevel, 가격 조건이 있으면 `/api/products/search`를 사용하고, 일반 목록은 `/api/products`를 사용합니다.
+
+주문 어댑터는 회원 주문 생성은 `/api/orders`, 비회원 주문 생성은 `/api/guest-orders`로 보냅니다. 프론트 전용 옵션 키는 백엔드 `productOptionId`로 보내지 않도록 숫자 옵션 id만 전송합니다.
+
+## 관리자 앱 흐름
+
+관리자 앱 진입점:
+
+- `apps/admin/src/main.tsx`
+- `apps/admin/src/app/App.tsx`
+- `apps/admin/src/app/router.tsx`
+
+실행 흐름:
+
+1. `App`이 mount되면 `useAdminAuthStore().hydrate()`로 세션을 복원합니다.
+2. 라우터는 `/`를 `/admin/dashboard`로 리다이렉트합니다.
+3. `/admin/login`은 이미 로그인된 세션이면 대시보드로 보냅니다.
+4. 관리자 페이지들은 `ProtectedRoute` 아래에서만 접근됩니다.
+5. 보호된 페이지는 `AdminShell` 안에서 렌더됩니다.
+
+주요 라우트:
+
+| Path | Page |
+| --- | --- |
+| `/admin/login` | LoginPage |
+| `/admin/dashboard` | DashboardPage |
+| `/admin/orders` | OrdersPage |
+| `/admin/products` | ProductsPage |
+| `/admin/members` | MembersPage |
+
+관리자 기능:
+
+- 대시보드: 요약 지표, 매출 차트, 최근 주문/리뷰/알림 계열 API
+- 회원 관리: 회원 목록 조회, 회원 삭제
+- 상품 관리: 상품 목록, 등록, 수정, 삭제, 이미지 업로드, 옵션 CRUD
+- 카테고리 관리: 목록, 등록, 삭제
+- 주문 관리: 주문 목록, 주문 상태 변경
+- 관리자 인증: 로그인, 로그아웃, 세션 복원, 401 refresh retry
+
+## 관리자 API 흐름
+
+관리자 앱은 Axios가 아니라 `apps/admin/src/services/api/client.ts`의 `apiFetch`를 사용합니다.
+
+- API base URL: `VITE_API_BASE_URL`, 기본값 `http://localhost:8082`
+- 기본 요청은 `credentials: include`
+- JSON body는 자동으로 `Content-Type: application/json`을 설정
+- access token이 있으면 `Authorization` 헤더 추가
+- 401 응답이면 `/api/members/refresh` 호출 후 원 요청 1회 재시도
+- access token 저장은 remember 옵션에 따라 localStorage/sessionStorage를 사용
+
+관리자 엔드포인트 상수는 `apps/admin/src/services/api/endpoints.ts`에 있습니다. 주요 계열은 `/api/admin/members`, `/api/admin/orders`, `/api/admin/dashboard/*`, `/api/products`, `/api/categories`입니다.
+
+## 환경 변수
+
+두 앱 모두 Vite 환경 변수를 사용합니다.
+
+```bash
+VITE_API_BASE_URL=http://localhost:8082
+VITE_APP_NAME=Dicha Coffee
+```
+
+`VITE_APP_NAME`은 현재 고객 앱 `env`에서만 읽습니다. `VITE_API_BASE_URL`이 없으면 고객/관리자 모두 `http://localhost:8082`를 사용합니다.
+
+## 개발 시 주의사항
+
+- 이 저장소에는 백엔드 서버 코드가 없으므로 API 계약 변경은 백엔드 저장소와 함께 확인해야 합니다.
+- 고객 앱의 `shared/types/models.ts`에는 구형 `Order` 타입이 남아 있지만, 실제 주문 기능은 `features/orders/types.ts`를 중심으로 동작합니다.
+- 배송지는 로그인 상태에서는 API를 사용하고, 비로그인 상태에서는 `dicha.addresses` localStorage를 사용합니다.
+- 고객 앱 cart store의 item count는 로컬 store 기준입니다. 서버 cart query와 동기화되는 화면 흐름을 수정할 때는 store/query 양쪽 영향을 확인해야 합니다.
+- 상품 상세는 numeric id가 아니면 전체 목록을 조회한 뒤 slug/route key 매칭으로 fallback합니다.
+- 이미지 URL은 `resolveApiMediaUrl`을 거쳐 상대 경로를 API base URL과 조합합니다.
+- 관리자 로그인은 `/api/members/me` 조회 후 `/api/admin/members` 접근이 되는지 확인해 관리자 권한을 검증합니다.
+- 운영 배포 전 CORS allowlist, HttpOnly refresh cookie의 `Secure`/`SameSite`, CSRF 정책, refresh token rotation 정책을 백엔드와 맞춰야 합니다.
+
+## 현재 남은 작업 후보
+
+- 실제 Spring Boot API와 고객 앱 전체 구매/비회원 주문/주문 취소 플로우 통합 테스트
+- 관리자 대시보드 API 응답 형태와 화면 표시값 최종 검증
+- 상품 리뷰 작성/조회 정책과 프론트 UI 연결 범위 확정
+- 결제 연동 또는 mock 결제 정책 확정
+- access token 저장 위치와 XSS 대응 정책 재검토
+- `packages/types`, `packages/ui`, `packages/utils`에 실제 공통 코드 이동 여부 결정
+- 테스트 코드와 CI 검증 흐름 추가
+- 모바일 실기기에서 헤더/하단 탭/safe-area/고정 CTA 레이아웃 점검
+- 배포 도메인 확정 후 SEO, canonical, Open Graph 이미지 절대 경로 정리

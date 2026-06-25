@@ -15,6 +15,7 @@ interface ProductTileCardProps {
   showRating?: boolean;
   showAddButton?: boolean;
   className?: string;
+  onSelect?: () => void;
 }
 
 export function ProductTileCard({
@@ -26,6 +27,7 @@ export function ProductTileCard({
   showRating = true,
   showAddButton = true,
   className,
+  onSelect,
 }: ProductTileCardProps) {
   const imageHeightClassName = compact ? "h-32" : "h-36";
   const isChalkboard = appearance === "chalkboard";
@@ -35,6 +37,7 @@ export function ProductTileCard({
       className={["motion-clickable motion-image-parent block min-w-0", className]
         .filter(Boolean)
         .join(" ")}
+      onClick={onSelect}
       to={href}
     >
       <AppCard

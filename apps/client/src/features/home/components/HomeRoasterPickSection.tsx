@@ -2,6 +2,10 @@ import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 
 import { AppCard } from "@/components/common/AppCard";
+import {
+  toAnalyticsItem,
+  trackAnalyticsEvent,
+} from "@/services/analytics";
 import { formatPrice } from "@/shared/utils/format";
 import type { Product } from "@/shared/types/models";
 import { productDetailPath } from "@/shared/utils/productRoutes";
@@ -21,6 +25,17 @@ export function HomeRoasterPickSection({
     <AppCard className="rounded-[0.45rem] p-0" padding="none" variant="wood">
       <Link
         className="grid grid-cols-[minmax(0,1fr)_7rem] gap-4 p-4"
+        onClick={() => {
+          trackAnalyticsEvent("home_section_click", {
+            section_name: "roaster_pick",
+            item_id: product.id,
+            item_name: product.name,
+          });
+          trackAnalyticsEvent("select_item", {
+            item_list_name: "home_roaster_pick",
+            items: [toAnalyticsItem(product)],
+          });
+        }}
         to={productDetailPath(product)}
       >
         <div className="min-w-0">

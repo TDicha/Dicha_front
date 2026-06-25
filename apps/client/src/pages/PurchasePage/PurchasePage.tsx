@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { useAuthStore, useCartStore, useCheckoutStore } from "@/app/store";
@@ -22,6 +22,10 @@ import {
 import type { AddressSnapshot, PaymentMethod } from "@/features/checkout/types";
 import { useCreateOrder } from "@/features/orders/hooks/useOrders";
 import type { CheckoutItem, CreateOrderPayload, Order } from "@/features/orders/types";
+import {
+  toAnalyticsCartItems,
+  trackAnalyticsEvent,
+} from "@/services/analytics";
 import { ROUTES } from "@/shared/constants/routes";
 
 const paymentOptions = [
@@ -100,15 +104,10 @@ export function PurchasePage() {
   const [completedOrder, setCompletedOrder] = useState<Order | null>(null);
   const [completedPricing, setCompletedPricing] =
     useState<CartPricingSummary | null>(null);
+  const trackedCheckoutKeyRef = useRef<string | null>(null);
+  const trackedShippingKeyRef = useRef<string | null>(null);
 
   const selectedAddress = draft?.addressSnapshot ?? null;
-
-  // 진입 시 기본 배송지가 있으면 자동 선택한다.
-  useEffect(() => {
-    if (!selectedAddress && defaultAddress) {
-      setAddress(toAddressSnapshot(defaultAddress));
-    }
-  }, [selectedAddress, defaultAddress, setAddress]);
 
   const { subtotal, couponDiscount, shippingFee, total } = useMemo(
     () => calculateCartPricing(items),
@@ -118,6 +117,64 @@ export function PurchasePage() {
   const paymentLabel =
     paymentOptions.find((option) => option.id === selectedPayment)?.label ??
     "결제 수단";
+
+  const trackShippingInfo = useCallback(
+    (address: AddressSnapshot) => {
+      const shippingKey = [
+        address.recipientName,
+        address.phone,
+        address.postalCode,
+        address.address,
+        address.detailAddress,
+      ].join(":");
+
+      if (trackedShippingKeyRef.current === shippingKey) {
+        return;
+      }
+
+      trackedShippingKeyRef.current = shippingKey;
+      trackAnalyticsEvent("add_shipping_info", {
+        currency: "KRW",
+        orderer_type: isAuthenticated ? "member" : "guest",
+        shipping_tier: "standard",
+        value: total,
+        items: toAnalyticsCartItems(items),
+      });
+    },
+    [isAuthenticated, items, total],
+  );
+
+  // 진입 시 기본 배송지가 있으면 자동 선택한다.
+  useEffect(() => {
+    if (!selectedAddress && defaultAddress) {
+      const addressSnapshot = toAddressSnapshot(defaultAddress);
+      setAddress(addressSnapshot);
+      trackShippingInfo(addressSnapshot);
+    }
+  }, [selectedAddress, defaultAddress, setAddress, trackShippingInfo]);
+
+  useEffect(() => {
+    if (!items.length) {
+      return;
+    }
+
+    const checkoutKey = `${draft?.mode ?? "unknown"}:${items
+      .map((item) => `${item.cartItemId}:${item.quantity}`)
+      .join(",")}`;
+
+    if (trackedCheckoutKeyRef.current === checkoutKey) {
+      return;
+    }
+
+    trackedCheckoutKeyRef.current = checkoutKey;
+    trackAnalyticsEvent("begin_checkout", {
+      checkout_mode: draft?.mode,
+      currency: "KRW",
+      orderer_type: isAuthenticated ? "member" : "guest",
+      value: total,
+      items: toAnalyticsCartItems(items),
+    });
+  }, [draft?.mode, isAuthenticated, items, total]);
 
   function handleGoOrders() {
     if (isAuthenticated) {
@@ -160,6 +217,13 @@ export function PurchasePage() {
   function handleSelectPayment(paymentId: PaymentMethod) {
     setSelectedPayment(paymentId);
     setPaymentMethod(paymentId);
+    trackAnalyticsEvent("add_payment_info", {
+      currency: "KRW",
+      orderer_type: isAuthenticated ? "member" : "guest",
+      payment_type: paymentId,
+      value: total,
+      items: toAnalyticsCartItems(items),
+    });
   }
 
   async function handlePlaceOrder() {
@@ -201,6 +265,30 @@ export function PurchasePage() {
 
     try {
       const order = await createOrderMutation.mutateAsync(payload);
+      const orderPayload = {
+        currency: "KRW",
+        orderer_type: payload.ordererType,
+        payment_type: selectedPayment,
+        payment_status: order.paymentStatus,
+        transaction_id: order.orderNo,
+        value: order.totalAmount,
+        shipping: order.shippingFee,
+        items: order.items.map((item) => ({
+          item_id: item.productId,
+          item_name: item.productName,
+          item_variant: item.optionName,
+          price: item.unitPrice,
+          quantity: item.quantity,
+        })),
+      };
+
+      trackAnalyticsEvent("order_created", orderPayload);
+
+      if (payload.ordererType === "guest") {
+        trackAnalyticsEvent("guest_order_created", orderPayload);
+      }
+
+      trackAnalyticsEvent("purchase", orderPayload);
       setCompletedPricing(pricing);
       // 주문에 사용한 장바구니 항목 정리 후 draft 초기화.
       clearPurchasedItems(items.map((item) => item.cartItemId));
@@ -267,7 +355,11 @@ export function PurchasePage() {
 
       <AddressPickerModal
         onClose={() => setPickerOpen(false)}
-        onSelect={(address) => setAddress(toAddressSnapshot(address))}
+        onSelect={(address) => {
+          const addressSnapshot = toAddressSnapshot(address);
+          setAddress(addressSnapshot);
+          trackShippingInfo(addressSnapshot);
+        }}
         open={pickerOpen}
       />
     </div>

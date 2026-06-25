@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { useAuthStore, useCartStore, useCheckoutStore } from "@/app/store";
@@ -15,6 +15,11 @@ import {
   useRemoveCartItem,
   useUpdateCartItemQuantity,
 } from "@/features/cart";
+import {
+  toAnalyticsCartItem,
+  toAnalyticsCartItems,
+  trackAnalyticsEvent,
+} from "@/services/analytics";
 import { ROUTES } from "@/shared/constants/routes";
 
 export function CartPage() {
@@ -39,6 +44,7 @@ export function CartPage() {
   const removeCartItemMutation = useRemoveCartItem();
   const clearCartItemsMutation = useClearCartItems();
   const selectedItems = items.filter((item) => item.selected);
+  const trackedCartKeyRef = useRef<string | null>(null);
 
   const pricing = calculateCartPricing(selectedItems);
   const isAllSelected =
@@ -49,6 +55,27 @@ export function CartPage() {
       setItems(cartQuery.data);
     }
   }, [cartQuery.data, setItems, shouldUseCartApi]);
+
+  useEffect(() => {
+    if (!items.length) {
+      return;
+    }
+
+    const cartKey = items
+      .map((item) => `${item.cartItemId}:${item.quantity}`)
+      .join(",");
+
+    if (trackedCartKeyRef.current === cartKey) {
+      return;
+    }
+
+    trackedCartKeyRef.current = cartKey;
+    trackAnalyticsEvent("view_cart", {
+      currency: "KRW",
+      value: calculateCartPricing(items).total,
+      items: toAnalyticsCartItems(items),
+    });
+  }, [items]);
 
   function handleToggleAll() {
     if (isAllSelected) {
@@ -61,6 +88,13 @@ export function CartPage() {
 
   function handleRemoveSelected() {
     const selectedCartItemIds = selectedItems.map((item) => item.cartItemId);
+    const removedValue = calculateCartPricing(selectedItems).total;
+
+    trackAnalyticsEvent("remove_from_cart", {
+      currency: "KRW",
+      value: removedValue,
+      items: toAnalyticsCartItems(selectedItems),
+    });
 
     clearPurchasedItems(selectedCartItemIds);
 
@@ -90,6 +124,16 @@ export function CartPage() {
   }
 
   function handleRemoveItem(cartItemId: string) {
+    const targetItem = items.find((item) => item.cartItemId === cartItemId);
+
+    if (targetItem) {
+      trackAnalyticsEvent("remove_from_cart", {
+        currency: "KRW",
+        value: targetItem.unitPrice * targetItem.quantity,
+        items: [toAnalyticsCartItem(targetItem)],
+      });
+    }
+
     removeItem(cartItemId);
 
     if (shouldUseCartApi) {

@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import { useAppStore } from "@/app/store";
 import { EmptyState } from "@/components/common/EmptyState";
@@ -17,6 +17,10 @@ import {
   type ProductTypeOption,
 } from "@/features/products";
 import { useProducts } from "@/features/products";
+import {
+  toAnalyticsItem,
+  trackAnalyticsEvent,
+} from "@/services/analytics";
 import type { Product, ProductBadge } from "@/shared/types/models";
 
 const productPageSize = 4;
@@ -111,6 +115,7 @@ export function ProductListPage() {
   const [selectedSort, setSelectedSort] =
     useState<ProductSortKey>("recommended");
   const [visibleCount, setVisibleCount] = useState(productPageSize);
+  const trackedListKeysRef = useRef<Set<string>>(new Set());
   const normalizedQuery = query.trim();
   const isSearching = Boolean(normalizedQuery);
   const productParams = isSearching ? { query: normalizedQuery } : undefined;
@@ -172,6 +177,30 @@ export function ProductListPage() {
     filteredProducts.length - visibleProducts.length,
     0,
   );
+  const itemListName = isSearching ? "product_search_results" : "product_list";
+
+  useEffect(() => {
+    if (isLoading || isError || visibleProducts.length === 0) {
+      return;
+    }
+
+    const listKey = `${itemListName}:${visibleProducts
+      .map((product) => product.id)
+      .join(",")}`;
+
+    if (trackedListKeysRef.current.has(listKey)) {
+      return;
+    }
+
+    trackedListKeysRef.current.add(listKey);
+    trackAnalyticsEvent("view_item_list", {
+      item_list_name: itemListName,
+      items: visibleProducts.map((product, index) => ({
+        ...toAnalyticsItem(product),
+        index,
+      })),
+    });
+  }, [isError, isLoading, itemListName, visibleProducts]);
 
   return (
     <div className="page-content cafe-tile-bg space-y-0 px-0 pt-0">
@@ -200,6 +229,7 @@ export function ProductListPage() {
               <ProductShelfSection
                 description="많은 분들이 가장 먼저 고른 디차의 인기 메뉴"
                 eyebrow="Best Selection"
+                itemListName="product_best_selection"
                 products={bestProducts}
                 title="베스트 상품 추천"
                 tone="chalkboard"
@@ -207,6 +237,7 @@ export function ProductListPage() {
               <ProductShelfSection
                 description="오늘 매장에서 권하고 싶은 풍미 좋은 메뉴"
                 eyebrow="Owner's Pick"
+                itemListName="product_owner_pick"
                 products={ownerPickProducts}
                 title="사장님 추천"
                 tone="wood"
@@ -259,7 +290,7 @@ export function ProductListPage() {
             />
           </div>
         ) : visibleProducts.length ? (
-          <ProductGrid products={visibleProducts} />
+          <ProductGrid itemListName={itemListName} products={visibleProducts} />
         ) : (
           <div className="px-4 py-4">
             <EmptyState

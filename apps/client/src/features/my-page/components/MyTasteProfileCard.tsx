@@ -14,6 +14,7 @@ import {
   Wheat,
   type LucideIcon,
 } from "lucide-react";
+import { createElement } from "react";
 import { Link } from "react-router-dom";
 
 import { AppCard } from "@/components/common/AppCard";
@@ -24,6 +25,18 @@ import type { UserProfile } from "@/shared/types/models";
 interface MyTasteProfileCardProps {
   user: UserProfile;
 }
+
+const flavorIconMap: Record<string, LucideIcon> = {
+  FRUITY: Cherry,
+  FLORAL: Flower2,
+  NUTTY: Nut,
+  CHOCOLATY: Cookie,
+  SPICY: Wheat,
+  CARAMEL: Candy,
+  CITRUS: Citrus,
+  BERRY: Grape,
+  ROASTY: Flame,
+};
 
 function scoreLabel(score: number, labels: [string, string, string]) {
   if (score >= 4) return labels[2];
@@ -40,20 +53,10 @@ function getFlavorLabel(note?: string) {
   return flavorNoteLabels[note] ?? note;
 }
 
-function getFlavorIcon(note?: string): LucideIcon {
-  const iconMap: Record<string, LucideIcon> = {
-    FRUITY: Cherry,
-    FLORAL: Flower2,
-    NUTTY: Nut,
-    CHOCOLATY: Cookie,
-    SPICY: Wheat,
-    CARAMEL: Candy,
-    CITRUS: Citrus,
-    BERRY: Grape,
-    ROASTY: Flame,
-  };
+function renderFlavorIcon(note: string | undefined, className: string) {
+  const Icon = note ? flavorIconMap[note] ?? Bean : Bean;
 
-  return note ? iconMap[note] ?? Bean : Bean;
+  return createElement(Icon, { className });
 }
 
 function hasTasteProfile(user: UserProfile) {
@@ -98,7 +101,6 @@ export function MyTasteProfileCard({ user }: MyTasteProfileCardProps) {
   const acidity = user.tasteAcidity ?? 3;
   const body = user.tasteBody ?? 3;
   const sweetness = user.tasteSweetness ?? 3;
-  const FlavorIcon = getFlavorIcon(user.tastePrimaryFlavorNote);
 
   const tasteRows = [
     {
@@ -129,7 +131,7 @@ export function MyTasteProfileCard({ user }: MyTasteProfileCardProps) {
       <div className="flex items-start justify-between gap-3">
         <div className="flex min-w-0 items-start gap-3">
           <div className="flex size-11 shrink-0 items-center justify-center bg-[var(--surface-brand-tint-6)] text-[var(--brand-primary)]">
-            <FlavorIcon className="size-5" />
+            {renderFlavorIcon(user.tastePrimaryFlavorNote, "size-5")}
           </div>
           <div className="min-w-0">
             <p className="text-[0.62rem] font-semibold uppercase tracking-[0.3em] text-[var(--text-muted)]">

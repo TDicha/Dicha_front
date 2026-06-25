@@ -2,6 +2,7 @@ import { ChevronLeft, Search, ShoppingCart } from "lucide-react";
 import { Link, useLocation, useMatches, useNavigate } from "react-router-dom";
 
 import { useCartStore, usePreferenceStore } from "@/app/store";
+import { trackAnalyticsEvent } from "@/services/analytics";
 import { ROUTES } from "@/shared/constants/routes";
 
 interface RouteHandle {
@@ -61,6 +62,12 @@ export function AppHeader() {
               <Link
                 aria-label="검색으로 이동"
                 className="flex size-8 items-center justify-center rounded-full"
+                onClick={() =>
+                  trackAnalyticsEvent("home_section_click", {
+                    section_name: "header",
+                    target_path: ROUTES.search,
+                  })
+                }
                 to={ROUTES.search}
               >
                 <Search className="size-4.5" />
@@ -69,6 +76,12 @@ export function AppHeader() {
             <Link
               aria-label="장바구니로 이동"
               className="relative flex size-8 items-center justify-center rounded-full"
+              onClick={() =>
+                trackAnalyticsEvent("home_section_click", {
+                  section_name: "header",
+                  target_path: ROUTES.cart,
+                })
+              }
               to={ROUTES.cart}
             >
               <ShoppingCart className="size-4.5" />
@@ -102,6 +115,12 @@ export function AppHeader() {
               <Link
                 aria-label="검색으로 이동"
                 className="flex size-8 items-center justify-center rounded-full"
+                onClick={() =>
+                  trackAnalyticsEvent("home_section_click", {
+                    section_name: "header",
+                    target_path: ROUTES.search,
+                  })
+                }
                 to={ROUTES.search}
               >
                 <Search className="size-4.5" />
@@ -110,6 +129,12 @@ export function AppHeader() {
             <Link
               aria-label="장바구니로 이동"
               className="relative flex size-8 items-center justify-center rounded-full"
+              onClick={() =>
+                trackAnalyticsEvent("home_section_click", {
+                  section_name: "header",
+                  target_path: ROUTES.cart,
+                })
+              }
               to={ROUTES.cart}
             >
               <ShoppingCart className="size-4.5" />

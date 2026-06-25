@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 import { useAppStore } from "@/app/store";
 import { EmptyState } from "@/components/common/EmptyState";
@@ -12,6 +12,11 @@ import {
   useProducts,
   useRecentKeywords,
 } from "@/features/products";
+import {
+  sanitizeSearchTerm,
+  shouldTrackSearchTerm,
+  trackAnalyticsEvent,
+} from "@/services/analytics";
 
 const recommendedKeywords: string[] = [];
 
@@ -26,6 +31,7 @@ export function SearchPage() {
     isLoading,
   } = useProducts(isSearching ? { query: query.trim() } : undefined);
   const { recentKeywords, addRecentKeyword } = useRecentKeywords();
+  const trackedSearchTermsRef = useRef<Set<string>>(new Set());
 
   // Front-only 임시 처리: 사용자가 입력을 멈춘 뒤 검색 결과가 있으면
   // 해당 키워드를 최근 검색에 저장한다.
@@ -48,6 +54,27 @@ export function SearchPage() {
     filteredProducts.length,
     addRecentKeyword,
   ]);
+
+  useEffect(() => {
+    if (!isSearching || isLoading || isError) {
+      return;
+    }
+
+    const sanitizedTerm = sanitizeSearchTerm(query);
+
+    if (
+      !shouldTrackSearchTerm(query) ||
+      trackedSearchTermsRef.current.has(sanitizedTerm)
+    ) {
+      return;
+    }
+
+    trackedSearchTermsRef.current.add(sanitizedTerm);
+    trackAnalyticsEvent("search", {
+      search_term: sanitizedTerm,
+      result_count: filteredProducts.length,
+    });
+  }, [filteredProducts.length, isError, isLoading, isSearching, query]);
 
   return (
     <div className="page-content cafe-tile-bg space-y-0 px-0 pb-24 pt-0">

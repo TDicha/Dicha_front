@@ -2,6 +2,10 @@ import { Link } from "react-router-dom";
 
 import { AppCard } from "@/components/common/AppCard";
 import { ProductTileCard } from "@/components/common/ProductTileCard";
+import {
+  toAnalyticsItem,
+  trackAnalyticsEvent,
+} from "@/services/analytics";
 import { ROUTES } from "@/shared/constants/routes";
 import type { Product } from "@/shared/types/models";
 
@@ -45,6 +49,12 @@ export function HomeBestProductsSection({
         {remainingProductCount > 0 ? (
           <Link
             className="mt-1 shrink-0 rounded-full border border-[var(--border-chalk-highlight)] px-3 py-1.5 text-xs font-semibold text-[var(--text-chalk)]"
+            onClick={() =>
+              trackAnalyticsEvent("home_section_click", {
+                section_name: "best_products",
+                target_path: ROUTES.products,
+              })
+            }
             to={ROUTES.products}
           >
             더보기 {remainingProductCount}
@@ -60,6 +70,17 @@ export function HomeBestProductsSection({
               className="w-[var(--mobile-card-width)] shrink-0 scroll-ml-[var(--page-x)] snap-start"
               compact
               appearance="chalkboard"
+              onSelect={() => {
+                trackAnalyticsEvent("home_section_click", {
+                  section_name: "best_products",
+                  item_id: product.id,
+                  item_name: product.name,
+                });
+                trackAnalyticsEvent("select_item", {
+                  item_list_name: "home_best_products",
+                  items: [toAnalyticsItem(product)],
+                });
+              }}
               product={product}
               showAddButton={false}
             />

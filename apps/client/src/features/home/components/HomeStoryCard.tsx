@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 
 import { AppCard } from "@/components/common/AppCard";
 import { BrandAvatar } from "@/components/common/BrandAvatar";
+import { trackAnalyticsEvent } from "@/services/analytics";
 import { ROUTES } from "@/shared/constants/routes";
 
 export function HomeStoryCard() {
@@ -18,6 +19,12 @@ export function HomeStoryCard() {
         <Link
           aria-label="브루잉 스토리로 이동"
           className="block"
+          onClick={() =>
+            trackAnalyticsEvent("home_section_click", {
+              section_name: "story",
+              target_path: ROUTES.brewingStory,
+            })
+          }
           to={ROUTES.brewingStory}
         >
           <div className="mb-4 flex items-center gap-3 border-b border-[var(--border-menu-board)] pb-4">

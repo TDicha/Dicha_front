@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 
 import {
@@ -29,6 +29,10 @@ import {
 } from "@/features/products/hooks/useProducts";
 import { useProductReviews } from "@/features/products/hooks/useProductReviews";
 import { ROUTES } from "@/shared/constants/routes";
+import {
+  toAnalyticsItem,
+  trackAnalyticsEvent,
+} from "@/services/analytics";
 import { formatPrice } from "@/shared/utils/format";
 
 const ROAST_OPTIONS = ["라이트", "미디엄", "다크"] as const;
@@ -128,6 +132,7 @@ export function ProductDetailPage() {
     string | null
   >(null);
   const [isCartAddedDialogOpen, setIsCartAddedDialogOpen] = useState(false);
+  const trackedProductIdRef = useRef<string | null>(null);
 
   const selectedRoastLabel =
     selectedRoast ?? (product ? getDefaultRoast(product.roastLevel) : "");
@@ -169,6 +174,19 @@ export function ProductDetailPage() {
       : userHasTasteProfile
         ? "저장된 산미, 바디감, 단맛 기준으로 자동 선택"
         : "취향 테스트를 먼저 완료하면 사용할 수 있어요";
+
+  useEffect(() => {
+    if (!product || trackedProductIdRef.current === product.id) {
+      return;
+    }
+
+    trackedProductIdRef.current = product.id;
+    trackAnalyticsEvent("view_item", {
+      currency: "KRW",
+      value: product.price,
+      items: [toAnalyticsItem(product)],
+    });
+  }, [product]);
 
   function ensureOptionSelected() {
     if (
@@ -212,6 +230,18 @@ export function ProductDetailPage() {
         quantity,
       });
     }
+
+    trackAnalyticsEvent("add_to_cart", {
+      currency: "KRW",
+      value: totalPrice,
+      items: [
+        toAnalyticsItem(product, {
+          itemVariant: selectedSummary,
+          price: unitPrice,
+          quantity,
+        }),
+      ],
+    });
 
     closeBottomSheet();
     setIsCartAddedDialogOpen(true);

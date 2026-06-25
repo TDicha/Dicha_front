@@ -1,4 +1,8 @@
 import { ProductTileCard } from "@/components/common/ProductTileCard";
+import {
+  toAnalyticsItem,
+  trackAnalyticsEvent,
+} from "@/services/analytics";
 import type { Product } from "@/shared/types/models";
 
 interface SearchResultGridProps {
@@ -19,6 +23,12 @@ export function SearchResultGrid({ products }: SearchResultGridProps) {
           <ProductTileCard
             key={product.id}
             compact
+            onSelect={() =>
+              trackAnalyticsEvent("select_item", {
+                item_list_name: "search_results",
+                items: [toAnalyticsItem(product)],
+              })
+            }
             product={product}
             showAddButton={false}
           />

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 
 import { BrandWatermark } from "@/components/common/BrandWatermark";
 import { homeHeroSlides } from "@/features/home/homeConfig";
+import { trackAnalyticsEvent } from "@/services/analytics";
 
 interface HomeHeroSectionProps {
   heroSlide: (typeof homeHeroSlides)[number];
@@ -34,6 +35,12 @@ export function HomeHeroSection({ heroSlide }: HomeHeroSectionProps) {
         </p>
         <Link
           className="relative z-10 mt-4 inline-flex h-10 items-center border border-[var(--border-cafe-stripe)] bg-[var(--surface-menu-board)] px-5 text-sm font-semibold text-[var(--text-cafe-ink)]"
+          onClick={() =>
+            trackAnalyticsEvent("home_section_click", {
+              section_name: "hero",
+              target_path: heroSlide.ctaTo,
+            })
+          }
           to={heroSlide.ctaTo}
         >
           {heroSlide.ctaLabel}

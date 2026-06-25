@@ -12,6 +12,7 @@ import {
   maxTasteQuestionCount,
   useSubmitTasteTest,
 } from "@/features/taste-test";
+import { trackAnalyticsEvent } from "@/services/analytics";
 import { fetchSession } from "@/services/auth/authService";
 
 export function TasteTestPage() {
@@ -63,6 +64,15 @@ export function TasteTestPage() {
     mutate(answers, {
       onSuccess: (data) => {
         setResult(data);
+        trackAnalyticsEvent("taste_test_complete", {
+          acidity: data.profile.acidity,
+          body: data.profile.body,
+          sweetness: data.profile.sweetness,
+          primary_flavor_note: data.profile.primaryFlavorNote,
+          recommended_item_ids: data.recommendedProducts.map(
+            (product) => product.id,
+          ),
+        });
         void refreshAuthenticatedUser();
       },
     });
@@ -89,6 +99,12 @@ export function TasteTestPage() {
     }
 
     answerQuestion(currentQuestion.key, value);
+    trackAnalyticsEvent("taste_test_answer", {
+      question_id: currentQuestion.questionId,
+      question_key: currentQuestion.key,
+      answer_value: value,
+      step_index: currentQuestionIndex + 1,
+    });
 
     const nextAnswers =
       currentQuestion.key === "level"
@@ -111,6 +127,15 @@ export function TasteTestPage() {
     mutate(answers, {
       onSuccess: (data) => {
         setResult(data);
+        trackAnalyticsEvent("taste_test_complete", {
+          acidity: data.profile.acidity,
+          body: data.profile.body,
+          sweetness: data.profile.sweetness,
+          primary_flavor_note: data.profile.primaryFlavorNote,
+          recommended_item_ids: data.recommendedProducts.map(
+            (product) => product.id,
+          ),
+        });
         void refreshAuthenticatedUser();
       },
     });
@@ -119,7 +144,10 @@ export function TasteTestPage() {
   if (step === "intro") {
     return (
       <TasteTestIntroView
-        onStart={startTest}
+        onStart={() => {
+          trackAnalyticsEvent("taste_test_start");
+          startTest();
+        }}
         questionCount={maxTasteQuestionCount}
       />
     );

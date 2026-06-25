@@ -2,6 +2,7 @@ import { NavLink, useLocation, useMatches } from "react-router-dom";
 
 import { bottomTabItems } from "@/shared/constants/navigation";
 import { ROUTES } from "@/shared/constants/routes";
+import { trackAnalyticsEvent } from "@/services/analytics";
 
 interface RouteHandle {
   chrome?: boolean;
@@ -33,7 +34,13 @@ export function BottomTabBar() {
                   : "text-[var(--text-muted)]",
               ].join(" ")
             }
-            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            onClick={() => {
+              trackAnalyticsEvent("home_section_click", {
+                section_name: "bottom_tab",
+                target_path: to,
+              });
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }}
             to={to}
           >
             <Icon className="size-[1.1rem] transition-transform duration-200" strokeWidth={2.1} />

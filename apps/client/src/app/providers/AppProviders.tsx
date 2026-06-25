@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { QueryProvider } from "@/app/providers/QueryProvider";
 import { router } from "@/app/router/router";
 import { useAuthStore } from "@/app/store";
+import { AnalyticsContextProvider } from "@/services/analytics";
 
 // const initialLoadingDurationMs = 1000;
 
@@ -25,7 +26,8 @@ export function AppProviders() {
 
   return (
     <QueryProvider>
-      {/* {isBootLoading ? (
+      <AnalyticsContextProvider>
+        {/* {isBootLoading ? (
             <LoadingScreen
               className="min-h-[var(--app-safe-min-height)]"
               message="디차를 준비하는 중"
@@ -33,7 +35,8 @@ export function AppProviders() {
           ) : (
             <RouterProvider router={router} />
           )} */}
-      <RouterProvider router={router} />
+        <RouterProvider router={router} />
+      </AnalyticsContextProvider>
     </QueryProvider>
   );
 }
