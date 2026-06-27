@@ -1,4 +1,4 @@
-const dichaHorseImage = "/image2.webp";
+const dichaHorseImage = "/dicha-running-logo.png";
 
 interface AuthLogoMarkProps {
   sizeClassName?: string;
@@ -17,7 +17,7 @@ export function AuthLogoMark({
       <img
         alt=""
         aria-hidden="true"
-        className=" object-contain"
+        className="w-[72%] object-contain"
         src={dichaHorseImage}
       />
     </div>

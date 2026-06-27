@@ -21,6 +21,7 @@ import {
   ProductOptionSection,
   ProductReviewSection,
   ProductSummarySection,
+  ProductSubscriptionReservationSection,
 } from "@/features/products";
 import { useAddCartItem } from "@/features/cart";
 import {
@@ -356,14 +357,25 @@ export function ProductDetailPage() {
         onApplyRecommendation={handleApplyRecommendation}
         onApplyTasteRecommendation={handleApplyTasteRecommendation}
         onOpenOptions={openBottomSheet}
+        quantity={quantity}
         selectedGrindLabel={selectedGrind}
-        selectedRoastLabel={selectedRoastLabel || getDefaultRoast(product.roastLevel)}
+        selectedRoastLabel={
+          selectedRoastLabel || getDefaultRoast(product.roastLevel)
+        }
+        selectedSummary={selectedSummary}
         selectedWeightLabel={
           selectedWeight
             ? `${selectedWeight.name} - ₩${formatPrice(unitPrice)}`
             : "선택해주세요"
         }
         tasteRecommendationDescription={tasteRecommendationDescription}
+        totalPrice={totalPrice}
+      />
+      <ProductSubscriptionReservationSection
+        onReserve={() =>
+          navigate(`${ROUTES.services}?tab=subscription&productId=${product.id}`)
+        }
+        productName={product.name}
       />
       <ProductFlavorNotesSection
         description={product.description}
@@ -378,6 +390,7 @@ export function ProductDetailPage() {
       />
       <ProductBottomActionBar
         onAddToCart={handleAddToCart}
+        onOpenOptions={openBottomSheet}
         onPurchase={handlePurchase}
         selectedSummary={selectedSummary}
         totalPrice={totalPrice}
@@ -408,6 +421,7 @@ export function ProductDetailPage() {
         selectedGrind={selectedGrind}
         selectedRoast={selectedRoastLabel}
         selectedWeightId={activeWeightId}
+        totalPrice={totalPrice}
         weightOptions={weightOptions}
       />
       <ImplementationNoticeModal

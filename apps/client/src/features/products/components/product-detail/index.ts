@@ -9,3 +9,4 @@ export { ProductOptionSection } from "@/features/products/components/product-det
 export { ProductReviewSection } from "@/features/products/components/product-detail/ProductReviewSection";
 export { ProductStorySection } from "@/features/products/components/product-detail/ProductStorySection";
 export { ProductSummarySection } from "@/features/products/components/product-detail/ProductSummarySection";
+export { ProductSubscriptionReservationSection } from "@/features/products/components/product-detail/ProductSubscriptionReservationSection";

@@ -288,6 +288,7 @@ button {
 .primary-action:disabled,
 .danger-action:disabled,
 .secondary-action:disabled,
+.section-heading button:disabled,
 .category-chip button:disabled {
   cursor: not-allowed;
   opacity: 0.6;
@@ -509,7 +510,8 @@ button {
 
 .simple-table {
   margin-top: 16px;
-  overflow: hidden;
+  overflow-x: auto;
+  overflow-y: hidden;
   border: 1px solid var(--admin-border);
   border-radius: 8px;
 }
@@ -534,7 +536,10 @@ button {
 }
 
 .admin-data-table.members-table .table-row {
-  grid-template-columns: 80px 0.8fr 1.4fr 120px;
+  grid-template-columns:
+    72px minmax(180px, 1.1fr) minmax(130px, 0.8fr) 130px
+    minmax(120px, 0.7fr) minmax(150px, 0.8fr) 110px;
+  align-items: center;
 }
 
 .admin-data-table.products-table .table-row {
@@ -542,10 +547,27 @@ button {
 }
 
 .admin-data-table.orders-table .table-row {
-  grid-template-columns: 1.1fr 1.2fr 0.8fr 1.1fr 1fr 70px;
+  grid-template-columns:
+    minmax(120px, 1fr) minmax(160px, 1.1fr) 92px minmax(100px, 0.7fr)
+    minmax(150px, 1fr) minmax(150px, 1fr) 70px;
   align-items: center;
 }
 
+.admin-data-table.subscriptions-table .table-row,
+.admin-data-table.classes-table .table-row {
+  grid-template-columns:
+    minmax(160px, 1fr) minmax(180px, 1fr) minmax(220px, 1.2fr)
+    minmax(130px, 0.8fr) minmax(100px, 0.6fr) 120px;
+  align-items: center;
+}
+
+.admin-data-table.classes-table .table-row {
+  grid-template-columns:
+    minmax(160px, 1fr) minmax(180px, 1fr) minmax(180px, 1fr)
+    minmax(90px, 0.5fr) minmax(100px, 0.6fr) 120px;
+}
+
+.admin-data-table.members-table select,
 .admin-data-table.orders-table select {
   width: 100%;
   padding: 6px 8px;
@@ -554,6 +576,41 @@ button {
   background: #fff;
   color: var(--admin-text);
   font-size: 12px;
+}
+
+.admin-filter-bar {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(160px, 1fr)) auto auto;
+  gap: 14px;
+  margin-top: 18px;
+  align-items: end;
+}
+
+.status-badge {
+  display: inline-flex;
+  min-height: 28px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  padding: 0 10px;
+  font-size: 12px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.status-badge.success {
+  background: rgba(22, 163, 74, 0.1);
+  color: var(--admin-success);
+}
+
+.status-badge.muted {
+  background: rgba(107, 114, 128, 0.12);
+  color: var(--admin-muted);
+}
+
+.status-badge.warning {
+  background: rgba(195, 159, 84, 0.16);
+  color: #8a6a1f;
 }
 
 .order-detail {
@@ -735,6 +792,90 @@ button {
   color: var(--admin-muted);
 }
 
+.analytics-bars {
+  display: grid;
+  min-height: 240px;
+  grid-template-columns: repeat(auto-fit, minmax(72px, 1fr));
+  align-items: end;
+  gap: 14px;
+  margin-top: 22px;
+}
+
+.analytics-bar-item {
+  display: grid;
+  min-width: 0;
+  gap: 8px;
+  color: var(--admin-muted);
+  font-size: 12px;
+  text-align: center;
+}
+
+.analytics-bar-track {
+  display: flex;
+  height: 148px;
+  align-items: end;
+  border-radius: 8px;
+  background: #eef1f0;
+  padding: 6px;
+}
+
+.analytics-bar-track span {
+  display: block;
+  width: 100%;
+  border-radius: 6px;
+  background: var(--admin-primary);
+}
+
+.analytics-bar-item strong,
+.analytics-bar-item small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.insight-list {
+  display: grid;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.insight-list p {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0;
+  border: 1px solid var(--admin-border);
+  border-radius: 8px;
+  padding: 12px 14px;
+  color: var(--admin-muted);
+}
+
+.insight-list strong {
+  color: var(--admin-primary);
+}
+
+.integration-card {
+  border-left: 4px solid var(--admin-accent);
+}
+
+.api-contract-list {
+  display: grid;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.api-contract-list code {
+  display: block;
+  overflow-x: auto;
+  border: 1px solid var(--admin-border);
+  border-radius: 8px;
+  background: #f8faf9;
+  padding: 12px 14px;
+  color: var(--admin-primary);
+  font-size: 12px;
+}
+
 .icon-button {
   display: grid;
   width: 40px;
@@ -801,6 +942,10 @@ button {
   .admin-form-grid.category-form-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+
+  .admin-filter-bar {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 680px) {
@@ -815,7 +960,8 @@ button {
   }
 
   .admin-form-grid,
-  .admin-form-grid.category-form-grid {
+  .admin-form-grid.category-form-grid,
+  .admin-filter-bar {
     grid-template-columns: 1fr;
   }
 

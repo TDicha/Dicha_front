@@ -46,5 +46,12 @@ export const endpoints = {
   },
   subscriptions: {
     list: "/api/subscriptions",
+    detail: (subscriptionId: string) => `/api/subscriptions/${subscriptionId}`,
+    create: "/api/subscriptions",
+    pause: (subscriptionId: string) =>
+      `/api/subscriptions/${subscriptionId}/pause`,
+    resume: (subscriptionId: string) =>
+      `/api/subscriptions/${subscriptionId}/resume`,
+    cancel: (subscriptionId: string) => `/api/subscriptions/${subscriptionId}`,
   },
 } as const;

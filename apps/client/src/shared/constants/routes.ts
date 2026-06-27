@@ -4,6 +4,8 @@ export const ROUTES = {
   productDetail: "/products/:productId",
   brewingStory: "/brewing-story",
   tasteTest: "/taste-test",
+  services: "/services",
+  serviceManagement: "/service-management",
   myPage: "/mypage",
   cart: "/cart",
   purchase: "/purchase",

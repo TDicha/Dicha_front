@@ -31,6 +31,18 @@ function formatDate(value?: string) {
   return Number.isNaN(date.getTime()) ? value : date.toLocaleString("ko-KR");
 }
 
+function getOrdererType(order: AdminOrder) {
+  if (order.ordererType === "MEMBER" || order.memberId || order.memberEmail) {
+    return { className: "status-badge success", label: "회원" };
+  }
+
+  if (order.ordererType === "GUEST" || order.isGuestOrder) {
+    return { className: "status-badge muted", label: "비회원" };
+  }
+
+  return { className: "status-badge warning", label: "구분 필요" };
+}
+
 export function OrdersPage() {
   const [orders, setOrders] = useState<AdminOrder[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -115,7 +127,8 @@ export function OrdersPage() {
           <div>
             <h2>주문 목록</h2>
             <p className="section-description">
-              주문을 조회하고 배송 상태를 변경합니다.
+              주문을 조회하고 배송 상태를 변경합니다. 현재 백엔드 주문 응답에는
+              회원/비회원 식별 필드가 없어 일부 주문은 구분 필요로 표시됩니다.
             </p>
           </div>
           <button onClick={() => void loadOrders()} type="button">
@@ -129,6 +142,7 @@ export function OrdersPage() {
           <div className="table-row table-head">
             <span>주문번호</span>
             <span>주문자</span>
+            <span>유형</span>
             <span>금액</span>
             <span>주문일</span>
             <span>상태</span>
@@ -145,10 +159,13 @@ export function OrdersPage() {
                 <div className="table-row">
                   <span>{order.orderNumber}</span>
                   <span>
-                    {order.recipientName}
-                    {order.memberEmail
-                      ? ` (${order.memberEmail})`
-                      : " (회원 여부 미표시)"}
+                    <strong>{order.memberName ?? order.recipientName}</strong>
+                    <small>{order.memberEmail ?? order.phoneNumber}</small>
+                  </span>
+                  <span>
+                    <span className={getOrdererType(order).className}>
+                      {getOrdererType(order).label}
+                    </span>
                   </span>
                   <span>₩{formatPrice(order.totalPrice)}</span>
                   <span>{formatDate(order.createdAt)}</span>
@@ -196,6 +213,9 @@ export function OrdersPage() {
                     <p>
                       <strong>현재 상태</strong>{" "}
                       {STATUS_LABEL.get(order.status) ?? order.status}
+                    </p>
+                    <p>
+                      <strong>주문자 유형</strong> {getOrdererType(order).label}
                     </p>
                     <ul>
                       {order.items.map((item, index) => (

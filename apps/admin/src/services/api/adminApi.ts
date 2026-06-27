@@ -17,10 +17,21 @@ export interface AdminMember {
   id: number;
   email: string;
   name: string;
+  phoneNumber?: string | null;
+  grade?: AdminMemberGrade | null;
+  totalSpent?: number | null;
+  createdAt?: string;
+  lastVisitedAt?: string | null;
 }
+
+export type AdminMemberGrade = "SILVER" | "GOLD" | "BLACK";
 
 interface PageResponse<T> {
   content: T[];
+  totalElements?: number;
+  totalPages?: number;
+  number?: number;
+  size?: number;
 }
 
 export interface AdminCategory {
@@ -153,6 +164,25 @@ function unwrapPageContent<T>(response: T[] | PageResponse<T>) {
   return Array.isArray(response) ? response : response.content;
 }
 
+export interface MemberSearchParams {
+  name?: string;
+  email?: string;
+  grade?: AdminMemberGrade | "";
+}
+
+function withSearchParams(path: string, params: Record<string, string | undefined>) {
+  const searchParams = new URLSearchParams();
+
+  Object.entries(params).forEach(([key, value]) => {
+    if (value) {
+      searchParams.set(key, value);
+    }
+  });
+
+  const search = searchParams.toString();
+  return search ? `${path}?${search}` : path;
+}
+
 export async function loginAdmin(payload: {
   email: string;
   password: string;
@@ -203,14 +233,28 @@ export async function logoutAdmin() {
   }
 }
 
-export function fetchMembers() {
+export function fetchMembers(params: MemberSearchParams = {}) {
   return apiFetch<AdminMember[] | PageResponse<AdminMember>>(
-    endpoints.admin.members,
+    withSearchParams(endpoints.admin.members, {
+      email: params.email?.trim(),
+      grade: params.grade || undefined,
+      name: params.name?.trim(),
+    }),
   ).then(unwrapPageContent);
 }
 
 export async function deleteMember(memberId: number) {
   await apiFetch<void>(endpoints.admin.member(memberId), { method: "DELETE" });
+}
+
+export async function updateMemberGrade(
+  memberId: number,
+  grade: AdminMemberGrade,
+) {
+  await apiFetch<void>(endpoints.admin.memberGrade(memberId), {
+    body: JSON.stringify({ grade }),
+    method: "PATCH",
+  });
 }
 
 export function fetchCategories() {
@@ -327,10 +371,14 @@ export interface AdminOrder {
   orderNumber: string;
   status: AdminOrderStatus;
   totalPrice: number;
+  memberId?: number | null;
   recipientName: string;
   phoneNumber: string;
   shippingAddress: string;
   memberEmail?: string | null;
+  memberName?: string | null;
+  ordererType?: "MEMBER" | "GUEST" | "UNKNOWN";
+  isGuestOrder?: boolean;
   items: AdminOrderItem[];
   createdAt?: string;
 }

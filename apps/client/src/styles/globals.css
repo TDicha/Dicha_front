@@ -188,25 +188,9 @@
   }
 
   .dicha-loading-window {
-    width: min(12.5rem, 72vw);
+    width: min(8.75rem, 35vw);
     aspect-ratio: 1 / 1;
-    overflow: hidden;
-    position: relative;
-    background-position: 0 0;
-    background-repeat: no-repeat;
-    background-size: 1200% 100%;
-    animation: dicha-loading-frame 0.88s steps(10, end) infinite;
-    will-change: background-position;
-  }
-
-  @keyframes dicha-loading-frame {
-    from {
-      background-position: 0 0;
-    }
-
-    to {
-      background-position: 100% 0;
-    }
+    object-fit: contain;
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -221,7 +205,6 @@
 
     .dicha-loading-window {
       animation: none;
-      background-position: 0 0;
     }
 
     .route-transition,

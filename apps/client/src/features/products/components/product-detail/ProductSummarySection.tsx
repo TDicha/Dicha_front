@@ -37,14 +37,14 @@ export function ProductSummarySection({
       <p className="mt-5 text-[0.62rem] font-semibold tracking-[0.18em] text-[var(--text-muted)]">
         MENU DETAIL
       </p>
-      <h1 className="mt-2 text-[clamp(1.35rem,6vw,1.6rem)] font-bold text-[var(--text-cafe-ink)]">
+      <h1 className="mt-2 break-keep text-[clamp(1.28rem,5.5vw,1.6rem)] font-bold leading-8 text-[var(--text-cafe-ink)]">
         {product.name}
       </h1>
-      <p className="mt-1 text-[0.82rem] text-[var(--text-muted-subtle)]">
+      <p className="mt-1 break-keep text-[0.82rem] leading-5 text-[var(--text-muted-subtle)]">
         {product.subtitle}
       </p>
 
-      <div className="mt-3 flex items-end gap-2">
+      <div className="mt-3 flex flex-wrap items-end gap-x-2 gap-y-1">
         <p className="text-[clamp(1.55rem,7vw,1.9rem)] font-bold text-[var(--text-cafe-ink)]">
           ₩{formatPrice(product.price)}
         </p>

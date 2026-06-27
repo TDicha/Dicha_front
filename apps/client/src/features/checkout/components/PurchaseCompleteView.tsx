@@ -1,4 +1,3 @@
-import { CheckCircle2 } from "lucide-react";
 import { Link } from "react-router-dom";
 
 import { PrimaryButton } from "@/components/common/PrimaryButton";
@@ -6,6 +5,8 @@ import type { CartPricingSummary } from "@/features/cart/cartPricing";
 import type { Order } from "@/features/orders";
 import { ROUTES } from "@/shared/constants/routes";
 import { formatPrice } from "@/shared/utils/format";
+
+const paymentCompleteStampImage = "/dicha-payment-complete-stamp.png";
 
 interface PurchaseCompleteViewProps {
   completedOrder: Order | null;
@@ -27,8 +28,13 @@ export function PurchaseCompleteView({
   return (
     <div className="cafe-tile-bg min-h-full pb-10 pt-2">
       <section className="bg-[var(--surface-chalkboard)] px-[var(--page-x)] py-10 text-center">
-        <div className="mx-auto flex size-24 items-center justify-center bg-[var(--surface-chalkboard-highlight)]">
-          <CheckCircle2 className="size-12 text-[var(--text-chalk)]" />
+        <div className="mx-auto flex size-24 items-center justify-center bg-[var(--surface-cream)] p-3">
+          <img
+            alt=""
+            aria-hidden="true"
+            className="size-full object-contain"
+            src={paymentCompleteStampImage}
+          />
         </div>
         <p className="mt-7 text-[0.62rem] font-semibold uppercase tracking-[0.3em] text-[var(--text-chalk-muted)]">
           Order Complete
@@ -48,13 +54,17 @@ export function PurchaseCompleteView({
           Receipt
         </p>
         <div className="flex items-center justify-between gap-3 bg-[var(--surface-cafe-tile)] px-3 py-4">
-          <span className="text-[1rem] text-[var(--text-muted-warm)]">주문번호</span>
+          <span className="text-[1rem] text-[var(--text-muted-warm)]">
+            주문번호
+          </span>
           <span className="min-w-0 truncate text-[1rem] font-bold text-[var(--text-cafe-ink)]">
             {completedOrder?.orderNo ?? "-"}
           </span>
         </div>
         <div className="mt-2 flex items-center justify-between gap-3 bg-[var(--surface-cafe-tile)] px-3 py-4">
-          <span className="text-[1rem] text-[var(--text-muted-warm)]">총 결제 금액</span>
+          <span className="text-[1rem] text-[var(--text-muted-warm)]">
+            총 결제 금액
+          </span>
           <span className="shrink-0 text-[clamp(1.35rem,5.8vw,1.55rem)] font-bold text-[var(--text-cafe-ink)]">
             ₩{formatPrice(completedPricing?.total ?? fallbackTotal)}
           </span>

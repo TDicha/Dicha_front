@@ -15,6 +15,7 @@ interface ProductOptionBottomSheetProps {
   roastOptions: readonly string[];
   selectedGrind: string;
   selectedRoast: string;
+  totalPrice: number;
   selectedWeightId: string;
   weightOptions: ProductOption[];
   onClose: () => void;
@@ -34,6 +35,7 @@ export function ProductOptionBottomSheet({
   roastOptions,
   selectedGrind,
   selectedRoast,
+  totalPrice,
   selectedWeightId,
   weightOptions,
   onClose,
@@ -49,14 +51,14 @@ export function ProductOptionBottomSheet({
       open={open}
       title={enablesRoastCustomization ? "커스텀 옵션 선택" : "상품 구성 선택"}
     >
-      <div className="space-y-5">
+      <div className="space-y-5 pb-1">
         <section className="cafe-wood-grain bg-[linear-gradient(135deg,var(--gradient-wood-start)_0%,var(--gradient-wood-end)_100%)] px-4 py-4 text-[var(--text-inverse)] shadow-[var(--shadow-wood-card)]">
           <div className="flex items-start justify-between gap-4">
-            <div>
+            <div className="min-w-0">
               <p className="text-[0.58rem] font-semibold tracking-[0.17em] text-[var(--text-wood-muted)]">
                 YOUR ORDER
               </p>
-              <h4 className="mt-1 text-base font-semibold text-[var(--text-inverse)]">
+              <h4 className="mt-1 break-keep text-base font-semibold leading-6 text-[var(--text-inverse)]">
                 {productName}
               </h4>
               <p className="mt-1 text-xs leading-5 text-[var(--text-wood-muted)]">
@@ -82,7 +84,7 @@ export function ProductOptionBottomSheet({
                 필수
               </span>
             </div>
-            <div className="space-y-2.5">
+            <div className="grid grid-cols-3 gap-2 max-[340px]:grid-cols-1">
               {roastOptions.map((roast) => (
                 <OptionRow
                   key={roast}
@@ -105,7 +107,7 @@ export function ProductOptionBottomSheet({
                 필수
               </span>
             </div>
-            <div className="space-y-2.5">
+            <div className="grid gap-2">
               {grindOptions.map((grind) => (
                 <OptionRow
                   key={grind}
@@ -127,7 +129,7 @@ export function ProductOptionBottomSheet({
               필수
             </span>
           </div>
-          <div className="space-y-2.5">
+          <div className="grid gap-2">
             {weightOptions.map((option) => (
               <OptionRow
                 key={option.id}
@@ -178,12 +180,22 @@ export function ProductOptionBottomSheet({
           </div>
         </section>
 
-        <PrimaryButton
-          className="w-full rounded-none bg-[var(--surface-chalkboard)] text-[var(--text-chalk)] shadow-none"
-          onClick={onClose}
-        >
-          선택 완료
-        </PrimaryButton>
+        <div className="sticky bottom-0 -mx-[var(--page-x)] border-t border-[var(--border-ink-6)] bg-[var(--surface-menu-board)] px-[var(--page-x)] pb-1 pt-3">
+          <div className="mb-2 flex items-center justify-between gap-3">
+            <span className="text-xs font-semibold text-[var(--text-muted)]">
+              예상 주문금액
+            </span>
+            <span className="text-lg font-black text-[var(--text-cafe-ink)]">
+              ₩{formatPrice(totalPrice)}
+            </span>
+          </div>
+          <PrimaryButton
+            className="w-full rounded-none bg-[var(--surface-chalkboard)] text-[var(--text-chalk)] shadow-none"
+            onClick={onClose}
+          >
+            선택 완료
+          </PrimaryButton>
+        </div>
       </div>
     </BottomSheet>
   );

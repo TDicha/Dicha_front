@@ -34,7 +34,7 @@ export function BottomSheet({
       />
       <section
         className={cn(
-          "absolute inset-x-0 bottom-0 max-h-[84vh] w-full overflow-y-auto bg-[var(--surface-menu-board)] px-[var(--page-x)] pb-[calc(env(safe-area-inset-bottom)+1.25rem)] pt-3 shadow-[var(--shadow-bottom-sheet)] transition-[transform,opacity] duration-300 ease-out",
+          "absolute bottom-0 left-1/2 max-h-[88dvh] w-full max-w-[var(--app-max-width)] -translate-x-1/2 overflow-y-auto bg-[var(--surface-menu-board)] px-[var(--page-x)] pb-[calc(env(safe-area-inset-bottom)+1.25rem)] pt-3 shadow-[var(--shadow-bottom-sheet)] transition-[transform,opacity] duration-300 ease-out",
           open ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0",
         )}
       >

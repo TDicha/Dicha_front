@@ -14,6 +14,8 @@ import { ProductDetailPage } from "@/pages/ProductDetailPage/ProductDetailPage";
 import { ProductListPage } from "@/pages/ProductListPage/ProductListPage";
 import { PurchasePage } from "@/pages/PurchasePage/PurchasePage";
 import { SearchPage } from "@/pages/SearchPage/SearchPage";
+import { ServiceManagementPage } from "@/pages/ServiceManagementPage/ServiceManagementPage";
+import { ServicesPage } from "@/pages/ServicesPage/ServicesPage";
 import { SignupPage } from "@/pages/SignupPage/SignupPage";
 import { TasteTestPage } from "@/pages/TasteTestPage/TasteTestPage";
 import { ROUTES } from "@/shared/constants/routes";
@@ -65,6 +67,16 @@ export const router = createBrowserRouter([
             path: "addresses",
             element: <AddressBookPage />,
             handle: { title: "배송지 관리" },
+          },
+          {
+            path: "services",
+            element: <ServicesPage />,
+            handle: { title: "구독/예약" },
+          },
+          {
+            path: "service-management",
+            element: <ServiceManagementPage />,
+            handle: { title: "구독/예약 관리" },
           },
         ],
       },

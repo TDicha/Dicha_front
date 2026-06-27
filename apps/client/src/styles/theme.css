@@ -502,7 +502,7 @@
   --bottom-safe-padding: calc(env(safe-area-inset-bottom) + 1rem);
   --bottom-compact-safe-padding: calc(env(safe-area-inset-bottom) + 0.625rem);
   --fixed-action-page-padding: calc(7.5rem + env(safe-area-inset-bottom));
-  --product-action-page-padding: calc(6.75rem + env(safe-area-inset-bottom));
+  --product-action-page-padding: calc(8rem + env(safe-area-inset-bottom));
 
   --background: var(--surface-app);
   --foreground: var(--text-ink);

@@ -8,6 +8,8 @@ export const endpoints = {
   admin: {
     members: "/api/admin/members",
     member: (memberId: number | string) => `/api/admin/members/${memberId}`,
+    memberGrade: (memberId: number | string) =>
+      `/api/admin/members/${memberId}/grade`,
     board: (boardId: number | string) => `/api/admin/boards/${boardId}`,
     orders: "/api/admin/orders",
     order: (orderNumber: string) => `/api/admin/orders/${orderNumber}`,

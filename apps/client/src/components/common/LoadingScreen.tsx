@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 
-const dichaLoadingImage = "/dichaloading.webp";
+const dichaLoadingImage = "/dicha-loading.gif";
 
 interface LoadingScreenProps {
   className?: string;
@@ -19,10 +19,11 @@ export function LoadingScreen({
       )}
       role="status"
     >
-      <div
+      <img
+        alt=""
         aria-hidden="true"
         className="dicha-loading-window"
-        style={{ backgroundImage: `url(${dichaLoadingImage})` }}
+        src={dichaLoadingImage}
       />
       <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--text-cafe-ink)]">
         {message}

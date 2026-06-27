@@ -2,6 +2,7 @@ export {
   productQueryKeys,
   useProduct,
   useProductCategories,
+  useProductOptions,
   useProducts,
 } from "./hooks/useProducts";
 export { useProductReviews } from "./hooks/useProductReviews";

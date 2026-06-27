@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 
-const defaultBrandAvatarImage = "/image1.webp";
+const defaultBrandAvatarImage = "/dicha-face-logo.png";
 
 interface BrandAvatarProps {
   alt?: string;
@@ -18,7 +18,7 @@ export function BrandAvatar({ alt = "", className, src }: BrandAvatarProps) {
         className,
       )}
     >
-      <img alt={alt} className="size-full object-cover" src={imageSrc} />
+      <img alt={alt} className="size-full object-contain p-1" src={imageSrc} />
     </div>
   );
 }
